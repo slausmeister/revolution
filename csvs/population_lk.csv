@@ -55,8 +55,8 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 3455,Niedersachsen,Friesland,609.53,98704,48179,50525,162
 3456,Niedersachsen,Grafschaft Bentheim,981.79,137162,68658,68504,140
 3457,Niedersachsen,Leer,1085.72,170756,85211,85545,157
-3458,Niedersachsen,Oldenburg,1064.83,130890,64873,66017,123
-3459,Niedersachsen,Osnabrück,2121.81,358080,177737,180343,169
+3458,Niedersachsen,Landkreis Oldenburg,1064.83,130890,64873,66017,123
+3459,Niedersachsen,Landkreis Osnabrück,2121.81,358080,177737,180343,169
 3460,Niedersachsen,Vechta,814.2,142814,72095,70719,175
 3461,Niedersachsen,Wesermarsch,824.78,88583,44415,44168,107
 3462,Niedersachsen,Wittmund,656.86,56926,27900,29026,87
@@ -126,7 +126,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 6435,Hessen,Main-Kinzig-Kreis,1397.32,420552,207433,213119,301
 6436,Hessen,Main-Taunus-Kreis,222.53,238558,116820,121738,1072
 6437,Hessen,Odenwaldkreis,623.97,96703,47855,48848,155
-6438,Hessen,Offenbach,356.24,355813,175379,180434,999
+6438,Hessen,Landkreis Offenbach,356.24,355813,175379,180434,999
 6439,Hessen,Rheingau-Taunus-Kreis,811.41,187160,92025,95135,231
 6440,Hessen,Wetteraukreis,1100.66,308339,152469,155870,280
 6531,Hessen,Gießen,854.56,270688,133185,137503,317
@@ -137,7 +137,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 6611,Hessen,Kassel,106.8,202137,99319,102818,1893
 6631,Hessen,Fulda,1380.41,223145,110782,112363,162
 6632,Hessen,Hersfeld-Rotenburg,1097.75,120719,60512,60207,110
-6633,Hessen,Kassel,1293.31,236764,116153,120611,183
+6633,Hessen,Landkreis Kassel,1293.31,236764,116153,120611,183
 6634,Hessen,Schwalm-Eder-Kreis,1539.01,179673,89941,89732,117
 6635,Hessen,Waldeck-Frankenberg,1848.7,156406,77901,78505,85
 6636,Hessen,Werra-Meißner-Kreis,1024.83,100629,49856,50773,98
@@ -171,7 +171,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 7332,Rheinland-Pfalz,Bad Dürkheim,594.64,132671,64871,67800,223
 7333,Rheinland-Pfalz,Donnersbergkreis,645.41,75325,37331,37994,117
 7334,Rheinland-Pfalz,Germersheim,463.32,129013,64277,64736,278
-7335,Rheinland-Pfalz,Kaiserslautern,640,105979,52078,53901,166
+7335,Rheinland-Pfalz,Landkreis Kaiserslautern,640,105979,52078,53901,166
 7336,Rheinland-Pfalz,Kusel,573.61,70219,34874,35345,122
 7337,Rheinland-Pfalz,Südliche Weinstraße,639.93,110521,54419,56102,173
 7338,Rheinland-Pfalz,Rhein-Pfalz-Kreis,304.99,154609,76324,78285,507
@@ -184,15 +184,15 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 8118,Baden-Württemberg,Ludwigsburg,686.77,545423,270799,274624,794
 8119,Baden-Württemberg,Rems-Murr-Kreis,858.08,427248,211395,215853,498
 8121,Baden-Württemberg,Heilbronn,99.9,126592,63802,62790,1267
-8125,Baden-Württemberg,Heilbronn,1099.91,344456,172994,171462,313
-8126,Baden-Württemberg,Hohenlohekreis,776.76,112655,56872,55783,145
+8125,Baden-Württemberg,Landkreis Heilbronn,1099.91,344456,172994,171462,313
+8126,Baden-Württemberg,Hagen,776.76,112655,56872,55783,145
 8127,Baden-Württemberg,Schwäbisch Hall,1484.07,196761,98720,98041,133
 8128,Baden-Württemberg,Main-Tauber-Kreis,1304.12,132399,65992,66407,102
 8135,Baden-Württemberg,Heidenheim,627.13,132777,66089,66688,212
 8136,Baden-Württemberg,Ostalbkreis,1511.39,314025,156464,157561,208
 8211,Baden-Württemberg,Baden-Baden,140.19,55185,26522,28663,394
 8212,Baden-Württemberg,Karlsruhe,173.42,312060,159887,152173,1799
-8215,Baden-Württemberg,Karlsruhe,1084.98,445101,221685,223416,410
+8215,Baden-Württemberg,Landkreis Karlsruhe,1084.98,445101,221685,223416,410
 8216,Baden-Württemberg,Rastatt,738.43,231420,114941,116479,313
 8221,Baden-Württemberg,Heidelberg,108.83,161485,77638,83847,1484
 8222,Baden-Württemberg,Mannheim,144.97,310658,155007,155651,2143
@@ -237,10 +237,10 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9181,Bayern,Landsberg a.Lech,804.36,120302,60066,60236,150
 9182,Bayern,Miesbach,866.21,100010,48999,51011,115
 9183,Bayern,Mühldorf a.Inn,805.33,115872,58718,57154,144
-9184,Bayern,München,664.25,350473,174436,176037,528
+9184,Bayern,Landkreis München,664.25,350473,174436,176037,528
 9185,Bayern,Neuburg-Schrobenhausen,739.71,97303,48931,48372,132
 9186,Bayern,Pfaffenhofen a.d.Ilm,761.05,128227,65167,63060,168
-9187,Bayern,Rosenheim,1439.44,261330,129399,131931,182
+9187,Bayern,Landkreis Rosenheim,1439.44,261330,129399,131931,182
 9188,Bayern,Starnberg,487.71,136667,66265,70402,280
 9189,Bayern,Traunstein,1533.76,177319,87614,89705,116
 9190,Bayern,Weilheim-Schongau,966.28,135478,67242,68236,140
@@ -250,8 +250,8 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9271,Bayern,Deggendorf,861.17,119478,59650,59828,139
 9272,Bayern,Freyung-Grafenau,983.85,78362,39063,39299,80
 9273,Bayern,Kelheim,1065.13,123058,62512,60546,116
-9274,Bayern,Landshut,1347.55,159895,80913,78982,119
-9275,Bayern,Passau,1530.09,192656,95727,96929,126
+9274,Bayern,Landkreis Landshut,1347.55,159895,80913,78982,119
+9275,Bayern,Landkreis Passau,1530.09,192656,95727,96929,126
 9276,Bayern,Regen,974.78,77410,38619,38791,79
 9277,Bayern,Rottal-Inn,1281.2,121502,60920,60582,95
 9278,Bayern,Straubing-Bogen,1201.61,101120,50763,50357,84
@@ -263,18 +263,18 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9372,Bayern,Cham,1526.82,127998,64289,63709,84
 9373,Bayern,Neumarkt i.d.OPf.,1343.96,134573,68058,66515,100
 9374,Bayern,Neustadt a.d.Waldnaab,1427.69,94450,47061,47389,66
-9375,Bayern,Regensburg,1391.65,194070,97185,96885,139
+9375,Bayern,Landkreis Regensburg,1391.65,194070,97185,96885,139
 9376,Bayern,Schwandorf,1458.34,147872,74315,73557,101
 9377,Bayern,Tirschenreuth,1084.25,72046,35891,36155,66
-9461,Bayern,Bamberg,54.62,77373,37296,40077,1417
+9461,Bayern,Stadt Bamberg,54.62,77373,37296,40077,1417
 9462,Bayern,Bayreuth,66.89,74783,36539,38244,1118
 9463,Bayern,Coburg,48.29,41072,20042,21030,851
 9464,Bayern,Hof,58.02,45825,22095,23730,790
-9471,Bayern,Bamberg,1167.79,147163,73740,73423,126
-9472,Bayern,Bayreuth,1273.62,103664,51361,52303,81
-9473,Bayern,Coburg,590.42,86747,42836,43911,147
+9471,Bayern,Landkreis Bamberg,1167.79,147163,73740,73423,126
+9472,Bayern,Landkreis Bayreuth,1273.62,103664,51361,52303,81
+9473,Bayern,Landkreis Coburg,590.42,86747,42836,43911,147
 9474,Bayern,Forchheim,642.82,116203,57771,58432,181
-9475,Bayern,Hof,892.52,94801,46459,48342,106
+9475,Bayern,Landkreis Hof,892.52,94801,46459,48342,106
 9476,Bayern,Kronach,651.49,66743,32987,33756,102
 9477,Bayern,Kulmbach,658.33,71566,35244,36322,109
 9478,Bayern,Lichtenfels,519.94,66776,32965,33811,128
@@ -284,9 +284,9 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9563,Bayern,Fürth,63.35,128497,63051,65446,2028
 9564,Bayern,Nürnberg,186.45,518370,253135,265235,2780
 9565,Bayern,Schwabach,40.8,40981,20068,20913,1004
-9571,Bayern,Ansbach,1971.33,184591,92836,91755,94
+9571,Bayern,Landkreis Ansbach,1971.33,184591,92836,91755,94
 9572,Bayern,Erlangen-Höchstadt,564.55,137262,68245,69017,243
-9573,Bayern,Fürth,307.44,117853,57200,60653,383
+9573,Bayern,Landkreis Fürth,307.44,117853,57200,60653,383
 9574,Bayern,Nürnberger Land,799.52,170792,84197,86595,214
 9575,Bayern,Neustadt a.d.Aisch-Bad Windsheim,1267.44,101014,50621,50393,80
 9576,Bayern,Roth,895.16,126749,62952,63797,142
@@ -294,15 +294,15 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9661,Bayern,Aschaffenburg,62.45,71002,34641,36361,1137
 9662,Bayern,Schweinfurt,35.7,53426,26169,27257,1497
 9663,Bayern,Würzburg,87.6,127934,61131,66803,1460
-9671,Bayern,Aschaffenburg,698.9,174200,86457,87743,249
-9672,Bayern,Bad Kissingen,1136.9,103235,50860,52375,91
+9671,Bayern,Landkreis Aschaffenburg,698.9,174200,86457,87743,249
+9672,Bayern,Bad Tölz-Wolfratshausen,1136.9,103235,50860,52375,91
 9673,Bayern,Rhön-Grabfeld,1021.68,79635,39646,39989,78
 9674,Bayern,Haßberge,956.19,84384,42309,42075,88
 9675,Bayern,Kitzingen,684.14,91155,45862,45293,133
 9676,Bayern,Miltenberg,715.58,128743,64105,64638,180
 9677,Bayern,Main-Spessart,1321.2,126158,62951,63207,95
-9678,Bayern,Schweinfurt,841.39,115445,58014,57431,137
-9679,Bayern,Würzburg,968.35,162302,80732,81570,168
+9678,Bayern,Landkreis Schweinfurt,841.39,115445,58014,57431,137
+9679,Bayern,Landkreis Würzburg,968.35,162302,80732,81570,168
 9761,Bayern,Augsburg,146.86,296582,146222,150360,2019
 9762,Bayern,Kaufbeuren,40.02,44398,21872,22526,1109
 9763,Bayern,Kempten,63.28,69151,34219,34932,1093
@@ -356,7 +356,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 13003,Mecklenburg-Vorpommern,Rostock,181.36,209191,103101,106090,1153
 13004,Mecklenburg-Vorpommern,Schwerin,130.52,95653,45957,49696,733
 13071,Mecklenburg-Vorpommern,Mecklenburgische Seenplatte,5495.6,258074,126560,131514,47
-13072,Mecklenburg-Vorpommern,Rostock,3431.29,215794,107360,108434,63
+13072,Mecklenburg-Vorpommern,Landkreis Rostock,3431.29,215794,107360,108434,63
 13073,Mecklenburg-Vorpommern,Vorpommern-Rügen,3216.02,224702,110438,114264,70
 13074,Mecklenburg-Vorpommern,Nordwestmecklenburg,2127.08,157322,78294,79028,74
 13075,Mecklenburg-Vorpommern,Vorpommern-Greifswald,3945.56,235623,115274,120349,60
@@ -372,7 +372,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 14627,Sachsen,Meißen,1454.59,241717,118997,122720,166
 14628,Sachsen,Sächsische Schweiz-Osterzgebirge,1654.19,245586,121254,124332,148
 14713,Sachsen,Leipzig,297.8,593145,291450,301695,1992
-14729,Sachsen,Leipzig,1651.28,258139,126466,131673,156
+14729,Sachsen,Landkreis Leipzig,1651.28,258139,126466,131673,156
 14730,Sachsen,Nordsachsen,2028.56,197741,98130,99611,97
 15001,Sachsen-Anhalt,Dessau-Roßlau,244.71,80103,38894,41209,327
 15002,Sachsen-Anhalt,Halle,135.03,238762,115552,123210,1768
