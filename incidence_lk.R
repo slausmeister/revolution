@@ -88,9 +88,6 @@ calc_sti_germany <- function(){
 
 # plot sti for multiple 'Landkreise'
 plot_sti_for <- function(lk_names){
-  # for(i in 1:length(lk_names)){
-  #   lk_names[[i]] <- get_lk(lk_names[[i]])
-  # }
 
   tibble(date=days_since_2020, sti=calc_sti_lk(lk_names[[1]]), Landkreis=lk_names[[1]]) -> df
 

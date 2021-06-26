@@ -1,0 +1,82 @@
+source("data_preparation.R")
+
+# libraries for plotting
+library(ggplot2)
+
+### sti means 'Sieben Tage Inzidenz'
+
+# calc sti for a certain time series with a given population
+calc_sti <- function(cases, pop){
+  # cases is a vector of daily cases, pop the population of the group
+  n <- length(cases)
+  sti <- rep(0, n)
+  for(i in 1:n){
+    for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
+  }
+  return(sti / pop * 1e5)
+}
+
+# get the right age label
+get_age <- function(age_name){
+  if(age_name=="total") return("total")
+  if(as.integer(age_name) < 0) return("A00-A04")
+  if(as.integer(age_name) < 5) return("A00-A04")
+  if(as.integer(age_name) < 15) return("A05-A14")
+  if(as.integer(age_name) < 34) return("A15-A34")
+  if(as.integer(age_name) < 59) return("A35-A59")
+  if(as.integer(age_name) < 79) return("A60-A79")
+  return("A80+")
+}
+
+
+# calculate sti for a 'Landkreis' or Germany
+calc_sti_age <- function(age_name){
+  if(age_name=="total") return(calc_sti_germany())
+  age_name <- get_age(age_name)
+
+  # pop of the landkreis
+  age_pop <- population_age_2020_data %>%
+    filter(Altersgruppe==age_name) %>%
+    `[[`("Bevölkerung")
+
+  data <- rki_data  %>%
+    filter(Altersgruppe==age_name)
+
+  # infections time series
+  tibble(date=days_since_2020) %>%
+    left_join(data, by=c("date"="Meldedatum"))  %>%
+    group_by(date) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall), recoveries=sum(AnzahlGenesen)) %>%
+    # the days for which we have no infection data for are days with 0 infections
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0),
+      recoveries=replace_na(recoveries, 0)) %>% `[[`("cases") -> cases
+  return(calc_sti(cases, age_pop))
+}
+
+# calc sti for all of Germany
+calc_sti_germany <- function(){
+  # infections time series
+  tibble(date=days_since_2020) %>%
+    left_join(rki_data, by=c("date"="Meldedatum"))  %>%
+    group_by(date) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall), recoveries=sum(AnzahlGenesen)) %>%
+    # the days for which we have no infection data for are days with 0 infections
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0),
+      recoveries=replace_na(recoveries, 0)) %>% `[[`("cases") -> cases
+  return(calc_sti(cases, total_population_germany))
+}
+
+# plot sti for multiple 'Altersgruppen'
+plot_sti_for <- function(age_names){
+
+  tibble(date=days_since_2020, sti=calc_sti_age(age_names[[1]]), Altersgruppe=get_age(age_names[[1]])) -> df
+
+  for(age_name in age_names[-1]){
+    df %>% add_row(date=days_since_2020, sti=calc_sti_age(age_name), Altersgruppe=get_age(age_name)) -> df
+  }
+
+  ggplot(data=df, aes(x=date, y=sti, color=Altersgruppe)) + geom_line()
+}
+
+# plot for the age group with people of age x in it (or the total)
+print(plot_sti_for(c(2, 91, "total")))
