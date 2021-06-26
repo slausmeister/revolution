@@ -10,7 +10,7 @@ library(stringr)
 library(tidyr)
 
 
-### population data:
+### population data: -> maybe move this to incidence.R?
 # import the population of 'Landkreis' with the given csv
 population_lk_data <- read_csv("csvs/population_lk.csv")
 
@@ -21,7 +21,8 @@ population_lk_data %>% mutate(IdLandkreis=as.numeric(IdLandkreis)) -> population
 population_lk_data %>% summarise(n=sum(Bevölkerung)) %>%
   `[[`(1) -> total_population_germany
 
-
+# import the population per age group in 2020
+population_age_2020_data <- read_csv("csvs/population_age.csv") %>% filter(Jahr==2020)
 
 ### rki covid data:
 # import raw rki data
@@ -49,7 +50,7 @@ rki_data %>% mutate(IdLandkreis=as.numeric(IdLandkreis)) -> rki_data
 rki_data %>% select(-Landkreis) %>%
   left_join(select(population_lk_data, IdLandkreis, Landkreis), by="IdLandkreis") ->
   rki_data
-  
+
 # 'IdBundesland' is a part of 'IdLandkreis' and we have the 'Bundesland' column
 rki_data %>% select(-IdBundesland) -> rki_data
 

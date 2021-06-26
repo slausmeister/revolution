@@ -1,6 +1,6 @@
 source("data_preparation.R")
 
-# library for plotting
+# libraries for plotting
 library(ggplot2)
 
 ### sti means 'Sieben Tage Inzidenz'
@@ -18,6 +18,8 @@ calc_sti <- function(cases, pop){
 
 # get a 'Landkreis' name
 get_lk <- function(lk_name){
+  if(str_detect("Germany", regex(lk_name, ignore_case=T))) return("Germany")
+
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
   if(length(lks) == 1) return(lks)
@@ -45,9 +47,11 @@ get_lk <- function(lk_name){
   return(lk_name)
 }
 
-# calculate sti for a Landkreis
+# calculate sti for a 'Landkreis' or Germany
 calc_sti_lk <- function(lk_name){
   lk_name <- get_lk(lk_name)
+
+  if(lk_name=="Germany") return(calc_sti_germany())
 
   # pop of the landkreis
   lk_pop <- population_lk_data %>%
@@ -69,9 +73,24 @@ calc_sti_lk <- function(lk_name){
   return(calc_sti(cases, lk_pop))
 }
 
+# calc sti for all of Germany
+calc_sti_germany <- function(){
+  # infections time series
+  tibble(date=days_since_2020) %>%
+    left_join(rki_data, by=c("date"="Meldedatum"))  %>%
+    group_by(date) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall), recoveries=sum(AnzahlGenesen)) %>%
+    # the days for which we have no infection data for are days with 0 infections
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0),
+      recoveries=replace_na(recoveries, 0)) %>% `[[`("cases") -> cases
+  return(calc_sti(cases, total_population_germany))
+}
+
 # plot sti for multiple 'Landkreise'
-plot_sti_lk <- function(lk_names){
-  for(i in length(lk_names)) lk_names[[i]] <- get_lk(lk_names[[i]])
+plot_sti_for <- function(lk_names){
+  # for(i in 1:length(lk_names)){
+  #   lk_names[[i]] <- get_lk(lk_names[[i]])
+  # }
 
   tibble(date=days_since_2020, sti=calc_sti_lk(lk_names[[1]]), Landkreis=lk_names[[1]]) -> df
 
@@ -82,4 +101,4 @@ plot_sti_lk <- function(lk_names){
 }
 
 
-print(plot_sti_lk(c("Köln", "Mannheim", "Joghurt City")))
+print(plot_sti_for(c("Passau", "Joghurt City", "Germa")))
