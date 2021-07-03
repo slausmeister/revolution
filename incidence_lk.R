@@ -11,45 +11,52 @@ calc_sti <- function(cases, pop){
   n <- length(cases)
   sti <- rep(0, n)
   for(i in 1:n){
-    for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
+      for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
   }
   return(sti / pop * 1e5)
 }
 
 # get a 'Landkreis' name
-get_lk <- function(lk_name){
+get_lk <- function(lk_name, print_name){
   if(str_detect("Germany", regex(lk_name, ignore_case=T))) return("Germany")
 
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
+  
   if(length(lks) == 1) return(lks)
   if(length(lks) == 0) {
-    cat("No match found for:\n")
-    print(lk_name)
-    cat("Defaulting to Heidelberg <3\n")
+    if(print_name){
+      cat("No match found for:\n")
+      print(lk_name)
+      cat("Defaulting to Heidelberg <3\n")
+    }
     return("Heidelberg")
   }
-
-  cat("For ", lk_name, " the following 'Landkreise' were found\n")
-  print(lks)
-
+  if(print_name){
+    cat("For ", lk_name, " the following 'Landkreise' were found\n")
+    print(lks)
+  }
   for(lk in lks) if(tolower(lk) == tolower(lk_name)){
-    cat("We considered, because of exact match:\n")
+    if(print_name){
+      cat("We considered, because of exact match:\n")
+      print(lk_name)
+      cat("If this is wrong, please type the exact 'Landkreis'\n")
+    }
+    return(lk)
+  }
+  lk_name <- lks[[1]]
+  if(print_name){
+    cat("We considered:\n")
     print(lk_name)
     cat("If this is wrong, please type the exact 'Landkreis'\n")
-    return(lk_name)
   }
 
-  cat("We considered:\n")
-  lk_name <- lks[[1]]
-  print(lk_name)
-  cat("If this is wrong, please type the exact 'Landkreis'\n")
   return(lk_name)
 }
 
 # calculate sti for a 'Landkreis' or Germany
-calc_sti_lk <- function(lk_name){
-  lk_name <- get_lk(lk_name)
+calc_sti_lk <- function(lk_name, print_name=T){
+  lk_name <- get_lk(lk_name, print_name)
 
   if(lk_name=="Germany") return(calc_sti_germany())
 
@@ -58,6 +65,10 @@ calc_sti_lk <- function(lk_name){
     filter(Landkreis==lk_name) %>%
     `[[`("Bevölkerung")
 
+  if(length(lk_pop)>1){
+    print("lkpop > 1")
+    print(lk_name)
+  }
 
   data <- rki_data  %>%
     filter(Landkreis==lk_name)
@@ -98,4 +109,4 @@ plot_sti_for <- function(lk_names){
 }
 
 
-print(plot_sti_for(c("Passau", "Joghurt City", "Germa")))
+# print(plot_sti_for(c("Passau", "Joghurt City", "Germa")))

@@ -72,7 +72,6 @@ calc_sti_germany <- function(deaths=FALSE){
 
 # plot sti for multiple 'Altersgruppen'
 plot_sti_for <- function(age_names, deaths=FALSE){
-
   tibble(date=days_since_2020, sti=calc_sti_age(age_names[[1]], deaths),
     Altersgruppe=get_age(age_names[[1]])) -> df
 
@@ -84,5 +83,37 @@ plot_sti_for <- function(age_names, deaths=FALSE){
   ggplot(data=df, aes(x=date, y=sti, color=Altersgruppe)) + geom_line()
 }
 
+library(ggstream)
+# plot infections/deaths by age
+plot_total_by_age <- function(deaths=FALSE){
+  if(deaths){
+    tibble(date=days_since_2020) %>%
+      left_join(rki_data, by=c("date"="Meldedatum")) %>% group_by(date, Altersgruppe) %>%
+      summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%
+      mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0),
+       Altersgruppe=replace_na(Altersgruppe, "unbekannt")) %>%
+      filter(Altersgruppe!="unbekannt") %>%
+      select(date, deaths, Altersgruppe) ->
+      deaths_by_age
+
+      return(ggplot(data=deaths_by_age, aes(x=date, y=deaths, fill=Altersgruppe)) +
+        geom_stream(type="ridge"))
+  }
+
+  tibble(date=days_since_2020) %>%
+    left_join(rki_data, by=c("date"="Meldedatum")) %>% group_by(date, Altersgruppe) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0),
+     Altersgruppe=replace_na(Altersgruppe, "unbekannt")) %>%
+    filter(Altersgruppe!="unbekannt") %>%
+    select(date, cases, Altersgruppe) ->
+    cases_by_age
+
+  ggplot(data=cases_by_age, aes(x=date, y=cases, fill=Altersgruppe)) + geom_stream(type="ridge")
+}
+
 # plot for the age group with people of age x in it (or the total)
-print(plot_sti_for(c(51, 91, "total"), deaths=T))
+print(plot_sti_for(c(51, 91, "total"), deaths=TRUE))
+
+# ridge plots to show ratios
+# print(plot_total_by_age(deaths=T))

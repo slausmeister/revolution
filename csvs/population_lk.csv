@@ -1,4 +1,4 @@
-IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
+IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,BevDichte
 1001,Schleswig-Holstein,Flensburg,53.02,90164,44904,45260,1701
 1002,Schleswig-Holstein,Kiel,118.65,246794,120198,126596,2080
 1003,Schleswig-Holstein,Lübeck,214.19,216530,104032,112498,1011
@@ -105,7 +105,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 5774,Nordrhein-Westfalen,Paderborn,1246.8,307839,154132,153707,247
 5911,Nordrhein-Westfalen,Bochum,145.66,365587,178131,187456,2510
 5913,Nordrhein-Westfalen,Dortmund,280.71,588250,289339,298911,2096
-5914,Nordrhein-Westfalen,Hagen,160.45,188686,92214,96472,1176
+5914,Nordrhein-Westfalen,Hagen NRW,160.45,188686,92214,96472,1176
 5915,Nordrhein-Westfalen,Hamm,226.44,179916,88554,91362,795
 5916,Nordrhein-Westfalen,Herne,51.42,156449,76795,79654,3043
 5954,Nordrhein-Westfalen,Ennepe-Ruhr-Kreis,409.64,324106,157395,166711,791
@@ -185,7 +185,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 8119,Baden-Württemberg,Rems-Murr-Kreis,858.08,427248,211395,215853,498
 8121,Baden-Württemberg,Heilbronn,99.9,126592,63802,62790,1267
 8125,Baden-Württemberg,Landkreis Heilbronn,1099.91,344456,172994,171462,313
-8126,Baden-Württemberg,Hagen,776.76,112655,56872,55783,145
+8126,Baden-Württemberg,Hagen BW,776.76,112655,56872,55783,145
 8127,Baden-Württemberg,Schwäbisch Hall,1484.07,196761,98720,98041,133
 8128,Baden-Württemberg,Main-Tauber-Kreis,1304.12,132399,65992,66407,102
 8135,Baden-Württemberg,Heidenheim,627.13,132777,66089,66688,212
@@ -295,7 +295,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9662,Bayern,Schweinfurt,35.7,53426,26169,27257,1497
 9663,Bayern,Würzburg,87.6,127934,61131,66803,1460
 9671,Bayern,Landkreis Aschaffenburg,698.9,174200,86457,87743,249
-9672,Bayern,Bad Tölz-Wolfratshausen,1136.9,103235,50860,52375,91
+9672,Bayern,Bad Kissingen,1136.9,103235,50860,52375,91
 9673,Bayern,Rhön-Grabfeld,1021.68,79635,39646,39989,78
 9674,Bayern,Haßberge,956.19,84384,42309,42075,88
 9675,Bayern,Kitzingen,684.14,91155,45862,45293,133
@@ -308,7 +308,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,proKM
 9763,Bayern,Kempten,63.28,69151,34219,34932,1093
 9764,Bayern,Memmingen,70.11,44100,21892,22208,629
 9771,Bayern,Aichach-Friedberg,780.23,134655,67161,67494,173
-9772,Bayern,Augsburg,1070.63,253468,125761,127707,237
+9772,Bayern,Landkreis Augsburg,1070.63,253468,125761,127707,237
 9773,Bayern,Dillingen a.d.Donau,792.23,96562,48441,48121,122
 9774,Bayern,Günzburg,762.4,127027,64288,62739,167
 9775,Bayern,Neu-Ulm,515.84,175204,86839,88365,340

@@ -36,12 +36,8 @@ rki_data <- read_csv("csvs/RKI_COVID19.csv")
 rki_data %>% select(-NeuerFall, -NeuerTodesfall, -NeuGenesen, -Datenstand) ->
   rki_data
 
-# the 'Refdatum' column is not necessary to analyse the fraction of known infection dates,
-# we can use 'IstErkrankungsbeginn' for that
-rki_data %>% select(-Refdatum) -> rki_data
-
-# change the column type of 'Meldedatum' to date
-rki_data %>% mutate(Meldedatum=as.Date(Meldedatum)) -> rki_data
+# change the column type of 'Meldedatum' and 'Refdatum' to date
+rki_data %>% mutate(Meldedatum=as.Date(Meldedatum), Refdatum=as.Date(Refdatum)) -> rki_data
 
 # in most cases, 'Altersgruppe2' is not available
 rki_data %>% select(-Altersgruppe2) -> rki_data
