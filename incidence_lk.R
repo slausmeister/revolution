@@ -17,19 +17,18 @@ calc_sti <- function(cases, pop){
 }
 
 # get a 'Landkreis' name
+# should probably return LandkreisID
 get_lk <- function(lk_name, print_name){
   if(str_detect("Germany", regex(lk_name, ignore_case=T))) return("Germany")
 
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
-  
+
   if(length(lks) == 1) return(lks)
   if(length(lks) == 0) {
-    if(print_name){
-      cat("No match found for:\n")
-      print(lk_name)
-      cat("Defaulting to Heidelberg <3\n")
-    }
+    cat("No match found for:\n")
+    print(lk_name)
+    cat("Defaulting to Heidelberg <3\n")
     return("Heidelberg")
   }
   if(print_name){

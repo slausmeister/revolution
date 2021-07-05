@@ -30,7 +30,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,BevDich
 3252,Niedersachsen,Hameln-Pyrmont,797.54,148549,71880,76669,186
 3254,Niedersachsen,Hildesheim,1208.34,275817,134547,141270,228
 3255,Niedersachsen,Holzminden,694.27,70458,34911,35547,101
-3256,Niedersachsen,Nienburg (Weser),1400.82,121390,60299,61091,87
+3256,Niedersachsen,Nienburg an der Weser,1400.82,121390,60299,61091,87
 3257,Niedersachsen,Schaumburg,675.67,157820,77266,80554,234
 3351,Niedersachsen,Celle,1550.82,179011,88101,90910,115
 3352,Niedersachsen,Cuxhaven,2058.96,198038,96867,101171,96
@@ -38,7 +38,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,BevDich
 3354,Niedersachsen,Lüchow-Dannenberg,1227.33,48412,23783,24629,39
 3355,Niedersachsen,Lüneburg,1327.8,184139,89803,94336,139
 3356,Niedersachsen,Osterholz,652.67,113928,55926,58002,175
-3357,Niedersachsen,Rotenburg (Wümme),2074.78,163782,82317,81465,79
+3357,Niedersachsen,Rotenburg an der Wümme,2074.78,163782,82317,81465,79
 3358,Niedersachsen,Heidekreis,1881.45,140673,70251,70422,75
 3359,Niedersachsen,Stade,1267.38,204512,101831,102681,161
 3360,Niedersachsen,Uelzen,1462.59,92389,45137,47252,63
@@ -337,7 +337,7 @@ IdLandkreis,Bundesland,Landkreis,Fläche,Bevölkerung,Männlich,Weiblich,BevDich
 11012,Berlin,Berlin Reinickendorf,89.32,266408,131073,135335,2983
 12051,Brandenburg,Brandenburg a.d.Havel,229.72,72184,35577,36607,314
 12052,Brandenburg,Cottbus,165.62,99678,48816,50862,602
-12053,Brandenburg,Frankfurt (Oder),147.85,57751,28099,29652,391
+12053,Brandenburg,Frankfurt an der Oder,147.85,57751,28099,29652,391
 12054,Brandenburg,Potsdam,188.24,180334,87158,93176,958
 12060,Brandenburg,Barnim,1479.58,185244,91812,93432,125
 12061,Brandenburg,Dahme-Spreewald,2274.5,170791,84806,85985,75
