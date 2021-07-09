@@ -9,7 +9,9 @@ AEG <- rename(AEG, c(id=...3,Einkommen=...27))
 AEG$id <- as.integer(AEG$id)
 AEG$Einkommen <- as.integer(AEG$Einkommen)
 
-AEG <- AEG[which(AEG$id>100),]
+AEG <- AEG[which(AEG$id>100|AEG$id==2),] #Filtering Bundesländer etc.
+AEG$id[AEG$id==2] <- 2000 #Fixing Hamburg
 
+#Filtering for available indection data
 fehlt <- population_lk_data[!population_lk_data$IdLandkreis %in% AEG$id,]
 vorhanden <- population_lk_data[population_lk_data$IdLandkreis %in% AEG$id,]
