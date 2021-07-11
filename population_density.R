@@ -4,7 +4,7 @@ mean_stis <- c()
 for(lk in population_lk_data[["Landkreis"]]){
   mean_stis <- c(mean_stis, mean(calc_sti_lk(lk, print_name=F)))
 }
-# 3. Welle: [306:397]
+# 2. Welle: [306:397]
 
 population_lk_data %>%
   transmute(Landkreis=Landkreis, mean_sti=mean_stis, pop_density=BevDichte) ->

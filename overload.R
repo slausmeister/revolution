@@ -20,8 +20,10 @@ rki_data %>%
   mutate(diff=as.numeric(Meldedatum - Refdatum)) %>%
   group_by(diff) %>%
   count() %>%
-  filter(abs(diff) < 30) %>%
+  filter(abs(diff)<30) %>%
   ungroup() ->
   report_diffs
+
+
 
 (ggplot(data=report_diffs, aes(x=diff, y=n)) + geom_bar(stat='identity', fill="Blue")) %>% print()

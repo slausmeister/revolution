@@ -113,7 +113,7 @@ plot_total_by_age <- function(deaths=FALSE){
 }
 
 # plot for the age group with people of age x in it (or the total)
-print(plot_sti_for(c(51, 91, "total"), deaths=TRUE))
+# print(plot_sti_for(c(51, 91, "total"), deaths=TRUE))
 
 # ridge plots to show ratios
-# print(plot_total_by_age(deaths=T))
+print(plot_total_by_age(deaths=F))
