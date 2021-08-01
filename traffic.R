@@ -1,4 +1,5 @@
-source("incidence_lk.R")
+source("utilities.R")
+library(ggplot2)
 
 unfaelle_data <- read_csv("csvs/unfaelle_jahre.csv")
 
@@ -8,9 +9,9 @@ ggplot(data=unfaelle_data, aes(x=Monat, y=Unfaelle, fill=factor(Jahr))) +
   geom_col(position=position_dodge()) + scale_x_discrete(limits=unfaelle_data$Monat[1:12]) +
   labs(fill = "Jahr") -> unfaelle_plt
 
-sti_germany <- calc_sti_germany()
-tibble(date=days_since_2020[1:366], sti=sti_germany[1:366], Landkreis="GER") -> df
-ggplot(data=df, aes(x=date, y=sti, color=Landkreis)) + geom_line() -> plt_germany
+# sti_germany <- get_sti_series_for()
+# tibble(date=days_since_2020[1:366], sti=sti_germany[1:366]) -> df
+ggplot(data=get_sti_series_for(), aes(x=date, y=sti, color=Landkreis)) + geom_line() -> plt_germany
 
 
 
