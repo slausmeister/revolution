@@ -1,10 +1,10 @@
-source("incidence_lk.R")
+source("sti.R")
 
 mean_stis <- c()
-for(lk in population_lk_data[["Landkreis"]]){
-  mean_stis <- c(mean_stis, mean(calc_sti_lk(lk, print_name=F)))
+for(lk_id in population_lk_data[["IdLandkreis"]]){
+  mean_stis <- c(mean_stis, mean(get_sti_series_by_id(lk_id)[["sti"]]))
+  print(lk_id)
 }
-# 2. Welle: [306:397]
 
 population_lk_data %>%
   transmute(Landkreis=Landkreis, mean_sti=mean_stis, pop_density=BevDichte) ->
@@ -13,6 +13,8 @@ population_lk_data %>%
 model <- lm(mean_sti~pop_density, data=sti_density)
 intercept <- model$coefficients[[1]]
 weight <- model$coefficients[[2]]
+
+library(ggplot2)
 
 print(ggplot(NULL, aes(x, y)) +
   geom_point(data=sti_density, aes(x=pop_density, y=mean_sti)) +
