@@ -15,7 +15,7 @@ sti <- function(cases, pop){
 get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
-  data <- rki_data
+  data <- filter_data_by(ages, regions, from, to)
 
   # create time series
   days_series <- seq(as.Date(from), as.Date(to), by="days")
