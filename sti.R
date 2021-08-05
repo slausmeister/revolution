@@ -51,6 +51,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   }
 
   time_series <- get_time_series_for(ages, regions, from, to)
+  days_series <- days_series <- seq(as.Date(from), as.Date(to), by="days")
 
   # filter the regions (not robust at the moment)
   rki_data %>% select(Bundesland) %>% unique() %>%
@@ -73,7 +74,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   if(return_deaths) sti_series <- sti(time_series[["deaths"]], final_pop)
   else sti_series <- sti(time_series[["cases"]], final_pop)
 
-  return(tibble(date=days_since_2020, sti=sti_series))
+  return(tibble(date=days_series, sti=sti_series))
 }
 
 # get a sti time series for a lk id

@@ -1,2 +1,0 @@
-incidence_lk.R: Identifikation der LK auf LandkreisID umstellen
-		-> mit get_lk aus string die id holen
