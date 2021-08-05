@@ -1,5 +1,6 @@
-source("utilities.R")
+source("sti.R")
 library(ggplot2)
+library(ggstream)
 
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -41,7 +42,7 @@ plot_traced_total <- function(ages="all", regions="Germany",
       pivot_longer(!date, names_to="traced", values_to="count") -> data
     print(data)
 
-    ggplot(data, aes(x=date)) + geom_area(aes(y=count, fill=traced)) -> plt
+    ggplot(data, aes(x=date)) + geom_stream(aes(y=count, fill=traced), type="ridge") -> plt
 
     ggplot(data=get_sti_series_for(), aes(x=date, y=sti)) +
       geom_line() -> plt_germany
@@ -62,4 +63,10 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
     # distorts the distribution
     filter(abs(diff)<30) %>%
     ungroup() %>% return()
+  }
+
+plot_distribution_diff <- function(ages="all", regions="Germany",
+  from="2020-01-01", to=Sys.Date()){
+    calc_distribution_report_diff() %>%
+      ggplot(aes(x=diff, y=n)) + geom_bar(stat="identity") %>% return()
   }
