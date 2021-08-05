@@ -1,28 +1,36 @@
-source("utilities.R")
+source("sti.R")
 library(ggplot2)
 
-unfaelle_data <- read_csv("csvs/unfaelle_jahre.csv")
+get_accidents_data <- function(){
+  read_csv("csvs/unfaelle_jahre.csv") %>% mutate(Jahr=as.character(Jahr)) %>% return()
+}
 
-unfaelle_data %>% mutate(Jahr=as.character(Jahr))
+plot_accidents <- function(){
+  unfaelle_data <- get_accidents_data()
 
-ggplot(data=unfaelle_data, aes(x=Monat, y=Unfaelle, fill=factor(Jahr))) +
-  geom_col(position=position_dodge()) + scale_x_discrete(limits=unfaelle_data$Monat[1:12]) +
-  labs(fill = "Jahr") -> unfaelle_plt
+  ggplot(data=unfaelle_data, aes(x=Monat, y=Unfaelle, fill=factor(Jahr))) +
+    geom_col(position=position_dodge()) + scale_x_discrete(limits=unfaelle_data$Monat[1:12]) +
+    labs(fill = "Jahr") -> unfaelle_plt
 
-# sti_germany <- get_sti_series_for()
-# tibble(date=days_since_2020[1:366], sti=sti_germany[1:366]) -> df
-ggplot(data=get_sti_series_for(), aes(x=date, y=sti, color=Landkreis)) + geom_line() -> plt_germany
+  ggplot(data=get_sti_series_for(to="2020-12-31"), aes(x=date, y=sti)) +
+    geom_line() -> plt_germany
 
+  cowplot::plot_grid(plotlist = list(plt_germany, unfaelle_plt), nrow=2) %>%
+    return()
+}
 
+get_public_transportation_data <- function(){
+  read_csv("csvs/oepnv_jahre.csv") %>% return()
+}
 
+plot_public_transportation <- function(){
+  ggplot(data=oepnv_data, aes(x=Quartal, y=Personenkilometer, fill=factor(Jahr))) +
+    geom_col(position=position_dodge()) + scale_x_discrete(limits=oepnv_data$Quartal[1:4]) +
+    labs(fill = "Jahr") -> oepnv_plt
 
-oepnv_data <- read_csv("csvs/oepnv_jahre.csv")
+  ggplot(data=get_sti_series_for(to="2020-12-31"), aes(x=date, y=sti)) +
+    geom_line() -> plt_germany
 
-oepnv_data %>% filter(Bundesland=="Hessen") -> oepnv_data
-
-ggplot(data=oepnv_data, aes(x=Quartal, y=Personenkilometer, fill=factor(Jahr))) +
-  geom_col(position=position_dodge()) + scale_x_discrete(limits=oepnv_data$Quartal[1:4]) +
-  labs(fill = "Jahr") -> oepnv_plt
-
-
-cowplot::plot_grid(plotlist = list(unfaelle_plt, oepnv_plt), nrow=2) %>% print()
+  cowplot::plot_grid(plotlist = list(plt_germany, oepnv_plt), nrow=2) %>%
+    return()
+}

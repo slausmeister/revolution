@@ -1,8 +1,0 @@
-Wieso gibt es Fälle, die mehrere Monate vor dem Erkrankungsbeginn
-gemeldet wurden?
-Wie misst man die Korrelation zwischen Zeitreihen?
-Sollen wir wirklich ein ausführliches R-package schreiben oder soll der Fokus
-auf der Auswertung der Daten liegen?
-Kann man csvs in ein package packen?
-Ist es okay, unsere "custom" csvs zu benutzen oder sollen wir immer nur die 
-von den offiziellen Quellen benutzen?
