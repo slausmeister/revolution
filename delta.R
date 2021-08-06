@@ -1,6 +1,8 @@
-# Ich hab absolut keinen Plan welche header geladen werden müssen
 source("sti.R")
-variant_case_time_series <- function(update_data=F, interpolation="none"){
+library(ggplot2)
+library(ggstream)
+
+variant_case_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
     if(update_data){
         source("update_VOC_data.R")
@@ -12,16 +14,28 @@ variant_case_time_series <- function(update_data=F, interpolation="none"){
         select(c("date","cases")) %>%
         right_join(temp_data, by = c("date" = "Datum")) %>%
         drop_na() %>%
-        mutate(alpha_cases = cases * alpha) %>%
-        mutate(beta_cases = cases * beta) %>%
-        mutate(gamma_cases = cases * gamma) %>%
-        mutate(delta_cases = cases * delta) %>%
-        select(c("date","alpha_cases","beta_cases", "gamma_cases","delta_cases")) %>%
-        return()
+        mutate(alpha_cases = as.integer(cases * alpha)) %>%
+        mutate(beta_cases = as.integer(cases * beta)) %>%
+        mutate(gamma_cases = as.integer(cases * gamma)) %>%
+        mutate(delta_cases = as.integer(cases * delta)) %>%
+        mutate(others_cases = as.integer(cases * (1- alpha - beta - gamma - delta))) %>%
+        select(c("date","alpha_cases","beta_cases", "gamma_cases","delta_cases",
+        "others_cases")) ->
+        temp_data
+
+    if(format_long){
+      rename_function <- function(s){
+        return(str_sub(s, 1, nchar(s)-6))
+      }
+      temp_data %>% rename_with(rename_function, ends_with("cases")) %>%
+        pivot_longer(!date, names_to="variant", values_to="cases") -> temp_data
+    }
+
+    return(temp_data)
 }
 
 
-variant_sti_time_series <- function(update_data=F, interpolation="none"){
+variant_sti_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
     if(update_data){
         source("update_VOC_data.R")
@@ -37,34 +51,25 @@ variant_sti_time_series <- function(update_data=F, interpolation="none"){
         mutate(beta_sti = sti * beta) %>%
         mutate(gamma_sti = sti * gamma) %>%
         mutate(delta_sti = sti * delta) %>%
-        select(c("date", "alpha_sti", "beta_sti", "gamma_sti", "delta_sti")) %>%
-        return()
+        mutate(others_sti = sti * (1- alpha - beta - gamma - delta)) %>%
+        select(c("date", "alpha_sti", "beta_sti", "gamma_sti", "delta_sti", "others_sti")) ->
+        temp_data
+
+    if(format_long){
+      rename_function <- function(s){
+        return(str_sub(s, 1, nchar(s)-4))
+      }
+      temp_data %>% rename_with(rename_function, ends_with("cases")) %>%
+        pivot_longer(!date, names_to="variant", values_to="sti") -> temp_data
+    }
+
+    return(temp_data)
 }
-
-    delta_r_sti <- delta_sti_time_series
-    delta_r_sti$delta <- 0
-    for(t in 8:nrow(delta_sti_time_series)){
-        delta_r_sti$delta[t] <- as.numeric(delta_sti_time_series[t,2])/as.numeric(delta_sti_time_series[t-4,2])
-    }
-
-    delta_r <- delta_time_series
-    delta_r$delta <- 0
-    for(t in 8:nrow(delta_time_series)){
-        delta_r$delta[t] <- as.numeric(delta_time_series[t,2])/as.numeric(delta_time_series[t-4,2])
-    }
-
-
-    plot(delta_r_sti, type="l")
-    abline(v=seq(as.Date("2021/01/04"),by = "weeks", length.out = (dim(anteil)[1])/7), col="grey")
-    abline(h=1, col="grey")
-
-
 
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = "xlsx/VOC_VOI_Tabelle.xlsx"){
 
     library("readxl")
-    #     source("sti_id.R")
 
     tablepath %>% read_excel(sheet=1) %>% # reading data
         head(-1) %>% # Dropping last row, as it is a summary row
@@ -96,4 +101,19 @@ building_variant_data <- function(interpolation="none", tablepath = "xlsx/VOC_VO
     }
 
     return(anteil)
+}
+
+plot_variant_share <- function(update_data=F, interpolation="none", sti=F){
+  if(sti){
+    variant_sti_time_series(update_data, interpolation, format_long=T) %>%
+      ggplot(aes(x=date)) %>%
+      `+`(geom_stream(aes(y=sti, fill=variant), type="ridge")) %>%
+      return()
+  }
+  else{
+    variant_case_time_series(update_data, interpolation, format_long=T) %>%
+      ggplot(aes(x=date)) %>%
+      `+`(geom_stream(aes(y=cases, fill=variant), type="ridge")) %>%
+      return()
+  }
 }
