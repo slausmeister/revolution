@@ -1,5 +1,5 @@
 # Ich hab absolut keinen Plan welche header geladen werden müssen
-
+source("sti.R")
 variant_case_time_series <- function(update_data=F, interpolation="none"){
 
     if(update_data){
@@ -39,14 +39,14 @@ variant_sti_time_series <- function(update_data=F, interpolation="none"){
         mutate(delta_sti = sti * delta) %>%
         select(c("date", "alpha_sti", "beta_sti", "gamma_sti", "delta_sti")) %>%
         return()
-} 
-    
+}
+
     delta_r_sti <- delta_sti_time_series
     delta_r_sti$delta <- 0
     for(t in 8:nrow(delta_sti_time_series)){
         delta_r_sti$delta[t] <- as.numeric(delta_sti_time_series[t,2])/as.numeric(delta_sti_time_series[t-4,2])
     }
-    
+
     delta_r <- delta_time_series
     delta_r$delta <- 0
     for(t in 8:nrow(delta_time_series)){
@@ -75,7 +75,7 @@ building_variant_data <- function(interpolation="none", tablepath = "xlsx/VOC_VO
         '/'(.,100) %>% # Dividing by 100 for acurate %
         slice(rep(1:n(), each = 7)) -> # Replicating the data values
         anteil
-    
+
     # Adding a date column
     anteil %>%
         mutate(Datum = seq(as.Date("2021/01/04"),by = "days",
@@ -83,7 +83,7 @@ building_variant_data <- function(interpolation="none", tablepath = "xlsx/VOC_VO
         anteil
     # Mayor issues right here...
     if(interpolation=="linear"){
-             
+
         for(i in seq(8, dim(anteil)[1], by=7) ){
             a <- anteil[i-7,2:5]
             b <- anteil[i,2:5]
