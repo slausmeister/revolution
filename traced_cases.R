@@ -40,7 +40,6 @@ plot_traced_total <- function(ages="all", regions="Germany",
     data <- calc_traced_cases(ages, regions, from, to)
     data %>% mutate(untraced_total=cases-traced_total) %>% select(-cases, -traced_percentage) %>%
       pivot_longer(!date, names_to="traced", values_to="count") -> data
-    print(data)
 
     ggplot(data, aes(x=date)) + geom_stream(aes(y=count, fill=traced), type="ridge") -> plt
 
