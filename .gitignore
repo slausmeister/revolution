@@ -1,2 +1,2 @@
 # ignore the rki csv
-/csvs/RKI_COVID19.csv
+/inst/extdata/RKI_COVID19.csv
