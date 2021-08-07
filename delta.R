@@ -5,7 +5,7 @@ library(ggstream)
 variant_case_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
     if(update_data){
-        source("update_VOC_data.R")
+        source("update_VOC_table.R")
         get_latest_voc_data()
     }
 
@@ -38,7 +38,7 @@ variant_case_time_series <- function(update_data=F, interpolation="none", format
 variant_sti_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
     if(update_data){
-        source("update_VOC_data.R")
+        source("update_VOC_table.R")
         get_latest_voc_data()
     }
 
