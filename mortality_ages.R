@@ -1,5 +1,8 @@
 source("utilities.R",encoding="UTF-8")
 
+# USER FUNKTION
+# gibt eine Zeitreihe zurück, an welchem Datum wie viele der infizierten gestorben
+# sind, aufgeschlüsselt nach Altersgruppe
 calc_mortality_ages <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
@@ -27,11 +30,10 @@ calc_mortality_ages <- function(ages="all", regions="Germany", from="2020-01-01"
     select(-days_series) %>% return()
 }
 
+# USER funktion
+# plottet die obige Zeitreihe
 plot_mortality_ages <- function(){
   calc_mortality_ages() %>%
     ggplot2::ggplot(ggplot2::aes(x=date, y=mortality, color=Altersgruppe)) %>%
     `+`(ggplot2::geom_line()) %>% return()
 }
-# nice plot:
-#calc_mortality_ages() %>%
-#  ggplot(aes(x=date, y=mortality, color=Altersgruppe)) %>% `+`(geom_line())

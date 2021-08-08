@@ -1,15 +1,14 @@
 source("sti.R")
 
+# USER FUNKTION
+# funktion, bei der man korrelation von landkreisen ausrechnen kann
+# man gibt die lks als regions=c("Hamburg", "Passau", "München") an
+# für regions="all" wird ein tibble mit allen lk Paaren zurückgegeben
 calc_sti_correlation_of_lks <- function(regions="all"){
+
   avg_correlation <- function(ts1, ts2, window=0){
     return(ccf(ts1, ts2, lag.max=window, plot=F)$acf %>% abs() %>% mean())
   }
-
-  # calc_cor_pair <- function(lk_id1, lk_id2){
-  #   return(avg_correlation(get_sti_series_simple(lk_id1),
-  #     get_sti_series_simple(lk_id2)))
-  # }
-
 
   if(all(regions=="all")){
     lk_ids <- population_lk_data[["IdLandkreis"]]
@@ -27,7 +26,7 @@ calc_sti_correlation_of_lks <- function(regions="all"){
     get_sti_series_simple(lk_ids[i]) %>% as.numeric() %>% list() %>%
       append(sti_list, .) -> sti_list
 
-    print(i/length(lk_ids))
+    print(paste("Progress: ", 50*i/length(lk_ids), "%"))
   }
 
   indices1 <- 1:length(lk_ids)
@@ -39,7 +38,7 @@ calc_sti_correlation_of_lks <- function(regions="all"){
   for(i in 1:no_of_pairs){
     index_pairs %>% slice(i) %>% unlist(use.names=F) -> indices
     avg_corrs[i] <- avg_correlation(sti_list[[indices[1]]], sti_list[[indices[2]]])
-    print(paste("Progress: ", 100*i/no_of_pairs, "%"))
+    print(paste("Progress: ", 50 + 50*i/no_of_pairs, "%"))
   }
 
   index_pairs %>% mutate(correlation=avg_corrs) %>%
@@ -58,23 +57,4 @@ calc_sti_correlation_of_lks <- function(regions="all"){
     left_join(population_lk_data, by=c("lk_id2"="IdLandkreis")) %>%
     mutate(Landkreis2=Landkreis) %>%
     select(correlation, Landkreis2, Landkreis1) %>% return()
-
-  # lk_ids2 <- lk_ids1
-  #
-  # crossing(lk_ids1, lk_ids2) %>% filter(lk_ids1 < lk_ids2) -> lk_pairs
-  # avg_corrs <- rep(0, length(lk_ids1))
-  #
-  # no_of_pairs <- lk_pairs %>% count() %>% `[[`(1)
-  #
-  # for(i in 1:no_of_pairs){
-  #   lk_pairs %>% slice(i) %>% unlist(use.names=F) -> lks
-  #   avg_corrs[i] <- calc_cor_pair(lks[1], lks[2])
-  #   print(paste("Progress: ", 100*i/no_of_pairs, "%"))
-  #   if(i %% 200 == 0){
-  #
-  #   }
-  # }
-  #
-  # lk_pairs %>% mutate(correlation=avg_corrs) %>%
-  #   arrange(desc(correlation)) %>% return()
 }

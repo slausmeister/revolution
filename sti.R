@@ -1,18 +1,17 @@
 source("utilities.R")
 
+# HIDDEN FUNKTION
 # calc sti for a certain time series with a given population
 sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
-  # n <- length(cases)
-  # sti <- rep(0, n)
+
   sti <- stats::filter(cases, rep(1/7, 7), method="convolution", sides=1)
   sti[1:6] <- cases[1:6] / 7
-  # for(i in 1:n){
-  #     for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
-  # }
+
   return(sti / pop * 1e5)
 }
 
+# USER FUNKTION
 # returns a total time series of cases and deaths for a region/age group etc.
 get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
@@ -31,7 +30,8 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
   return(time_series)
 }
 
-# funktion die schneller laufen sollte, klappt nicht so ganz
+# HIDDEN funktion
+# funktion die schneller laufen sollte, klappt so halb
 get_sti_series_simple <- function(lk_id){
   population_lk_data %>% filter(IdLandkreis %in% lk_id) %>%
     unique() -> data
@@ -44,6 +44,8 @@ get_sti_series_simple <- function(lk_id){
   sti(cases_ts, population) %>% return()
 }
 
+# USER FUNKTION
+# returnt eine zeitreihe der sti für eine bestimmte gruppe (lk, alter, etc)
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
   # careful! when specifying region *and* agegroup, the incidence will not be accurate because
@@ -94,6 +96,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(tibble(date=days_series, sti=sti_series))
 }
 
+# definitiv schlechter als die oben, löschen?
 # get a sti time series for a lk id
 get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){

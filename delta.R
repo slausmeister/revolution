@@ -2,6 +2,7 @@ source("sti.R")
 library(ggplot2)
 library(ggstream)
 
+
 variant_case_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
     if(update_data){
@@ -113,6 +114,7 @@ plot_variant_share <- function(update_data=F, interpolation="none", sti=F){
   else{
     variant_case_time_series(update_data, interpolation, format_long=T) %>%
       ggplot(aes(x=date)) %>%
+      # geom_stream kommt aus dem paket ggstream!!
       `+`(geom_stream(aes(y=cases, fill=variant), type="ridge")) %>%
       return()
   }
