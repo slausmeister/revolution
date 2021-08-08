@@ -1,5 +1,5 @@
 #' @export
-get_latest_data <- function(method){
+update_rki_data <- function(method){
   # the end user needs to specify a download method, because it depends on the system
   # on Manjaro Linux, "wget" seems to work
   # see ?download.file for all possible methods
@@ -44,7 +44,7 @@ get_latest_data <- function(method){
 }
 
 #' @export
-get_latest_voc_data <- function(method){
+update_voc_data <- function(method){
   # the end user needs to specify a download method, because it depends on the system
   # on Manjaro Linux, "wget" seems to work
   # see ?download.file for all possible methods
