@@ -26,7 +26,12 @@ calc_mortality_ages <- function(ages="all", regions="Germany", from="2020-01-01"
     mutate(date=days_series, mortality=replace_na(mortality, 0)) %>%
     select(-days_series) %>% return()
 }
-calc_mortality_ages()
+
+plot_mortality_ages <- function(){
+  calc_mortality_ages() %>%
+    ggplot2::ggplot(ggplot2::aes(x=date, y=mortality, color=Altersgruppe)) %>%
+    `+`(ggplot2::geom_line()) %>% return()
+}
 # nice plot:
 #calc_mortality_ages() %>%
 #  ggplot(aes(x=date, y=mortality, color=Altersgruppe)) %>% `+`(geom_line())

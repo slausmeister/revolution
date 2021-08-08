@@ -37,6 +37,8 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   # therefore, it is recommended to specify only one or the other
 
   # calculate the population of the specified group
+  population_age_data %>% filter(Jahr=="2020") -> population_age_2020_data
+   
   population_age_2020_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
   spec_pop_percentage <- 1
 
