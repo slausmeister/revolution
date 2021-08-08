@@ -5,10 +5,8 @@ library(tidyr)
 library(dplyr)
 library(rlist)
 
-deaths_per_age <- read_excel("csvs/deaths_per_age.xlsx")
+deaths_per_age <- read_excel("xlsx/deaths_per_age.xlsx")
 population_age <- read_csv("csvs/population_age.csv")
-population_age
-
 
 population_age %>%
   group_by(Jahr,Altersgruppe) %>% 
