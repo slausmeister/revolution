@@ -25,3 +25,5 @@ population_lk_data %>% summarise(n=sum(Bevölkerung)) %>%
 read_csv("csvs/population_age.csv") %>% 
   group_by(Altersgruppe,Jahr) %>% summarise(Bevölkerung=sum(Bevölkerung)) ->
   population_age_data
+
+
