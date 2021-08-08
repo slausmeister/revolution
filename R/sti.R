@@ -37,7 +37,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   # therefore, it is recommended to specify only one or the other
 
   # calculate the population of the specified group
-  population_age_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
+  rev.env$population_age_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
   spec_pop_percentage <- 1
 
   if(!all(ages=="all")){
@@ -60,13 +60,13 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
 
   if(all(tolower(regions)=="germany")) final_pop <- spec_pop_percentage * total_pop
   else if(all(tolower(regions) %in% bundesländer)){
-    population_age_2020_data %>% dplyr::filter(tolower(Bundesland) %in% tolower(regions)) %>%
+    rev.env$population_age_data %>% dplyr::filter(tolower(Bundesland) %in% tolower(regions)) %>%
       `[[`("Bevölkerung") %>% sum() -> region_pop
     final_pop <- region_pop * spec_pop_percentage
   }
   else{
     for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i])
-    population_lk_data %>% dplyr::filter(IdLandkreis %in% regions) %>%
+    rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% regions) %>%
       `[[`("Bevölkerung") %>% sum() -> region_pop
     final_pop <- region_pop * spec_pop_percentage
   }
@@ -83,8 +83,36 @@ get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.D
   return_deaths=F){
 
     # get the lk names
-    population_lk_data %>% dpylr::filter(IdLandkreis %in% lk_ids) %>% dplyr::select(Landkreis) %>%
+    rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% lk_ids) %>% dplyr::select(Landkreis) %>%
       unique() %>% `[[`("Landkreis") -> lk_names
     return(get_sti_series_for(ages=ages, regions=lk_names, from=from, to=to,
       return_deaths=return_deaths))
   }
+
+# A faster sti function, it is however less adaptable
+sti_id <- function(id){
+    # Getting population
+    pop <- as.integer(dplyr::filter(rev.env$population_lk_data,IdLandkreis==id)[5])
+    
+    #Getting each case
+    rki_id <- rki_data[which(rki_data$IdLandkreis == id),]
+
+    dplyr::left_join(tibble::tibble(date=rev.env$days_since_2020),rki_id, by=c("date"="Meldedatum")) %>%
+        dplyr::group_by(date) %>%
+        dplyr::summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall), recoveries=sum(AnzahlGenesen)) %>%
+      # the days we have no infection data for are days with 0 infections
+        dplyr::mutate(cases=tidyr::replace_na(cases, 0), deaths=tidyr::replace_na(deaths, 0),
+        recoveries=tidyr::replace_na(recoveries, 0)) ->
+            id_time_series
+
+
+    # Calculating the rolling average
+    n <- length(id_time_series$date)
+    sti <- rep(0, n)
+    for(i in 1:n){
+        for(j in max(1, i-6):i) sti[i] <- sti[i] + id_time_series$cases[j]
+    }
+    sti <- sti / pop * 1e5
+
+    return(tibble::tibble(id_time_series$date,sti, .name_repair = ~ c("date", "sti")))
+}

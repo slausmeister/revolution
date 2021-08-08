@@ -8,10 +8,10 @@ get_bundesland_id_from_lk_id <- function(lk_id){
 # get the LandkreisID from a input string
 
 get_lk_id_from_string <- function(lk_name, print_process=F){
-  population_lk_data %>% dplyr::filter(stringr::str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
+  rev.env$population_lk_data %>% dplyr::filter(stringr::str_detect(Landkreis, stringr::regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
 
-  population_lk_data %>% dplyr::filter(stringr::str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
+  rev.env$population_lk_data %>% dplyr::filter(stringr::str_detect(Landkreis, stringr::regex(lk_name, ignore_case=T))) %>%
     `[[`("IdLandkreis") -> lk_ids
 
   if(length(lks) == 1) return(lk_ids)
@@ -83,8 +83,4 @@ filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=
   }
 
   return(data)
-}
-
-days_since_2020 <- function(){
-    return(seq(as.Date("2020-01-01"), as.Date(Sys.Date()), by="days"))
 }

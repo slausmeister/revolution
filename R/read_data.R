@@ -1,24 +1,26 @@
 # This is the main data preperation function.
 #' @export
 read_rki_data <- function(){
+
+rev.env <<- new.env(parent = emptyenv())
 # import the population of 'Landkreis' with the given csv
-population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"))
+    rev.env$population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"),show_col_types = FALSE)
 
 # transform the 'IdLandkreis' column to a numeric
-population_lk_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)) -> population_lk_data
+rev.env$population_lk_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)) -> rev.env$population_lk_data
 
 # calculate the total german population
-population_lk_data %>% dplyr::summarise(n=sum(Bevölkerung)) %>%
+rev.env$population_lk_data %>% dplyr::summarise(n=sum(Bevölkerung)) %>%
   `[[`(1) -> total_population_germany
 
 # import the population per age group in 2020
-readr::read_csv(system.file("extdata", "population_age.csv", package="revolution")) %>% dplyr::filter(Jahr==2020) %>%
+readr::read_csv(system.file("extdata", "population_age.csv", package="revolution"),show_col_types = FALSE) %>% dplyr::filter(Jahr==2020) %>%
   dplyr::group_by(Altersgruppe) %>% dplyr::summarise(Bevölkerung=sum(Bevölkerung)) ->
-  population_age_2020_data
+  rev.env$population_age_data
 
 ### rki covid data:
 # import raw rki data
-rki_data <- readr::read_csv(system.file("extdata", "RKI_COVID19.csv", package="revolution"))
+rki_data <- readr::read_csv(system.file("extdata", "RKI_COVID19.csv", package="revolution"),show_col_types = FALSE)
 
 # the 'Neuer' and 'Datenstand' columns compare this dataset to the one from yesterday,
 # which makes it useless for our research
@@ -36,7 +38,7 @@ rki_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)) -> rki_data
 
 # we will use the 'Landkreis' column from the other csv, because of normalization
 rki_data %>% dplyr::select(-Landkreis) %>%
-  dplyr::left_join(dplyr::select(readr::read_csv(system.file("extdata","population_lk.csv", package="revolution")), IdLandkreis, Landkreis), by="IdLandkreis") ->
+  dplyr::left_join(dplyr::select(readr::read_csv(system.file("extdata","population_lk.csv", package="revolution"),show_col_types = FALSE), IdLandkreis, Landkreis), by="IdLandkreis") ->
   rki_data
 
 # 'IdBundesland' is a part of 'IdLandkreis' and we have the 'Bundesland' column
@@ -44,6 +46,8 @@ rki_data %>% dplyr::select(-IdBundesland) -> rki_data
 
 # 'FID' is the case id, which is useless for our research
 rki_data %>% dplyr::select(-FID) -> rki_data
+
+rev.env$days_since_2020 <- seq(as.Date("2020-01-01"), as.Date(Sys.Date()), by="days")
 
 return(rki_data)
 }
