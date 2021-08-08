@@ -2,8 +2,8 @@
 # eine Zeitreihe aus Infektionen erstellen kann
 # außerdem soll das Skript Benutzereingaben in IDs umwandeln können (zB Schleswig Holstein zu 01)
 
-source("pop_data_preparation.R")
-source("rki_data_preparation.R")
+source("pop_data_preparation.R",encoding="UTF-8")
+source("rki_data_preparation.R",encoding="UTF-8")
 
 get_bundesland_id_from_lk_id <- function(lk_id){
   return((lk_id - lk_id %% 1000) / 1000)

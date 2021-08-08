@@ -22,6 +22,6 @@ population_lk_data %>% summarise(n=sum(Bevölkerung)) %>%
   `[[`(1) -> total_population_germany
 
 # import the population per age group in 2020
-read_csv("csvs/population_age.csv") %>% filter(Jahr==2020) %>%
-  group_by(Altersgruppe) %>% summarise(Bevölkerung=sum(Bevölkerung)) ->
-  population_age_2020_data
+read_csv("csvs/population_age.csv") %>% 
+  group_by(Altersgruppe,Jahr) %>% summarise(Bevölkerung=sum(Bevölkerung)) ->
+  population_age_data
