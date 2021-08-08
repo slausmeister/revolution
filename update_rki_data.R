@@ -1,4 +1,4 @@
-get_latest_data <- function(method){
+get_latest_rki_data <- function(method){
   # the end user needs to specify a download method, because it depends on the system
   # on Manjaro Linux, "wget" seems to work
   # see ?download.file for all possible methods
@@ -39,5 +39,4 @@ get_latest_data <- function(method){
     print("Something went wrong, restoring the old file.")
     file.rename("csvs/RKI_COVID19_old.csv", "csvs/RKI_COVID19.csv")
   }
-
 }
