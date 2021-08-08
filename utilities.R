@@ -9,7 +9,7 @@ get_bundesland_id_from_lk_id <- function(lk_id){
   return((lk_id - lk_id %% 1000) / 1000)
 }
 
-# get the LandkreisID from a input string
+# get the LandkreisID from an input string
 get_lk_id_from_string <- function(lk_name, print_process=F){
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
@@ -41,7 +41,7 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
 
   if(print_process){
     cat("The following 'Landkreis' was returned:\n")
-    print(lk_name)
+    print(lks[[1]])
     cat("If this is wrong, please type the exact 'Landkreis'\n")
   }
 
