@@ -1,41 +1,80 @@
 source("sti.R")
 
-# cases <- cases_time_series_germany[["cases"]]
-# deaths <- cases_time_series_germany[["deaths"]]
-# recoveries <- cases_time_series_germany[["recoveries"]]
+calc_sti_correlation_of_lks <- function(regions="all"){
+  avg_correlation <- function(ts1, ts2, window=0){
+    return(ccf(ts1, ts2, lag.max=window, plot=F)$acf %>% abs() %>% mean())
+  }
 
-# acf(cases, lag.max=length(cases))
-# acf(deaths, lag.max=length(deaths))
-# acf(recoveries, lag.max=length(recoveries))
+  # calc_cor_pair <- function(lk_id1, lk_id2){
+  #   return(avg_correlation(get_sti_series_simple(lk_id1),
+  #     get_sti_series_simple(lk_id2)))
+  # }
 
-# ccf(deaths, cases, lag.max=length(cases))
 
+  if(all(regions=="all")){
+    lk_ids <- population_lk_data[["IdLandkreis"]]
+  }
+  else{
+    lk_ids <- c()
+    for(lk in regions){
+      lk_ids <- c(lk_ids, get_lk_id_from_string(lk, T))
+    }
+  }
 
-avg_correlation <- function(ts1, ts2, window=0){
-  return(ccf(ts1, ts2, lag.max=window, plot=F)$acf %>% abs() %>% mean())
-}
+  sti_list <- list()
 
-calc_cor_pair <- function(lk_id1, lk_id2){
-  return(avg_correlation(get_sti_series_by_id(lk_id1)[["sti"]],
-    get_sti_series_by_id(lk_id2)[["sti"]]))
-}
+  for(i in 1:length(lk_ids)){
+    get_sti_series_simple(lk_ids[i]) %>% as.numeric() %>% list() %>%
+      append(sti_list, .) -> sti_list
 
-lk_ids1 <- population_lk_data[["IdLandkreis"]]
-lk_ids2 <- lk_ids1
+    print(i/length(lk_ids))
+  }
 
-crossing(lk_ids1, lk_ids2) %>% filter(lk_ids1 < lk_ids2) -> lk_pairs
-avg_corrs <- rep(0, length(lk_ids1))
+  indices1 <- 1:length(lk_ids)
+  indices2 <- 1:length(lk_ids)
+  crossing(indices1, indices2) %>% filter(indices1 < indices2) -> index_pairs
+  index_pairs %>% count() %>% `[[`(1) -> no_of_pairs
+  avg_corrs <- rep(0, length(no_of_pairs))
 
-no_of_pairs <- lk_pairs %>% count() %>% `[[`(1)
-for(i in 1:no_of_pairs){
-  lk_pairs %>% slice(i) %>% unlist(use.names=F) -> lks
-  avg_corrs[i] <- calc_cor_pair(lks[1], lks[2])
-  if(i %% 200 == 0){
+  for(i in 1:no_of_pairs){
+    index_pairs %>% slice(i) %>% unlist(use.names=F) -> indices
+    avg_corrs[i] <- avg_correlation(sti_list[[indices[1]]], sti_list[[indices[2]]])
     print(paste("Progress: ", 100*i/no_of_pairs, "%"))
   }
+
+  index_pairs %>% mutate(correlation=avg_corrs) %>%
+    arrange(desc(correlation)) %>% mutate(lk_id1=0, lk_id2=0) -> data
+
+  for(i in 1:nrow(data)){
+    lk_ids[data[[i, "indices1"]]] -> id1
+    lk_ids[data[[i, "indices2"]]] -> id2
+    data[[i, "lk_id1"]]  <- id1
+    data[[i, "lk_id2"]]  <- id2
+  }
+
+  data %>% left_join(population_lk_data, by=c("lk_id1"="IdLandkreis")) %>%
+    mutate(Landkreis1=Landkreis) %>%
+    select(correlation, Landkreis1, lk_id2) %>%
+    left_join(population_lk_data, by=c("lk_id2"="IdLandkreis")) %>%
+    mutate(Landkreis2=Landkreis) %>%
+    select(correlation, Landkreis2, Landkreis1) %>% return()
+
+  # lk_ids2 <- lk_ids1
+  #
+  # crossing(lk_ids1, lk_ids2) %>% filter(lk_ids1 < lk_ids2) -> lk_pairs
+  # avg_corrs <- rep(0, length(lk_ids1))
+  #
+  # no_of_pairs <- lk_pairs %>% count() %>% `[[`(1)
+  #
+  # for(i in 1:no_of_pairs){
+  #   lk_pairs %>% slice(i) %>% unlist(use.names=F) -> lks
+  #   avg_corrs[i] <- calc_cor_pair(lks[1], lks[2])
+  #   print(paste("Progress: ", 100*i/no_of_pairs, "%"))
+  #   if(i %% 200 == 0){
+  #
+  #   }
+  # }
+  #
+  # lk_pairs %>% mutate(correlation=avg_corrs) %>%
+  #   arrange(desc(correlation)) %>% return()
 }
-
-lk_pairs %>% mutate(correlation=avg_corrs) %>% arrange(desc(correlation)) -> lk_cor
-
-# plot(normalize_sti(calc_sti_lk("Rheingau")), type="l")
-# ccf(normalize_sti(calc_sti_lk("Potsdam")), normalize_sti(calc_sti_lk("Berlin")), lag.max=500)

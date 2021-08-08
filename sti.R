@@ -3,11 +3,13 @@ source("utilities.R")
 # calc sti for a certain time series with a given population
 sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
-  n <- length(cases)
-  sti <- rep(0, n)
-  for(i in 1:n){
-      for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
-  }
+  # n <- length(cases)
+  # sti <- rep(0, n)
+  sti <- stats::filter(cases, rep(1/7, 7), method="convolution", sides=1)
+  sti[1:6] <- cases[1:6] / 7
+  # for(i in 1:n){
+  #     for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
+  # }
   return(sti / pop * 1e5)
 }
 
@@ -29,6 +31,19 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
   return(time_series)
 }
 
+# funktion die schneller laufen sollte, klappt nicht so ganz
+get_sti_series_simple <- function(lk_id){
+  population_lk_data %>% filter(IdLandkreis %in% lk_id) %>%
+    unique() -> data
+  data %>% `[[`("Landkreis") -> lk_name
+  data %>% `[[`("Bevölkerung") -> population
+
+  ts <- get_time_series_for(regions=lk_name)
+  cases_ts <- ts[["cases"]]
+
+  sti(cases_ts, population) %>% return()
+}
+
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
   # careful! when specifying region *and* agegroup, the incidence will not be accurate because
@@ -38,7 +53,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
 
   # calculate the population of the specified group
   population_age_data %>% filter(Jahr=="2020") -> population_age_2020_data
-   
+
   population_age_2020_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
   spec_pop_percentage <- 1
 
