@@ -87,3 +87,40 @@ update_voc_data <- function(method){
   }
 
 }
+
+#' @export
+update_vac_data <- function(method){
+  if (file.exists(system.file("extdata","vac_COVID19_old.csv", package = "revolution"))) {
+    # delete file if it exists
+    file.remove(system.file("extdata","vac_COVID19_old.csv", package = "revolution"))
+  }
+  
+  
+  # check if we have an old "new" file
+  if (file.exists(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))) {
+    # delete file if it exists
+    file.remove(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))
+  }
+  
+  # download the latest RKI file
+  download.file(url="https://raw.githubusercontent.com/robert-koch-institut/COVID-19-Impfungen_in_Deutschland/master/Aktuell_Deutschland_Landkreise_COVID-19-Impfungen.csv", destfile=system.file("extdata","vac_COVID19_new.csv", package = "revolution"), method=method)
+  
+  
+  # checks if we have an old RKI_file
+  if(file.exists(system.file("extdata","vac_COVID19.csv", package = "revolution"))){
+    # if so, make it a backup in case something went wrong
+    file.rename(system.file("extdata","vac_COVID19.csv", package = "revolution"), system.file("extdata","vac_COVID19_old.csv", package = "revolution"))
+  }
+  
+  
+  # check if the download was successful, if so remove the backup file and rename the new file
+  if(file.exists(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))){
+    file.rename(system.file("extdata","vac_COVID19_new.csv", package = "revolution"), system.file("extdata","vac_COVID19.csv", package = "revolution"))
+    file.remove(system.file("extdata","vac_COVID19_old.csv", package = "revolution"))
+    print("Download successful")
+  } else{
+    # if the download failed, restore the old file
+    print("Something went wrong, restoring the old file.")
+    file.rename(system.file("extdata","vac_COVID19_old.csv", package = "revolution"), system.file("extdata","vac_COVID19.csv", package = "revolution"))
+  }
+}
