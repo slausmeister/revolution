@@ -6,7 +6,7 @@ sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
 
   sti <- stats::filter(cases, rep(1/7, 7), method="convolution", sides=1)
-  sti[1:6] <- cases[1:6] / 7
+  sti[1:6] <- cases[1:6]
 
   return(sti / pop * 1e5)
 }
@@ -14,10 +14,13 @@ sti <- function(cases, pop){
 # USER FUNKTION
 # returns a total time series of cases and deaths for a region/age group etc.
 get_time_series_for <- function(ages="all", regions="Germany",
-  from="2020-01-01", to=Sys.Date(), ids=F){
+  from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
-  data <- filter_data_by(ages, regions, from, to, ids)
+
+  ids <- is.numeric(regions)
+
+  data <- filter_data_by(ages, regions, from, to)
 
   # create time series
   days_series <- seq(as.Date(from), as.Date(to), by="days")
@@ -42,17 +45,21 @@ get_sti_series_simple <- function(lk_id){
   ts <- get_time_series_for(regions=lk_name)
   cases_ts <- ts[["cases"]]
 
+  print(cases_ts)
+
   sti(cases_ts, population) %>% return()
 }
 
 # USER FUNKTION
 # returnt eine zeitreihe der sti für eine bestimmte gruppe (lk, alter, etc)
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
-  return_deaths=F, ids=F){
+  return_deaths=F){
   # careful! when specifying region *and* agegroup, the incidence will not be accurate because
   # there is no population data for the age groups in each Landkreis and it will be estimated
   # by the age distribution in all of Germany
   # therefore, it is recommended to specify only one or the other
+
+  ids <- is.numeric(regions)
 
   # calculate the population of the specified group
   population_age_data %>% filter(Jahr=="2020") -> population_age_2020_data
@@ -70,7 +77,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     spec_pop_percentage <- spec_pop / total_pop
   }
 
-  time_series <- get_time_series_for(ages, regions, from, to, ids)
+  time_series <- get_time_series_for(ages, regions, from, to)
   days_series <- days_series <- seq(as.Date(from), as.Date(to), by="days")
 
   # filter the regions (not robust at the moment)
@@ -85,7 +92,9 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     final_pop <- region_pop * spec_pop_percentage
   }
   else{
-    for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i])
+    if(!ids){
+      for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i])
+    }
     population_lk_data %>% filter(IdLandkreis %in% regions) %>%
       `[[`("Bevölkerung") %>% sum() -> region_pop
     final_pop <- region_pop * spec_pop_percentage
@@ -97,15 +106,16 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(tibble(date=days_series, sti=sti_series))
 }
 
-plot_comparison_lks <- function(lks, type="cases", id=F){
+plot_comparison_lks <- function(lks, type="cases"){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
 
+  ids <- is.numeric(regions)
 
-  ids <- lks
-  if(!id){
+  lk_ids <- lks
+  if(!ids){
     for(i in 1:length(lks)){
-      ids[i] <- get_lk_id_from_string(lks[i])
+      lk_ids[i] <- get_lk_id_from_string(lks[i])
     }
   }
 
@@ -113,10 +123,10 @@ plot_comparison_lks <- function(lks, type="cases", id=F){
 
   if(type=="sti"){
     for(i in 1:length(lks)){
-      get_sti_series_for(regions=ids[i], ids=T) -> temp
+      get_sti_series_for(regions=lk_ids[i], ids=T) -> temp
       temp %>% mutate(date=as.character(date), value=sti, lk=lks[i]) %>%
-        select(-sti) -> test
+        select(-sti) %>% add_row(data, .) -> data
     }
-
   }
+  return(data)
 }

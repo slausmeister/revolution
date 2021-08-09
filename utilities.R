@@ -65,9 +65,10 @@ get_age_label_from_number <- function(age_number){
 
 # USER FUNKTION (?)
 # gibt die ganze rki tabelle nach den Kriterien gefiltert zurück
-filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
-ids=F){
+filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # TODO: check if ids valid if ids
+  ids <- is.numeric(regions)
+
   data <- rki_data
   # filter the age groups
   if(!all(ages=="all")){
