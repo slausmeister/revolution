@@ -2,6 +2,8 @@
 #' @export
 read_rki_data <- function(){
 
+  # TODO: checken, ob die rki datei schon ex, wenn nicht, runterladen!!!!!!
+
 rev.env <<- new.env(parent = emptyenv())
 # import the population of 'Landkreis' with the given csv
 rev.env$population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"),show_col_types = FALSE)

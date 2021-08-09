@@ -104,10 +104,8 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
 #' @export
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01",
   to=Sys.Date(), vac_num="all", cumulate=F){
-    # TODO: Etwas robuster machen
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
-    print(data)
-    print(ncol(data))
+
     if(ncol(data)==2){
       data %>%
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl)) %>%

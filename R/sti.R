@@ -82,7 +82,6 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   # there is no population data for the age groups in each Landkreis and it will be estimated
   # by the age distribution in all of Germany
   # therefore, it is recommended to specify only one or the other
-  #TODO: ages und daten robust machen, bzw fehler melden
   ids <- is.numeric(regions)
 
   stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(age_number)))))
@@ -252,6 +251,7 @@ plot_for_lks <- function(lks, type="cases"){
     `+`(ggplot2::geom_line()) %>% return()
 }
 
+# TODO: documentation
 # schöner stream plot zur aufteilung der Altersgruppen
 #' @export
 plot_for_agegroups <- function(type="cases"){
