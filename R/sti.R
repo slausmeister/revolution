@@ -187,7 +187,7 @@ plot_for_lks <- function(lks, type="cases"){
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
-  rev.env$rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
+  rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
   tidyr::crossing(Altersgruppe, rev.env$days_since_2020) -> series1
   options(dplyr.summarise.inform = FALSE)
   series1 %>% dplyr::rename("date"="days_since_2020") %>%
