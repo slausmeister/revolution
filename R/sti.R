@@ -33,7 +33,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   # there is no population data for the age groups in each Landkreis and it will be estimated
   # by the age distribution in all of Germany
   # therefore, it is recommended to specify only one or the other
-
+  #TODO: ages und daten robust machen, bzw fehler melden
   ids <- is.numeric(regions)
 
   # calculate the population of the specified group
@@ -83,7 +83,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
 #' @export
 get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
-
+    #TODO: ages und daten robust machen, bzw fehler melden
     # get the lk names
     rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% lk_ids) %>% dplyr::select(Landkreis) %>%
       unique() %>% `[[`("Landkreis") -> lk_names

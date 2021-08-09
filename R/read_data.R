@@ -4,7 +4,7 @@ read_rki_data <- function(){
 
 rev.env <<- new.env(parent = emptyenv())
 # import the population of 'Landkreis' with the given csv
-    rev.env$population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"),show_col_types = FALSE)
+rev.env$population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"),show_col_types = FALSE)
 
 # transform the 'IdLandkreis' column to a numeric
 rev.env$population_lk_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)) -> rev.env$population_lk_data
@@ -12,6 +12,10 @@ rev.env$population_lk_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)
 # calculate the total german population
 rev.env$population_lk_data %>% dplyr::summarise(n=sum(Bevölkerung)) %>%
   `[[`(1) -> total_population_germany
+
+# import the data for vaccination
+rev.env$vax_data <- readr::read_csv(system.file("extdata", "vac_COVID19.csv", package="revolution"),
+  show_col_types = FALSE)
 
 # import the population per age group in 2020
 readr::read_csv(system.file("extdata", "population_age.csv", package="revolution"),show_col_types = FALSE) %>% dplyr::filter(Jahr==2020) %>%
