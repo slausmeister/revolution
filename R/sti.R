@@ -7,8 +7,28 @@ sti <- function(cases, pop){
   return(sti / pop * 1e5)
 }
 
-# returns a total time series of cases and deaths for a region/age group etc.
-#' @export
+#'Time series of COVID-19 cases and deaths
+#'
+#'\code{get_time_series_for()} is used to create a tibble of
+#'COVID-19 cases and COVID-19 related deaths for a region and a certain
+#'age group. The time period can be defined by the user.
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the summed cases/deaths of these regions.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'
+#'@return A tibble that contains the number of cases and deaths for the desired regions during the defined period of time.
+#'The default version without any arguments returns a tibble that contains all the cases/deaths of Germany between 2020-01-01 and today.
+#'@examples get_time_series_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
+#'
+#'get_time_series_for(ages=32,regions=c(8221,8222))
+#'
+#'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
+#'##"from" must always be an earlier date than "to"
+#'@export
 get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
@@ -26,6 +46,35 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
   return(time_series)
 }
 
+#'Time series of 7-day-incidence
+#'
+#'\code{get_sti_series_for()} is used to create a tibble of
+#'the 7-day-incidence of a region and a certain
+#'age group. The time period can be defined by the user.
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the 7-day-incidence of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'@param return_deaths A boolean. If one sets \code{return_deaths=T}, another column is added to the tibble that contains the 7-day-death-average weighted by
+#'the population. (Basically, this is the something like a 7-day-death-incidence.)
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the incidence will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A tibble that contains the 7-day-incidence (or additionally, the 7-day-death-average) for the desired regions during the defined period of time.
+#'The default version without any arguments returns a tibble that contains the 7-day-incidence of Germany between 2020-01-01 and today.
+#'@examples get_sti_series_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
+#'
+#'get_sti_series_for(ages=32,regions=c(8221,8222))
+#'
+#'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
+#'#"from" must always be an earlier date than "to"
 #' @export
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
@@ -82,21 +131,6 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(dplyr::tibble(date=days_series, sti=sti_series))
 }
 
-# get a sti time series for a lk id
-#' @export
-get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.Date(),
-  return_deaths=F){
-    #TODO: ages und daten robust machen, bzw fehler melden
-    # get the lk names
-    for(i in 1:length(lk_ids)){
-      lk_ids[i] <- get_lk_id_from_string(lk_ids[i])
-    }
-    rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% lk_ids) %>% dplyr::select(Landkreis) %>%
-      unique() %>% `[[`("Landkreis") -> lk_names
-    return(get_sti_series_for(ages=ages, regions=lk_names, from=from, to=to,
-      return_deaths=return_deaths))
-  }
-
 # A faster sti function, it is however less adaptable
 sti_id <- function(id){
     # Getting population
@@ -138,7 +172,36 @@ get_sti_series_simple <- function(lk_id){
   sti(cases_ts, population) %>% return()
 }
 
-# plots sti for lks, takes several lks for comparison
+#'Plotting time series for districts
+#'
+#'\code{plot_for_lks} is used to create a plot of the absolute number of cases, of deaths or of
+#'the 7-day-incidence of a region and a certain
+#'age group. The time period can be defined by the user.
+#'
+#'@param lks A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the 7-day-incidence of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'@param return_deaths A boolean. If one sets \code{return_deaths=T}, another column is added to the tibble that contains the 7-day-death-average weighted by
+#'the population. (Basically, this is the something like a 7-day-death-incidence.)
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the incidence will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A tibble that contains the 7-day-incidence (or additionally, the 7-day-death-average) for the desired regions during the defined period of time.
+#'The default version without any arguments returns a tibble that contains the 7-day-incidence of Germany between 2020-01-01 and today.
+#'@examples get_sti_series_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
+#'
+#'get_sti_series_for(ages=32,regions=c(8221,8222))
+#'
+#'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
+#'#"from" must always be an earlier date than "to"
+
 #' @export
 plot_for_lks <- function(lks, type="cases"){
   # type can be "cases", "sti", "deaths"
