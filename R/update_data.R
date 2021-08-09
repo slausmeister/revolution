@@ -1,5 +1,6 @@
 #' @export
 update_rki_data <- function(method){
+  # TODO: fehler für methods
   # the end user needs to specify a download method, because it depends on the system
   # on Manjaro Linux, "wget" seems to work
   # see ?download.file for all possible methods
@@ -94,25 +95,25 @@ update_vac_data <- function(method){
     # delete file if it exists
     file.remove(system.file("extdata","vac_COVID19_old.csv", package = "revolution"))
   }
-  
-  
+
+
   # check if we have an old "new" file
   if (file.exists(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))) {
     # delete file if it exists
     file.remove(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))
   }
-  
+
   # download the latest RKI file
   download.file(url="https://raw.githubusercontent.com/robert-koch-institut/COVID-19-Impfungen_in_Deutschland/master/Aktuell_Deutschland_Landkreise_COVID-19-Impfungen.csv", destfile=system.file("extdata","vac_COVID19_new.csv", package = "revolution"), method=method)
-  
-  
+
+
   # checks if we have an old RKI_file
   if(file.exists(system.file("extdata","vac_COVID19.csv", package = "revolution"))){
     # if so, make it a backup in case something went wrong
     file.rename(system.file("extdata","vac_COVID19.csv", package = "revolution"), system.file("extdata","vac_COVID19_old.csv", package = "revolution"))
   }
-  
-  
+
+
   # check if the download was successful, if so remove the backup file and rename the new file
   if(file.exists(system.file("extdata","vac_COVID19_new.csv", package = "revolution"))){
     file.rename(system.file("extdata","vac_COVID19_new.csv", package = "revolution"), system.file("extdata","vac_COVID19.csv", package = "revolution"))
