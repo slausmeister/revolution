@@ -5,7 +5,7 @@ source("utilities.R")
 sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
 
-  sti <- stats::filter(cases, rep(1/7, 7), method="convolution", sides=1)
+  sti <- stats::filter(cases, rep(1, 7), method="convolution", sides=1)
   sti[1:6] <- cases[1:6]
 
   return(sti / pop * 1e5)
@@ -44,8 +44,6 @@ get_sti_series_simple <- function(lk_id){
 
   ts <- get_time_series_for(regions=lk_name)
   cases_ts <- ts[["cases"]]
-
-  print(cases_ts)
 
   sti(cases_ts, population) %>% return()
 }
