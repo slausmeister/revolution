@@ -116,3 +116,16 @@ sti_id <- function(id){
 
     return(tibble::tibble(id_time_series$date,sti, .name_repair = ~ c("date", "sti")))
 }
+
+#Eine weitere "schnelle sti"
+get_sti_series_simple <- function(lk_id){
+  rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% lk_id) %>%
+    unique() -> data
+  data %>% `[[`("Landkreis") -> lk_name
+  data %>% `[[`("Bevölkerung") -> population
+
+  ts <- get_time_series_for(regions=lk_name)
+  cases_ts <- ts[["cases"]]
+
+  sti(cases_ts, population) %>% return()
+}
