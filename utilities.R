@@ -15,7 +15,14 @@ get_bundesland_id_from_lk_id <- function(lk_id){
 # get the LandkreisID from an input string
 get_lk_id_from_string <- function(lk_name, print_process=F){
   # TODO: check if valid ID
-  if(suppressWarnings(!is.na(as.numeric(lk_name)))) return(lk_name)
+  if(suppressWarnings(!is.na(as.numeric(lk_name)))){
+    rev.env$population_lk_data %>% dplyr::select(IdLandkreis) %>% unique() %>%
+      `[[`(1) -> valid_ids
+
+    stopifnot("invalid id!"=all(ids %in% valid_ids))
+    return(lk_name)
+  }
+
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
 
