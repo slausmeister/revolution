@@ -68,7 +68,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   }
 
   time_series <- get_time_series_for(ages, regions, from, to)
-  days_series <- days_series <- seq(as.Date(from), as.Date(to), by="days")
+  days_series <- seq(as.Date(from), as.Date(to), by="days")
 
   # filter the regions (not robust at the moment)
   rki_data %>% select(Bundesland) %>% unique() %>%

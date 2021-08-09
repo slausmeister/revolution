@@ -40,3 +40,4 @@ get_latest_vac_data <- function(method){
     file.rename("csvs/vac_COVID19_old.csv", "csvs/vac_COVID19.csv")
   }
 }
+
