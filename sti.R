@@ -103,9 +103,12 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
 }
 
 library(ggplot2)
+# USER FUNCTION
+# plots sti for lks, takes several lks for comparison
 plot_for_lks <- function(lks, type="cases"){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
+  # TODO: fehler
 
   ids <- is.numeric(lks)
 
@@ -141,14 +144,33 @@ plot_for_lks <- function(lks, type="cases"){
         select(-cases, -deaths) %>% add_row(data, .) -> data
     }
   }
-  data %>% mutate(date=as.Date(date)) -> data
-  
-  if(length(lks==1)){
-    data %>% ggplot(aes(x=date, y=value, color=lk, group=1)) %>%
-      `+`(geom_line()) %>% return()
+
+  data %>% mutate(date=as.Date(date)) %>%
+    ggplot(aes(x=date, y=value, color=lk, group=lk)) %>%
+    `+`(geom_line()) %>% return()
+}
+
+# USER FUNCTION
+# schöner stream plot zur aufteilung der Altersgruppen
+plot_for_agegroups <- function(type="cases"){
+  # type can be cases or deaths
+  rki_data %>% select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
+  crossing(Altersgruppe, days_since_2020) -> series1
+
+  series1 %>% rename("date"="days_since_2020") %>%
+    left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
+    group_by(date, Altersgruppe) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%
+    # the days for which we have no infection data for are days with 0 infections
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0)) -> data
+
+  if(type=="cases"){
+    print(data)
+    data %>% ggplot(aes(x=date, y=cases, fill=Altersgruppe)) %>%
+    `+`(ggstream::geom_stream()) %>% print()
   }
-  else{
-    data %>% ggplot(aes(x=date, y=value, color=lk)) %>%
-      `+`(geom_line()) %>% return()
+  if(type=="deaths"){
+    data %>% ggplot(aes(x=date, y=deaths, fill=Altersgruppe)) %>%
+    `+`(ggstream::geom_stream()) %>% print()
   }
 }
