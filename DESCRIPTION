@@ -20,4 +20,6 @@ Imports:
     tibble,
     stringr,
     tidyr,
-    readxl
+    readxl,
+    ggplot2,
+    ggstream
