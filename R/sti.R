@@ -246,7 +246,7 @@ plot_for_lks <- function(lks, type="cases"){
         dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
     }
   }
-
+  
   data %>% dplyr::mutate(date=as.Date(date)) %>%
     ggplot2::ggplot(ggplot2::aes(x=date, y=value, color=lk, group=lk)) %>%
     `+`(ggplot2::geom_line()) %>% return()
