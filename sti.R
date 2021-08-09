@@ -1,22 +1,23 @@
 source("utilities.R")
 
+# HIDDEN FUNKTION
 # calc sti for a certain time series with a given population
 sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
-  # n <- length(cases)
-  # sti <- rep(0, n)
-  sti <- stats::filter(cases, rep(1/7, 7), method="convolution", sides=1)
-  sti[1:6] <- cases[1:6] / 7
-  # for(i in 1:n){
-  #     for(j in max(1, i-6):i) sti[i] <- sti[i] + cases[j]
-  # }
+
+  sti <- stats::filter(cases, rep(1, 7), method="convolution", sides=1)
+  sti[1:6] <- cases[1:6]
+
   return(sti / pop * 1e5)
 }
 
+# USER FUNKTION
 # returns a total time series of cases and deaths for a region/age group etc.
-get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+get_time_series_for <- function(ages="all", regions="Germany",
+  from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
+
   data <- filter_data_by(ages, regions, from, to)
 
   # create time series
@@ -31,7 +32,8 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
   return(time_series)
 }
 
-# funktion die schneller laufen sollte, klappt nicht so ganz
+# HIDDEN funktion
+# funktion die schneller laufen sollte, klappt so halb
 get_sti_series_simple <- function(lk_id){
   population_lk_data %>% filter(IdLandkreis %in% lk_id) %>%
     unique() -> data
@@ -44,12 +46,16 @@ get_sti_series_simple <- function(lk_id){
   sti(cases_ts, population) %>% return()
 }
 
+# USER FUNKTION
+# returnt eine zeitreihe der sti für eine bestimmte gruppe (lk, alter, etc)
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
   # careful! when specifying region *and* agegroup, the incidence will not be accurate because
   # there is no population data for the age groups in each Landkreis and it will be estimated
   # by the age distribution in all of Germany
   # therefore, it is recommended to specify only one or the other
+
+  ids <- is.numeric(regions)
 
   # calculate the population of the specified group
   population_age_data %>% filter(Jahr=="2020") -> population_age_2020_data
@@ -82,7 +88,9 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     final_pop <- region_pop * spec_pop_percentage
   }
   else{
-    for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i])
+    if(!ids){
+      for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i])
+    }
     population_lk_data %>% filter(IdLandkreis %in% regions) %>%
       `[[`("Bevölkerung") %>% sum() -> region_pop
     final_pop <- region_pop * spec_pop_percentage
@@ -94,13 +102,74 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(tibble(date=days_series, sti=sti_series))
 }
 
-# get a sti time series for a lk id
-get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.Date(),
-  return_deaths=F){
+library(ggplot2)
+# USER FUNCTION
+# plots sti for lks, takes several lks for comparison
+plot_for_lks <- function(lks, type="cases"){
+  # type can be "cases", "sti", "deaths"
+  stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
+  # TODO: fehler
 
-    # get the lk names
-    population_lk_data %>% filter(IdLandkreis %in% lk_ids) %>% select(Landkreis) %>%
-      unique() %>% `[[`("Landkreis") -> lk_names
-    return(get_sti_series_for(ages=ages, regions=lk_names, from=from, to=to,
-      return_deaths=return_deaths))
+  ids <- is.numeric(lks)
+
+  lk_ids <- lks
+  if(!ids){
+    for(i in 1:length(lks)){
+      lk_ids[i] <- get_lk_id_from_string(lks[i])
+    }
   }
+
+  data <- tibble(date=character(), value=numeric(), lk=character())
+
+  if(type=="sti"){
+    for(i in 1:length(lks)){
+      get_sti_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=sti, lk=as.character(lks[i])) %>%
+        select(-sti) %>% add_row(data, .) -> data
+    }
+  }
+
+  if(type=="cases"){
+    for(i in 1:length(lks)){
+      get_time_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=cases, lk=as.character(lks[i])) %>%
+        select(-cases, -deaths) %>% add_row(data, .) -> data
+    }
+  }
+
+  if(type=="deaths"){
+    for(i in 1:length(lks)){
+      get_time_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=deaths, lk=as.character(lks[i])) %>%
+        select(-cases, -deaths) %>% add_row(data, .) -> data
+    }
+  }
+
+  data %>% mutate(date=as.Date(date)) %>%
+    ggplot(aes(x=date, y=value, color=lk, group=lk)) %>%
+    `+`(geom_line()) %>% return()
+}
+
+# USER FUNCTION
+# schöner stream plot zur aufteilung der Altersgruppen
+plot_for_agegroups <- function(type="cases"){
+  # type can be cases or deaths
+  rki_data %>% select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
+  crossing(Altersgruppe, days_since_2020) -> series1
+  options(dplyr.summarise.inform = FALSE)
+  series1 %>% rename("date"="days_since_2020") %>%
+    left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
+    group_by(date, Altersgruppe) %>%
+    summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%
+    # the days for which we have no infection data for are days with 0 infections
+    mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0)) -> data
+
+  if(type=="cases"){
+    data %>% ggplot(aes(x=date, y=cases, fill=Altersgruppe)) %>%
+    `+`(ggstream::geom_stream(type="ridge")) %>% print()
+  }
+  if(type=="deaths"){
+    data %>% ggplot(aes(x=date, y=deaths, fill=Altersgruppe)) %>%
+    `+`(ggstream::geom_stream(type="ridge")) %>% print()
+  }
+}

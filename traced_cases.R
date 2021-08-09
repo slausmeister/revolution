@@ -2,6 +2,9 @@ source("sti.R")
 library(ggplot2)
 library(ggstream)
 
+# USER FUNKTION
+# returnt einen tibble in dem die fälle an jedem tag stehen und bei wie vielen davon
+# das erkrankungsdatum bekannt ist (absolut und prozentual)
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
 
@@ -23,6 +26,9 @@ calc_traced_cases <- function(ages="all", regions="Germany",
       return()
   }
 
+# USER FUNKTION
+# plottet die sti über die plandemie und darunter zu welchem zeitpunkt wie viele
+# dieser fälle ein bekanntes erkrankungsdatum haben (prozentual)
 plot_traced_percentage <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
     data <- calc_traced_cases(ages, regions, from, to)
@@ -35,6 +41,9 @@ plot_traced_percentage <- function(ages="all", regions="Germany",
       return()
 }
 
+# USER FUNKTION
+# plots the proportion of traced/untraced cases in total over the pandemic
+# next to the sti
 plot_traced_total <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
     data <- calc_traced_cases(ages, regions, from, to)
@@ -50,22 +59,27 @@ plot_traced_total <- function(ages="all", regions="Germany",
       return()
   }
 
+# USER FUNKTION
+# berechnet die verteilung zwischen meldedatum und erkrankungsdatum (falls bekannt)
 calc_distribution_report_diff <- function(ages="all", regions="Germany",
-  from="2020-01-01", to=Sys.Date()){
+  from="2020-01-01", to=Sys.Date(), cut=Inf){
+    # cut cuts the distribution at this value
 
     filter_data_by(ages=ages, regions, from, to) %>%
     filter(IstErkrankungsbeginn==1) %>%
     mutate(diff=as.numeric(Meldedatum - Refdatum)) %>%
     group_by(diff) %>%
     count() %>%
-    # we cut every data which has a diff greater than 30 because that is nonsensical and
+    # we cut every data which has a diff greater than cut because that is nonsensical and
     # distorts the distribution
-    filter(abs(diff)<30) %>%
+    filter(abs(diff)<cut) %>%
     ungroup() %>% return()
   }
 
-plot_distribution_diff <- function(ages="all", regions="Germany",
-  from="2020-01-01", to=Sys.Date()){
-    calc_distribution_report_diff() %>%
+# USER FUNKTION
+# plottet die obige verteilung
+plot_distribution_report_diff <- function(ages="all", regions="Germany",
+  from="2020-01-01", to=Sys.Date(), cut=30){
+    calc_distribution_report_diff(cut=cut) %>%
       ggplot(aes(x=diff, y=n)) + geom_bar(stat="identity") %>% return()
   }

@@ -5,10 +5,13 @@
 source("pop_data_preparation.R",encoding="UTF-8")
 source("rki_data_preparation.R",encoding="UTF-8")
 
+# HIDDEN FUNKTION
+# klar
 get_bundesland_id_from_lk_id <- function(lk_id){
   return((lk_id - lk_id %% 1000) / 1000)
 }
 
+<<<<<<< HEAD
 get_bundesland_from_bundesland_id <- function(a){
   if(a==1){return("Schleswig-Holstein")}; if(a==2){return("Hamburg")}
   if(a==3){return("Niedersachsen")}; if(a==4){return("Bremen")}
@@ -22,7 +25,13 @@ get_bundesland_from_bundesland_id <- function(a){
 }
 
 # get the LandkreisID from a input string
+=======
+# HIDDEN FUNKTION
+# get the LandkreisID from an input string
+>>>>>>> 78379e898dd8dc8794ca800f1e87bbe408f1932b
 get_lk_id_from_string <- function(lk_name, print_process=F){
+  # TODO: check if valid ID
+  if(suppressWarnings(!is.na(as.numeric(lk_name)))) return(lk_name)
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
 
@@ -48,18 +57,20 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
       print(lk_name)
       cat("If this is wrong, please type the exact 'Landkreis'\n")
     }
-    return(lk_ids[i])
+
+    return(as.numeric(lk_ids[[i]]))
   }
 
   if(print_process){
     cat("The following 'Landkreis' was returned:\n")
-    print(lk_name)
+    print(lks[[1]])
     cat("If this is wrong, please type the exact 'Landkreis'\n")
   }
 
-  return(lk_ids[[1]])
+  return(as.numeric(lk_ids[[1]]))
 }
 
+# HIDDEN FUNKTION
 # get the right age label from number
 get_age_label_from_number <- function(age_number){
   if(as.integer(age_number) < 0) return("A00-A04")
@@ -71,7 +82,12 @@ get_age_label_from_number <- function(age_number){
   return("A80+")
 }
 
+# USER FUNKTION (?)
+# gibt die ganze rki tabelle nach den Kriterien gefiltert zurück
 filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+  # TODO: check if ids valid if ids
+  ids <- is.numeric(regions)
+
   data <- rki_data
   # filter the age groups
   if(!all(ages=="all")){
@@ -84,17 +100,22 @@ filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=
   # filter the time span
   data %>% filter(Meldedatum >= from, Meldedatum <= to) -> data
 
-  # filter the regions (not robust at the moment)
-  rki_data %>% select(Bundesland) %>% unique() %>%
-    filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
-    `[[`("Bundesland") %>% tolower() -> bundesländer
-
-  if(all(tolower(regions) %in% bundesländer)){
-    data %>% filter(tolower(Bundesland) %in% tolower(regions)) -> data
-  }
-  else if(!all(tolower(regions)=="germany")){
-    for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i], print_process=F)
+  if(ids){
     data %>% filter(IdLandkreis %in% regions) -> data
+  }
+  else{
+    # filter the regions (not robust at the moment)
+    rki_data %>% select(Bundesland) %>% unique() %>%
+      filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
+      `[[`("Bundesland") %>% tolower() -> bundesländer
+
+    if(all(tolower(regions) %in% bundesländer)){
+      data %>% filter(tolower(Bundesland) %in% tolower(regions)) -> data
+    }
+    else if(!all(tolower(regions)=="germany")){
+      for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i], print_process=F)
+      data %>% filter(IdLandkreis %in% regions) -> data
+    }
   }
 
   return(data)
