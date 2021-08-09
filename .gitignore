@@ -2,3 +2,4 @@
 /inst/extdata/RKI_COVID19.csv
 /inst/extdata/RKI_COVID19_new.csv
 /inst/extdata/RKI_COVID19_old.csv
+/load.R

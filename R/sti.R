@@ -142,7 +142,7 @@ plot_for_lks <- function(lks, type="cases"){
     rev.env$population_lk_data %>% dplyr::select(IdLandkreis) %>% unique() %>%
       `[[`(1) -> valid_ids
 
-    stopifnot("invalid id!"=!all(ids %in% valid_ids))
+    stopifnot("invalid id!"=all(lks %in% valid_ids))
   }
 
   lk_ids <- lks
@@ -187,15 +187,16 @@ plot_for_lks <- function(lks, type="cases"){
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
+  days_since_2020 <- rev.env$days_since_2020
   rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
-  tidyr::crossing(Altersgruppe, rev.env$days_since_2020) -> series1
+  tidyr::crossing(Altersgruppe, days_since_2020) -> series1
   options(dplyr.summarise.inform = FALSE)
   series1 %>% dplyr::rename("date"="days_since_2020") %>%
     dplyr::left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
     dplyr::group_by(date, Altersgruppe) %>%
     dplyr::summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%
     # the days for which we have no infection data for are days with 0 infections
-    dplyr::mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0)) -> data
+    dplyr::mutate(cases=tidyr::replace_na(cases, 0), deaths=tidyr::replace_na(deaths, 0)) -> data
 
   if(type=="cases"){
     data %>% ggplot2::ggplot(ggplot2::aes(x=date, y=cases, fill=Altersgruppe)) %>%
