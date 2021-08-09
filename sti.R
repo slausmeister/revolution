@@ -18,8 +18,6 @@ get_time_series_for <- function(ages="all", regions="Germany",
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
 
-  ids <- is.numeric(regions)
-
   data <- filter_data_by(ages, regions, from, to)
 
   # create time series
@@ -104,11 +102,12 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(tibble(date=days_series, sti=sti_series))
 }
 
-plot_comparison_lks <- function(lks, type="cases"){
+library(ggplot2)
+plot_for_lks <- function(lks, type="cases"){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
 
-  ids <- is.numeric(regions)
+  ids <- is.numeric(lks)
 
   lk_ids <- lks
   if(!ids){
@@ -121,10 +120,35 @@ plot_comparison_lks <- function(lks, type="cases"){
 
   if(type=="sti"){
     for(i in 1:length(lks)){
-      get_sti_series_for(regions=lk_ids[i], ids=T) -> temp
-      temp %>% mutate(date=as.character(date), value=sti, lk=lks[i]) %>%
+      get_sti_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=sti, lk=as.character(lks[i])) %>%
         select(-sti) %>% add_row(data, .) -> data
     }
   }
-  return(data)
+
+  if(type=="cases"){
+    for(i in 1:length(lks)){
+      get_time_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=cases, lk=as.character(lks[i])) %>%
+        select(-cases, -deaths) %>% add_row(data, .) -> data
+    }
+  }
+
+  if(type=="deaths"){
+    for(i in 1:length(lks)){
+      get_time_series_for(regions=lk_ids[i]) -> temp
+      temp %>% mutate(date=as.character(date), value=deaths, lk=as.character(lks[i])) %>%
+        select(-cases, -deaths) %>% add_row(data, .) -> data
+    }
+  }
+  data %>% mutate(date=as.Date(date)) -> data
+  
+  if(length(lks==1)){
+    data %>% ggplot(aes(x=date, y=value, color=lk, group=1)) %>%
+      `+`(geom_line()) %>% return()
+  }
+  else{
+    data %>% ggplot(aes(x=date, y=value, color=lk)) %>%
+      `+`(geom_line()) %>% return()
+  }
 }

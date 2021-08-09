@@ -14,6 +14,8 @@ get_bundesland_id_from_lk_id <- function(lk_id){
 # HIDDEN FUNKTION
 # get the LandkreisID from an input string
 get_lk_id_from_string <- function(lk_name, print_process=F){
+  # TODO: check if valid ID
+  if(suppressWarnings(!is.na(as.numeric(lk_name)))) return(lk_name)
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
      `[[`("Landkreis") -> lks
 
@@ -39,7 +41,8 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
       print(lk_name)
       cat("If this is wrong, please type the exact 'Landkreis'\n")
     }
-    return(lk_ids[i])
+
+    return(as.numeric(lk_ids[[i]]))
   }
 
   if(print_process){
@@ -48,7 +51,7 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
     cat("If this is wrong, please type the exact 'Landkreis'\n")
   }
 
-  return(lk_ids[[1]])
+  return(as.numeric(lk_ids[[1]]))
 }
 
 # HIDDEN FUNKTION
