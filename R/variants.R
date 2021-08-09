@@ -97,7 +97,7 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
     return(anteil)
 }
 
-#' @import ggplot2, ggstream
+#' @import ggplot2 ggstream
 #' @export
 plot_variant_share <- function(update_data=F, interpolation="none", sti=F){
   if(sti){
