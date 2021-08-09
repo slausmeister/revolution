@@ -18,8 +18,8 @@ rev.env$vax_data <- readr::read_csv(system.file("extdata", "vac_COVID19.csv", pa
   show_col_types = FALSE)
 
 # import the population per age group in 2020
-readr::read_csv(system.file("extdata", "population_age.csv", package="revolution"),show_col_types = FALSE) %>% dplyr::filter(Jahr==2020) %>%
-  dplyr::group_by(Altersgruppe) %>% dplyr::summarise(Bevölkerung=sum(Bevölkerung)) ->
+readr::read_csv(system.file("extdata", "population_age.csv", package="revolution"),show_col_types = FALSE) %>%
+  dplyr::group_by(Altersgruppe, Jahr) %>% dplyr::summarise(Bevölkerung=sum(Bevölkerung)) ->
   rev.env$population_age_data
 
 ### rki covid data:
