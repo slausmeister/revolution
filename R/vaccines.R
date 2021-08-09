@@ -6,6 +6,11 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
                    "Hamburg","Bremen","Sachsen","Thüringen","Hessen","Nordrhein-Westfalen","Rheinland-Pfalz",
                    "Saarland","Baden-Württemberg","Bayern","Brandenburg")
 
+
+   filter_data_by(ages, regions, from, to)
+   stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
+
+
    rev.env$vax_data -> vaccines
 
    vaccines %>%

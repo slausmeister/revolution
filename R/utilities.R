@@ -68,6 +68,7 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
 
 
 get_age_label_from_number <- function(age_number){
+  stopifnot("age must be a numeric"=suppressWarnings(!is.na(as.numeric(age_number))))
   if(as.integer(age_number) < 0) return("A00-A04")
   if(as.integer(age_number) < 5) return("A00-A04")
   if(as.integer(age_number) < 15) return("A05-A14")
@@ -79,9 +80,12 @@ get_age_label_from_number <- function(age_number){
 
 filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   data <- rki_data
-  # filter the age groups
   #TODO: ages und daten robust machen, bzw fehler melden
 
+  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(age_number)))))
+  stopifnot("from must be before to"=as.Date(from)<as.Date(to))
+
+  # filter the age groups
   if(!all(ages=="all")){
     for(i in 1:length(ages)){
       ages[i] <- get_age_label_from_number(ages[i])

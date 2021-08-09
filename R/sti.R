@@ -36,6 +36,9 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   #TODO: ages und daten robust machen, bzw fehler melden
   ids <- is.numeric(regions)
 
+  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(age_number)))))
+  stopifnot("from must be before to"=as.Date(from)<as.Date(to))
+
   # calculate the population of the specified group
   rev.env$population_age_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
   spec_pop_percentage <- 1
@@ -51,7 +54,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   }
 
   time_series <- get_time_series_for(ages, regions, from, to)
-  days_series <- days_series <- seq(as.Date(from), as.Date(to), by="days")
+  days_series <- seq(as.Date(from), as.Date(to), by="days")
 
   # filter the regions (not robust at the moment)
   rki_data %>% dplyr::select(Bundesland) %>% unique() %>%
@@ -85,6 +88,9 @@ get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.D
   return_deaths=F){
     #TODO: ages und daten robust machen, bzw fehler melden
     # get the lk names
+    for(i in 1:length(lk_ids)){
+      lk_ids[i] <- get_lk_id_from_string(lk_ids[i])
+    }
     rev.env$population_lk_data %>% dplyr::filter(IdLandkreis %in% lk_ids) %>% dplyr::select(Landkreis) %>%
       unique() %>% `[[`("Landkreis") -> lk_names
     return(get_sti_series_for(ages=ages, regions=lk_names, from=from, to=to,
@@ -187,6 +193,9 @@ plot_for_lks <- function(lks, type="cases"){
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
+
+  stopifnot(type %in% c("cases", "deaths", "sti"))
+
   days_since_2020 <- rev.env$days_since_2020
   rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
   tidyr::crossing(Altersgruppe, days_since_2020) -> series1

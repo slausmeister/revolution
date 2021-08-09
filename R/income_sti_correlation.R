@@ -1,3 +1,5 @@
+#TODO: fehlermeldungen!! (mit stopifnot)
+
 #' @export
 einkommen_sti_korrelation <- function(path, sheetnr){
 
