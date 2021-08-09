@@ -11,7 +11,8 @@ get_bundesland_id_from_lk_id <- function(lk_id){
   return((lk_id - lk_id %% 1000) / 1000)
 }
 
-<<<<<<< HEAD
+# HIDDEN
+# klar
 get_bundesland_from_bundesland_id <- function(a){
   if(a==1){return("Schleswig-Holstein")}; if(a==2){return("Hamburg")}
   if(a==3){return("Niedersachsen")}; if(a==4){return("Bremen")}
@@ -25,10 +26,8 @@ get_bundesland_from_bundesland_id <- function(a){
 }
 
 # get the LandkreisID from a input string
-=======
 # HIDDEN FUNKTION
 # get the LandkreisID from an input string
->>>>>>> 78379e898dd8dc8794ca800f1e87bbe408f1932b
 get_lk_id_from_string <- function(lk_name, print_process=F){
   # TODO: check if valid ID
   if(suppressWarnings(!is.na(as.numeric(lk_name)))){
