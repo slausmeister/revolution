@@ -156,7 +156,7 @@ plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
   rki_data %>% select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
   crossing(Altersgruppe, days_since_2020) -> series1
-
+  options(dplyr.summarise.inform = FALSE)
   series1 %>% rename("date"="days_since_2020") %>%
     left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
     group_by(date, Altersgruppe) %>%
@@ -165,12 +165,11 @@ plot_for_agegroups <- function(type="cases"){
     mutate(cases=replace_na(cases, 0), deaths=replace_na(deaths, 0)) -> data
 
   if(type=="cases"){
-    print(data)
     data %>% ggplot(aes(x=date, y=cases, fill=Altersgruppe)) %>%
-    `+`(ggstream::geom_stream()) %>% print()
+    `+`(ggstream::geom_stream(type="ridge")) %>% print()
   }
   if(type=="deaths"){
     data %>% ggplot(aes(x=date, y=deaths, fill=Altersgruppe)) %>%
-    `+`(ggstream::geom_stream()) %>% print()
+    `+`(ggstream::geom_stream(type="ridge")) %>% print()
   }
 }
