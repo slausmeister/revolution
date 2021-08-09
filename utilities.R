@@ -5,10 +5,13 @@
 source("pop_data_preparation.R",encoding="UTF-8")
 source("rki_data_preparation.R",encoding="UTF-8")
 
+# HIDDEN FUNKTION
+# klar
 get_bundesland_id_from_lk_id <- function(lk_id){
   return((lk_id - lk_id %% 1000) / 1000)
 }
 
+# HIDDEN FUNKTION
 # get the LandkreisID from an input string
 get_lk_id_from_string <- function(lk_name, print_process=F){
   population_lk_data %>% filter(str_detect(Landkreis, regex(lk_name, ignore_case=T))) %>%
@@ -48,6 +51,7 @@ get_lk_id_from_string <- function(lk_name, print_process=F){
   return(lk_ids[[1]])
 }
 
+# HIDDEN FUNKTION
 # get the right age label from number
 get_age_label_from_number <- function(age_number){
   if(as.integer(age_number) < 0) return("A00-A04")
@@ -59,7 +63,11 @@ get_age_label_from_number <- function(age_number){
   return("A80+")
 }
 
-filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+# USER FUNKTION (?)
+# gibt die ganze rki tabelle nach den Kriterien gefiltert zurück
+filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
+ids=F){
+  # TODO: check if ids valid if ids
   data <- rki_data
   # filter the age groups
   if(!all(ages=="all")){
@@ -72,17 +80,22 @@ filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=
   # filter the time span
   data %>% filter(Meldedatum >= from, Meldedatum <= to) -> data
 
-  # filter the regions (not robust at the moment)
-  rki_data %>% select(Bundesland) %>% unique() %>%
-    filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
-    `[[`("Bundesland") %>% tolower() -> bundesländer
-
-  if(all(tolower(regions) %in% bundesländer)){
-    data %>% filter(tolower(Bundesland) %in% tolower(regions)) -> data
-  }
-  else if(!all(tolower(regions)=="germany")){
-    for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i], print_process=F)
+  if(ids){
     data %>% filter(IdLandkreis %in% regions) -> data
+  }
+  else{
+    # filter the regions (not robust at the moment)
+    rki_data %>% select(Bundesland) %>% unique() %>%
+      filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
+      `[[`("Bundesland") %>% tolower() -> bundesländer
+
+    if(all(tolower(regions) %in% bundesländer)){
+      data %>% filter(tolower(Bundesland) %in% tolower(regions)) -> data
+    }
+    else if(!all(tolower(regions)=="germany")){
+      for(i in 1:length(regions)) regions[i] <- get_lk_id_from_string(regions[i], print_process=F)
+      data %>% filter(IdLandkreis %in% regions) -> data
+    }
   }
 
   return(data)

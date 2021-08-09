@@ -13,10 +13,11 @@ sti <- function(cases, pop){
 
 # USER FUNKTION
 # returns a total time series of cases and deaths for a region/age group etc.
-get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+get_time_series_for <- function(ages="all", regions="Germany",
+  from="2020-01-01", to=Sys.Date(), ids=F){
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
-  data <- filter_data_by(ages, regions, from, to)
+  data <- filter_data_by(ages, regions, from, to, ids)
 
   # create time series
   days_series <- seq(as.Date(from), as.Date(to), by="days")
@@ -47,7 +48,7 @@ get_sti_series_simple <- function(lk_id){
 # USER FUNKTION
 # returnt eine zeitreihe der sti für eine bestimmte gruppe (lk, alter, etc)
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
-  return_deaths=F){
+  return_deaths=F, ids=F){
   # careful! when specifying region *and* agegroup, the incidence will not be accurate because
   # there is no population data for the age groups in each Landkreis and it will be estimated
   # by the age distribution in all of Germany
@@ -69,7 +70,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     spec_pop_percentage <- spec_pop / total_pop
   }
 
-  time_series <- get_time_series_for(ages, regions, from, to)
+  time_series <- get_time_series_for(ages, regions, from, to, ids)
   days_series <- days_series <- seq(as.Date(from), as.Date(to), by="days")
 
   # filter the regions (not robust at the moment)
@@ -96,14 +97,26 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   return(tibble(date=days_series, sti=sti_series))
 }
 
-# definitiv schlechter als die oben, löschen?
-# get a sti time series for a lk id
-get_sti_series_by_id <- function(lk_ids, ages="all", from="2020-01-01", to=Sys.Date(),
-  return_deaths=F){
+plot_comparison_lks <- function(lks, type="cases", id=F){
+  # type can be "cases", "sti", "deaths"
+  stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
 
-    # get the lk names
-    population_lk_data %>% filter(IdLandkreis %in% lk_ids) %>% select(Landkreis) %>%
-      unique() %>% `[[`("Landkreis") -> lk_names
-    return(get_sti_series_for(ages=ages, regions=lk_names, from=from, to=to,
-      return_deaths=return_deaths))
+
+  ids <- lks
+  if(!id){
+    for(i in 1:length(lks)){
+      ids[i] <- get_lk_id_from_string(lks[i])
+    }
   }
+
+  data <- tibble(date=character(), value=numeric(), lk=character())
+
+  if(type=="sti"){
+    for(i in 1:length(lks)){
+      get_sti_series_for(regions=ids[i], ids=T) -> temp
+      temp %>% mutate(date=as.character(date), value=sti, lk=lks[i]) %>%
+        select(-sti) -> test
+    }
+
+  }
+}
