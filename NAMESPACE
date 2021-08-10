@@ -13,9 +13,7 @@ export(get_pop_density_with_sti)
 export(get_public_transportation_data)
 export(get_sti_series_for)
 export(get_time_series_for)
-<<<<<<< HEAD
 export(ost_deutschland)
-=======
 export(get_total_mortality)
 export(get_vaccination_data)
 export(get_weekly_absolute_mortality)
@@ -31,7 +29,6 @@ export(plot_total_mortality)
 export(plot_traced_cases_percentage)
 export(plot_traced_cases_total)
 export(plot_vaccination_data)
->>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
 export(plot_variant_share)
 export(plot_weekly_absolute_mortality)
 export(update_rki_data)

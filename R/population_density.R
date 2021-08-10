@@ -1,18 +1,11 @@
 # returnt ein tibble mit der bevdichte eines landkreises und dessen durschnitttliche
 # sti über die pandemie
-<<<<<<< HEAD
-=======
 #' @export
->>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
 get_pop_density_with_sti <- function(regions="all"){
   mean_stis <- c()
 
   if(all(regions=="all")){
-<<<<<<< HEAD
-    lk_ids <- population_lk_data[["IdLandkreis"]]
-=======
     lk_ids <- rev.env$population_lk_data[["IdLandkreis"]]
->>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
   }
   else{
     lk_ids <- c()
@@ -28,10 +21,6 @@ get_pop_density_with_sti <- function(regions="all"){
     mean_stis <- c(mean_stis, mean(get_sti_series_simple(lk_id)))
   }
 
-<<<<<<< HEAD
-  population_lk_data %>% filter(IdLandkreis %in% lk_ids) %>%
-    transmute(Landkreis=Landkreis, mean_sti=mean_stis, pop_density=BevDichte) %>% return()
-=======
   rev.env$population_lk_data %>%
     dplyr::filter(IdLandkreis %in% lk_ids) %>%
     dplyr::transmute(Landkreis=Landkreis, mean_sti=mean_stis, pop_density=BevDichte) %>%
@@ -53,5 +42,4 @@ plot_pop_density_with_linear_model <- function(regions="all"){
     ggplot2::geom_line(ggplot2::aes(x=1:15000, y=intercept + weight * 1:15000), color="blue") +
     ggplot2::xlab("Einwohner pro km²") +
     ggplot2::ylab("Mittlere STI über die Pandemie") %>% return()
->>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
 }
