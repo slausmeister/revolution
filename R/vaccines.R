@@ -1,15 +1,43 @@
-#' @export
-get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01",
+#'Time series of German COVID-19 vaccination data
+#' 
+#'\code{get_vaccination_data()} is used to create a tibble of vaccination data for regions and a certain
+#'age group. The time period can be defined by the user.
+#'  
+#'@param ages A string of the desired age group. Data is available for the groups "12-17","18-59" and "60+".
+#'The default value is "all", so that the data is not specified for a special age group.
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
+#'is not allowed.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'@param vac_num Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.
+#'@param cumulate A boolean that indicates whether the time series values should be absolute or cumulative.
+#'
+#'@return A tibble that contains the public vaccine data prepared in a user-specified way.
+#'
+#'@examples get_vaccination_data(ages="60+",regions=c("Heidelberg","Sachsen"),from="2021-06-07",vac_num=1,cumulate=T)
+#'
+#'get_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen"),to="2021-07-08")
+#'
+#'\dontrun{get_vaccination_data(regions=c("Germany","Heidelberg"))}
+#'#don't mix districts, states or "Germany
+#'
+#'\dontrun{get_vaccination_data(ages=12-17)}
+#'#age group must always be a string
+#'
+#'\dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
+#'#'from' needs to be earlier than 'to'
+#'@export
+get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F){
     #TODO: fehlermeldungen
     bundeslander<-c("Schleswig-Holstein","Mecklenburg-Vorpommern","Niedersachsen","Sachsen-Anhalt","Berlin",
                    "Hamburg","Bremen","Sachsen","Thüringen","Hessen","Nordrhein-Westfalen","Rheinland-Pfalz",
                    "Saarland","Baden-Württemberg","Bayern","Brandenburg")
 
-
-   #filter_data_by(regions, from, to)
-   stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
    
+   stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
+   stopifnot("'from' must be earlier than 'to'"= as.Date(from)<as.Date(to))
    rev.env$vax_data -> vaccines
 
    vaccines %>%
@@ -19,7 +47,7 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
      test
    vaccines <- test[-(8:12)]
    vaccines %>%
-     dplyr::filter(Impfdatum >= from & Impfdatum <= to) -> vaccine_days
+     dplyr::filter(Impfdatum >= as.Date(from) & Impfdatum <= as.Date(to)) -> vaccine_days
 
    if(vac_num=="all"){
      vaccine_days %>%
@@ -99,9 +127,41 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
      }
    }
 }
+#'Plotting the time series of German COVID-19 vaccination data
+#' 
+#'\code{plot_vaccination_data()} is used to create a plot of vaccination data for regions and a certain
+#'age group. The time period can be defined by the user.
+#'  
+#'@param ages A string of the desired age group. Data is available for the groups "12-17","18-59" and "60+".
+#'The default value is "all", so that the plot is not specified for a special age group.
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
+#'is not allowed.
+#'@param from A date that specifies the beginning of the time series.
+#'@param to A date that specifies the end of the time series.
+#'@param vac_num Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.
+#'@param cumulate A boolean that indicates whether the time series values should be absolute or cumulative.
+#'@param smoothing A positive integer that defines the window size of the moving average. Thus, the plot will be smoother
+#'the higher 'smoothing' is chosen. 
+#'
+#'@return A plot of public vaccine data prepared in a user-specified way.
+#'
+#'@examples plot_vaccination_data(ages="60+",regions=c("Heidelberg","Sachsen"),from="2021-06-07",vac_num=1,cumulate=T)
+#'
+#'plot_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen"),to="2021-07-08")
+#'
+#'\dontrun{plot_vaccination_data(regions=c("Germany","Heidelberg"))}
+#'#don't mix districts, states or "Germany"
+#'
+#'\dontrun{plot_vaccination_data(ages=12-17)}
+#'#age group must always be a string
+#'
+#'\dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
+#'#'from' needs to be earlier than 'to'
+
 
 #' @export
-plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01",
+plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
   
