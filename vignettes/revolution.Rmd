@@ -52,3 +52,18 @@ The package also offers a nice visualization of the age distribution during the 
 plot_for_agegroups(type="cases")
 ```
 
+## Factors influencing the spread
+
+The way COVID-19 spread during the last months is diffuse. One of the biggest problems with identifying influential factors is the large dark figure and the classical saying "correlation is not causality". There is a huge amount of possible factors (i.e. seasonality and weather, travel behaviour of the population, mandatory mask wearing, lockdown, etc.). "revolution" takes a closer look to two factors: the income and the geographical proximity between districts. 
+
+To study the correlation between income and COVID-19 incidence, the function `income_sti_correlation()` comes in handy. It returns a time series of correlation coefficients between the average income of districts and the 7-day-incidence.
+
+```{r}
+inco
+```
+
+
+## COVID-19 vaccine data
+
+In December of 2020, an influential and deciding factor was introduced to fight the pandemic: the vaccine. "revolution" offers the functionality to show the current vaccination progress. 
+
