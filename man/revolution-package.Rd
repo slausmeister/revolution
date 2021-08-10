@@ -38,7 +38,15 @@ Every other dataset in this package is not up to date and comes from the
 "Statistisches Bundesamt": \url{https://www.destatis.de/DE/Home/_inhalt.html}.
 }
 \author{
-\strong{Maintainer}: Nico Bruder
+\strong{Maintainer}: 
+
+Other contributors:
+\itemize{
+  \item Nico Bruder
+  \item Lucienne-Sophie Marmé
+  \item Viktor Stein von Kamienski
+  \item Philipp Hilmar Tepel
+}
 
 }
 \keyword{internal}
