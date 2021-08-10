@@ -4,7 +4,7 @@
 \alias{plot_for_lks}
 \title{Plotting time series for districts}
 \usage{
-plot_for_lks(lks, type = "cases")
+plot_for_lks(lks, type = "cases", smoothing = 0)
 }
 \arguments{
 \item{lks}{A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".

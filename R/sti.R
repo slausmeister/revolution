@@ -204,7 +204,7 @@ get_sti_series_simple <- function(lk_id){
 #'#"from" must always be an earlier date than "to"
 
 #' @export
-plot_for_lks <- function(lks, type="cases"){
+plot_for_lks <- function(lks, type="cases",smoothing=0){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
   ids <- is.numeric(lks)
@@ -247,6 +247,11 @@ plot_for_lks <- function(lks, type="cases"){
         dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
     }
   }
+
+  data %>%
+    dplyr::group_by(lk) %>%
+    dplyr::mutate(value=slider::slide_dbl(value,mean,.before=smoothing,.after=smoothing)) %>%
+    dplyr::ungroup()->data
 
   data %>% dplyr::mutate(date=as.Date(date)) %>%
     ggplot2::ggplot(ggplot2::aes(x=date, y=value, color=lk, group=lk)) %>%
