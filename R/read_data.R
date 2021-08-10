@@ -3,6 +3,7 @@
 read_rki_data <- function(){
 
   # TODO: checken, ob die rki datei schon ex, wenn nicht, runterladen!!!!!!
+  # TODO: package depen
 
 rev.env <<- new.env(parent = emptyenv())
 # import the population of 'Landkreis' with the given csv

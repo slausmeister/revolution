@@ -88,7 +88,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   stopifnot("from must be before to"=as.Date(from)<as.Date(to))
 
   # calculate the population of the specified group
-  rev.env$population_age_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
+  rev.env$population_lk_data %>% `[[`("Bevölkerung") %>% sum() -> total_pop
   spec_pop_percentage <- 1
 
   if(!all(ages=="all")){
@@ -109,7 +109,9 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     dplyr::filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
     `[[`("Bundesland") %>% tolower() -> bundesländer
 
-  if(all(tolower(regions)=="germany")) final_pop <- spec_pop_percentage * total_pop
+  if(all(tolower(regions)=="germany")){
+    final_pop <- spec_pop_percentage * total_pop
+  }
   else if(all(tolower(regions) %in% bundesländer)){
     rev.env$population_lk_data %>%
       dplyr::filter(tolower(Bundesland) %in% tolower(regions)) %>%
@@ -126,8 +128,12 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     final_pop <- region_pop * spec_pop_percentage
   }
 
-  if(return_deaths) sti_series <- sti(time_series[["deaths"]], final_pop)
-  else sti_series <- sti(time_series[["cases"]], final_pop)
+  if(return_deaths){
+    sti_series <- sti(time_series[["deaths"]], final_pop)
+  }
+  else{
+    sti_series <- sti(time_series[["cases"]], final_pop)
+  }
 
   return(dplyr::tibble(date=days_series, sti=sti_series))
 }
@@ -203,58 +209,105 @@ get_sti_series_simple <- function(lk_id){
 #'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'#"from" must always be an earlier date than "to"
 
-#' @export
-plot_for_lks <- function(lks, type="cases",smoothing=0){
+get_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases"){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
-  ids <- is.numeric(lks)
-  if(ids){
-    rev.env$population_lk_data %>% dplyr::select(IdLandkreis) %>% unique() %>%
-      `[[`(1) -> valid_ids
 
-    stopifnot("invalid id!"=all(lks %in% valid_ids))
-  }
+  regions_user <- regions
 
-  lk_ids <- lks
-  if(!ids){
-    for(i in 1:length(lks)){
-      lk_ids[i] <- get_lk_id_from_string(lks[i])
+  rki_data %>% dplyr::select(Bundesland) %>% unique() %>%
+    dplyr::filter(!Bundesland %in% c("Bremen", "Hamburg")) %>%
+    `[[`("Bundesland") %>% tolower() -> bundesländer
+
+  for(i in 1:length(regions)){
+    if(tolower(regions[i]) %in% bundesländer){
+      rev.env$population_lk_data %>%
+        dplyr::filter(tolower(Bundesland) == tolower(regions[i])) %>%
+        dplyr::select(Bundesland) %>%
+        unique() %>%
+        `[[`(1) ->
+        regions[i]
+    }
+    else if(tolower(regions[i])=="germany"){
+      regions[i] <- "Germany"
+    }
+    else{
+      regions[i] <- get_lk_id_from_string(regions[i])
     }
   }
 
-  data <- tibble::tibble(date=character(), value=numeric(), lk=character())
+  regions_labels <- tibble::tibble(region_name=regions_user, region=regions)
 
-  if(type=="sti"){
-    for(i in 1:length(lks)){
-      get_sti_series_for(regions=lk_ids[i]) -> temp
-      temp %>% dplyr::mutate(date=as.character(date), value=sti, lk=as.character(lks[i])) %>%
-        dplyr::select(-sti) %>% tibble::add_row(data, .) -> data
+  data <- tibble::tibble(date=character(), value=numeric(), region=character())
+
+  for(reg in regions){
+    if(type=="sti"){
+      get_sti_series_for(regions=reg, ages=ages, from=from, to=to) %>%
+        dplyr::mutate(date=as.character(date), region=reg, value=sti) %>%
+        dplyr::select(-sti) %>%
+        tibble::add_row(data, .) ->
+        data
     }
-  }
-
-  if(type=="cases"){
-    for(i in 1:length(lks)){
-      get_time_series_for(regions=lk_ids[i]) -> temp
-      temp %>% dplyr::mutate(date=as.character(date), value=cases, lk=as.character(lks[i])) %>%
-        dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
+    else if(type=="cases"){
+      get_time_series_for(regions=reg, ages=ages, from=from, to=to) %>%
+        dplyr::mutate(date=as.character(date), region=reg, value=cases) %>%
+        dplyr::select(-cases, -deaths) %>%
+        tibble::add_row(data, .) ->
+        data
     }
-  }
-
-  if(type=="deaths"){
-    for(i in 1:length(lks)){
-      get_time_series_for(regions=lk_ids[i]) -> temp
-      temp %>% dplyr::mutate(date=as.character(date), value=deaths, lk=as.character(lks[i])) %>%
-        dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
+    else if(type=="deaths"){
+      get_time_series_for(regions=reg, ages=ages, from=from, to=to) %>%
+        dplyr::mutate(date=as.character(date), region=reg, value=deaths) %>%
+        dplyr::select(-cases, -deaths) %>%
+        tibble::add_row(data, .) ->
+        data
     }
   }
 
   data %>%
-    dplyr::group_by(lk) %>%
+    dplyr::left_join(regions_labels, by="region") %>%
+    dplyr::select(-region) %>%
+    dplyr::mutate(date=as.Date(date)) %>%
+    return()
+}
+
+#' @export
+plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases", smoothing=0){
+  stopifnot("invalid smoothing"=smoothing>=0)
+  # data <- tibble::tibble(date=character(), value=numeric(), region=character())
+  #
+  # if(type=="sti"){
+  #   for(i in 1:length(lks)){
+  #     get_sti_series_for(regions=lk_ids[i]) -> temp
+  #     temp %>% dplyr::mutate(date=as.character(date), value=sti, lk=as.character(lks[i])) %>%
+  #       dplyr::select(-sti) %>% tibble::add_row(data, .) -> data
+  #   }
+  # }
+  #
+  # if(type=="cases"){
+  #   for(i in 1:length(lks)){
+  #     get_time_series_for(regions=lk_ids[i]) -> temp
+  #     temp %>% dplyr::mutate(date=as.character(date), value=cases, lk=as.character(lks[i])) %>%
+  #       dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
+  #   }
+  # }
+  #
+  # if(type=="deaths"){
+  #   for(i in 1:length(lks)){
+  #     get_time_series_for(regions=lk_ids[i]) -> temp
+  #     temp %>% dplyr::mutate(date=as.character(date), value=deaths, lk=as.character(lks[i])) %>%
+  #       dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
+  #   }
+  # }
+  data <- get_data_for(regions, ages, from, to, type)
+
+  data %>%
+    dplyr::group_by(region_name) %>%
     dplyr::mutate(value=slider::slide_dbl(value,mean,.before=smoothing,.after=smoothing)) %>%
     dplyr::ungroup()->data
 
   data %>% dplyr::mutate(date=as.Date(date)) %>%
-    ggplot2::ggplot(ggplot2::aes(x=date, y=value, color=lk, group=lk)) %>%
+    ggplot2::ggplot(ggplot2::aes(x=date, y=value, color=region_name, group=region_name)) %>%
     `+`(ggplot2::geom_line()) %>% return()
 }
 

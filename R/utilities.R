@@ -98,7 +98,7 @@ filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=
 
   # filter the regions (not robust at the moment)
   rki_data %>% dplyr::select(Bundesland) %>% unique() %>%
-    dplyr::filter(!Bundesland %in% c("Berlin", "Bremen", "Hamburg")) %>%
+    dplyr::filter(!Bundesland %in% c("Bremen", "Hamburg")) %>%
     `[[`("Bundesland") %>% tolower() -> bundesländer
 
   if(all(tolower(regions) %in% bundesländer)){
