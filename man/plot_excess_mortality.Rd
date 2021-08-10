@@ -35,6 +35,6 @@ smoothing factor is chosen.
 plot_excess_mortality(2020,c(2015,2016,2017,2018,2019),smoothing=1)
 
 \dontrun{plot_excess_mortality(excess_year="2020",average_years=c(1999,2017),smoothing=100)}
-#"excess_year" and "average_years" should be an integer. Only the years 2000-2020 can be considered. 
+#"excess_year" and "average_years" should be an integer. Only the years 2000-2020 can be considered.
 #Furthermore, it's not recommended to choose a smoothing factor > 5 due to the gap in the plot described in section "Warning".
 }

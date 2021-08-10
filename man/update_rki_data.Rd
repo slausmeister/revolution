@@ -7,15 +7,14 @@
 update_rki_data(method)
 }
 \arguments{
-\item{method}{Spezifiziert über welche Methode der Download
-passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
-"wget" und "curl". Wird dieser Parameter nicht spezifiziert, so
-wird "auto" gewält. Erfahrungsweise funktioniert dies auf Windows/
-OSX recht gut, auf Linux wird "wget" empfohlen, da die Datei für "curl"
-zu groß ist.}
+\item{method}{Specifies via which method the download should happen.
+Possible options include "auto", "internal", "libcurl", "wget" and "curl".
+If none is chosen, the function defaults to "auto". From experience the
+option "auto" works well on Wndows/OSX. For some Linux distributions it's
+recommended to choose "wget".}
 }
 \description{
-Läd die aktuellen RKI Daten über die RKI API in das Package
+Loads the newest RKI Covid-19 data via the RKI API, and loads it into the package.
 }
 \examples{
 update_rki_data()
