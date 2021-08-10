@@ -22,7 +22,7 @@ variant_case_time_series <- function(update_data=F, interpolation="none", format
 
     if(format_long){
       rename_function <- function(s){
-        return(str_sub(s, 1, nchar(s)-6))
+        return(stringr::str_sub(s, 1, nchar(s)-6))
       }
       temp_data %>% dplyr::rename_with(rename_function, dplyr::ends_with("cases")) %>%
         tidyr::pivot_longer(!date, names_to="variant", values_to="cases") -> temp_data
@@ -35,13 +35,13 @@ variant_case_time_series <- function(update_data=F, interpolation="none", format
 variant_case_R_value <- function(){
   cases <- c("alpha", "beta", "gamma", "delta")
   data <- variant_case_time_series()
-  
+
   for (i in 1:length(cases)){
     R_value <- rep(NA, nrow(data))
     case <- paste(cases[i], "cases", sep="_")
     print(case)
     for (t in 8:nrow(data)) {
-      R_value[t] <- sum(data[t-0:3, case]) / sum(data[t-4:7, case]) 
+      R_value[t] <- sum(data[t-0:3, case]) / sum(data[t-4:7, case])
     }
     column_title <- gsub(" ", "", paste("R_value_", cases[i]))
     print(column_title)
@@ -49,7 +49,7 @@ variant_case_R_value <- function(){
     print(R_value)
     data[i + 5] <- R_value
     names(data)[i + 5] <- column_title
-  } 
+  }
   data %>% print(n = 100)
   return(data)
 }
@@ -76,7 +76,7 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
 
     if(format_long){
       rename_function <- function(s){
-        return(str_sub(s, 1, nchar(s)-4))
+        return(stringr::str_sub(s, 1, nchar(s)-4))
       }
       temp_data %>% dplyr::rename_with(rename_function, dplyr::ends_with("cases")) %>%
         tidyr::pivot_longer(!date, names_to="variant", values_to="sti") -> temp_data
@@ -89,7 +89,7 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
 #' @export
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
-  
+
   tablepath %>% readxl::read_excel(sheet=1) %>% # reading data
     head(-1) %>% # Dropping last row, as it is a summary row
     dplyr::select(matches(
@@ -97,18 +97,18 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
     )) %>%
     dplyr::rename(c("alpha"=1,"beta"=2,"gamma"=3,"delta"=4)) %>%
     '/'(.,100) %>% # Dividing by 100 for accurate %
-    dplyr::slice(rep(1:n(), each = 7)) -> # Replicating the data values
+    dplyr::slice(rep(1:dplyr::n(), each = 7)) -> # Replicating the data values
     anteil
-  
+
   # Adding a date column
   anteil %>%
     dplyr::mutate(Datum = seq(as.Date("2021/01/04"),by = "days",
                               length.out = dim(anteil)[1]), .before = "alpha") ->
     anteil
   anteil
-  
+
   if(interpolation=="linear"){
-    
+
     variants_vector <- c("alpha", "beta", "gamma", "delta")
     for(k in 1:length(variants_vector)){
       x_out <- rep(NA, nrow(anteil))
@@ -125,7 +125,7 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
       names(anteil)[k + 5] <- column_title
     }
   }
-  
+
   ## plot still needs some work ##
   ggplot()+
     geom_line(data=anteil, aes(x = Datum, y = alpha), color="red")

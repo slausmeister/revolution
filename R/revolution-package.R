@@ -4,8 +4,10 @@
 #' and \code{plot_excess_mortality()} with their respective plot functions for
 #' presentiveness.
 #'
-#' 
-#'
+#' The package provides multiple different functions: For one, the user can access a
+#' lot of prepared data (eg. in \code{plot_for_agegroups()}
+#' or \code{plot_accidents_with_sti()}), which can be used for further analysis.
+#' On the other hand, 
 #'
 #'
 #'
