@@ -1,33 +1,30 @@
-#' Korrelation zwischen Einkommen und STI
+#' Correlation between income and STI 
+#'
+#' This function calculates the correlation between average income and seven day
+#' incidence in all administrative regions of germany on a dayly basis.
 #' 
-#' Diese Funktion berechnet die Korellation zwischen der STI eines Landkreises
-#' und dem durchschnittlichen Einkommen des Landkreises für jeden Tag aus.
-#' Anschließend wird der Korrelationskoeffizient als Zeitreihe ausgegeben.
+#' The funciton is based on data by Destatis aquired via
+#' https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
+#' on the 12.8.2021. The user can load his own income data into the function, as
+#' described in the parameters.
 #' 
-#' Die Funktion basiert auf Daten des Destatis, bezogen
-#' von https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
-#' am 12.8.2021. Man kann auch eine eigene Tabelle einladen. Hierfür muss der entsprechende
-#' Pfad, als auch die Sheetnumber des relevanten Datensatz angegeben werden.
-#' 
-#' @param path Gibt an, wo sich die relevante Tabelle befindet. Wird path nicht
-#'   angegeben, so wird die im Package vorhandene Tabelle benutzt.
-#' @param sheetnr Gibt an, auf welcher Seite der Excel Tabelle die releanten
-#'   Daten zu finden sind. Der Parameter muss nur angegeben werden, falls ein
-#'   eigener Datensatz verwendet wird.
-#' @return Gibt den täglichen Korrelationskoeffizienten zwischen Einkommen
-#'   und der STI in allen Landkreisen als Zeitreihe in der Form eines Tibbles
-#'   zurück. Die Spalte "date" beschreibt das Datum, die Spalte "cor" den Koeffizienten.
-#' 
+#' @param path Specifies the path to a giben excel sheet. If left empty the
+#'   function defaults to the data provided by the pachage.
+#' @param sheetnr Specifies the sheet of the excel table, where the relevant data can
+#'   be found. It only has to be specified, if custom data is used.
+#'
+#' @return The function returns a tibble carring a "date" column, and a "cor" column.
+#'   The "cor" column describes the correlation for a given date.
+#'
 #' @examples
-#' einkommen_sti_korrelation()
-#' einkommen_sti_korrelation("expl/path.xlsx", 11)
+#' income_sti_correlation()
+#' income_sti_correlation("expl/path.xlsx", 11)
 #' 
-#' \dontrun{einkommen_sti_korrelation(sheetnr=3)}
-#' \dontrun{einkommen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
+#' \dontrun{income_sti_correlation(sheetnr=3)}
+#' \dontrun{income_sti_correlation(path="custom/path/without/sheetnumber.xlsx")}
 #' 
-#' @family Wohlstand und Corona
 #' @export
-einkommen_sti_korrelation <- function(path, sheetnr){
+income_sti_correlation <- function(path, sheetnr){
 
     if(missing(path)){
         path <- system.file("extdata", "einkommen.xlsx", package="revolution")
@@ -70,7 +67,7 @@ einkommen_sti_korrelation <- function(path, sheetnr){
 #' \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
 #'
 #' @family Wohlstand und Corona
-#' @export
+# export
 auszahlungen_sti_korrelation <- function(path, sheetnr){
 
     if(missing(path)){
@@ -149,14 +146,14 @@ rolling_correlation <- function(tablepath, sheet){
         return()
 }
 
-#' Ost Deutschland
+#' East Germany 
 #'
-#' Generiert die STI time series für die neuen Bundesländer.
+#' Generates an STI time series for the new federal states.
 #'
-#' @return Ein Tibble mit einer Spalte "date" und einer Spalte "mean_sti".
-#' @family Ost-West
+#' @return A tibble with a "date" and a "mean_sti" column.
+#' @family East-West
 #' @export
-ost_deutschland <- function(){
+east_germany <- function(){
     ids <- rev.env$population_lk_data$IdLandkreis[rev.env$population_lk_data$IdLandkreis>=12000]
     temp <- tibble::tibble(sti_id(1001)$date)
     for(id in ids){
@@ -169,14 +166,14 @@ ost_deutschland <- function(){
         return()
 }
 
-#' West Deutschland
+#' West Germany 
 #'
-#' Generiert die STI time series für die alten Bundesländer.
+#' Generates an STI time series for the old federal states.
 #'
-#' @return Ein Tibble mit einer Spalte "date" und einer Spalte "mean_sti".
-#' @family Ost-West
+#' @return A tibble with a "date" and a "mean_sti" column.
+#' @family East-West
 #' @export
-west_deutschland <- function(){
+west_germany <- function(){
     ids <- rev.env$population_lk_data$IdLandkreis[rev.env$population_lk_data$IdLandkreis<=12000]
     temp <- tibble::tibble(sti_id(1001)$date)
     for(id in ids){

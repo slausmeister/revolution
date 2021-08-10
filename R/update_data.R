@@ -1,13 +1,12 @@
 #' Update RKI data
 #' 
-#' Läd die aktuellen RKI Daten über die RKI API in das Package
+#' Loads the newest RKI Covid-19 data via the RKI API, and loads it into the package. 
 #' 
-#' @param method Spezifiziert über welche Methode der Download
-#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
-#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
-#'   wird "auto" gewält. Erfahrungsweise funktioniert dies auf Windows/
-#'   OSX recht gut, auf Linux wird "wget" empfohlen, da die Datei für "curl"
-#'   zu groß ist.
+#' @param method Specifies via which method the download should happen.
+#'  Possible options include "auto", "internal", "libcurl", "wget" and "curl".
+#'  If none is chosen, the function defaults to "auto". From experience the
+#'  option "auto" works well on Wndows/OSX. For some Linux distributions it's
+#'  recommended to choose "wget".
 #' 
 #' @examples
 #' update_rki_data()
@@ -95,15 +94,13 @@ assign("rki_data", rki_data1, envir=as.environment("package:revolution"))
 }
 
 #' Update Variants of Concern data
-#' 
-#' Läd die aktuellen RKI VOC Daten über die API in das Package. Da das
-#' RKI die zugehörige API öfters verändert, kann es sein, dass diese
-#' Funktion irgentwann nicht mehr funktioniert.
-#' 
-#' @param method Spezifiziert über welche Methode der Download
-#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
-#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
-#'   wird "auto" gewält. 
+#'
+#' This function gets the newest Variants of Concern data via the RKI API
+#' and loads it into the package.
+#'
+#' @param method Specifies via which method the download should happen.
+#'  Possible options include "auto", "internal", "libcurl", "wget" and "curl".
+#'  If none is chosen, the function defaults to "auto".
 #' 
 #' @examples
 #' update_voc_data()
@@ -163,12 +160,12 @@ file.rename(
 
 #' Update Vaccination data
 #' 
-#' Läd die aktuellen RKI VOC Daten über die API in das Package.
-#' 
-#' @param method Spezifiziert über welche Methode der Download
-#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
-#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
-#'   wird "auto" gewält.
+#' Loads the newest Vaccination Data via the RKI API and loads it into
+#' the package.
+#'
+#' @param method Specifies via which method the download should happen.
+#'  Possible options include "auto", "internal", "libcurl", "wget" and "curl".
+#'  If none is chosen, the function defaults to "auto".
 #' 
 #' @examples
 #' update_vac_data()
