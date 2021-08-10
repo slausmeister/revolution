@@ -87,3 +87,17 @@ rolling_correlation <- function(tablepath, sheet){
 
     return(income_correlation <- tibble::tibble(sti_id(1001)$date,cts))
 }
+
+#' @export
+ost_deutschland <- function(){
+    ids <- rev.env$population_lk_data$IdLandkreis[rev.env$population_lk_data$IdLandkreis>=12000]
+    temp <- tibble::tibble(sti_id(1001)$date)
+    for(id in ids){
+        temp[as.character(id)] <- sti_id(id)$sti
+    }
+    
+    temp %>%
+        dplyr::transmute(m = rowMeans(dplyr::select(., !"sti_id(1001)$date"))) %>%
+        dplyr::mutate(date = sti_id(1001)$date, .before = 1) %>%
+        return()
+}

@@ -1,7 +1,11 @@
 # gibt eine Zeitreihe zurück, an welchem Datum wie viele der infizierten gestorben
 # sind, aufgeschlüsselt nach Altersgruppe
 #' @export
+<<<<<<< HEAD
+calc_mortality_ages <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+=======
 calc_covid_mortality <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
+>>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
   # regions can be either Landkreise, Bundesländer or just Germany
   # ages should be a number or a numeric vector (eg c(10, 76, 42))
   data <- filter_data_by(ages, regions, from, to)
@@ -30,7 +34,11 @@ calc_covid_mortality <- function(ages="all", regions="Germany", from="2020-01-01
 
 # plottet die obige Zeitreihe
 #' @export
+<<<<<<< HEAD
+plot_mortality_ages <- function(){
+=======
 plot_covid_mortality <- function(){
+>>>>>>> c6f1cea897ca7446a6ca6f880a11b7e5b72452c5
   calc_mortality_ages() %>%
     ggplot2::ggplot(ggplot2::aes(x=date, y=mortality, color=Altersgruppe)) %>%
     `+`(ggplot2::geom_line()) %>% return()
