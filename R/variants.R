@@ -64,7 +64,8 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
 
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
-
+    stopifnot("invalid interpolation method"=interpolation %in% c("none", "linear"))
+    
     tablepath %>% readxl::read_excel(sheet=1) %>% # reading data
         head(-1) %>% # Dropping last row, as it is a summary row
         dplyr::select(matches(
