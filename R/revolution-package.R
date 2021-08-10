@@ -4,6 +4,7 @@
 #' and \code{plot_excess_mortality()} with their respective plot functions for
 #' presentiveness.
 #'
+#' 
 #'
 #'
 #'
@@ -12,8 +13,7 @@
 #'
 #'
 #'
-#' @section Hallelujah:
-#' Hoffentlich kriegen wir eine < 3.0!
+#'
 #'
 #'
 #'
