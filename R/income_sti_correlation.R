@@ -1,13 +1,13 @@
-#' Correlation between income and STI 
+#' Correlation between income and STI
 #'
 #' This function calculates the correlation between average income and seven day
 #' incidence in all administrative regions of germany on a dayly basis.
-#' 
+#'
 #' The funciton is based on data by Destatis aquired via
 #' https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
 #' on the 12.8.2021. The user can load his own income data into the function, as
 #' described in the parameters.
-#' 
+#'
 #' @param path Specifies the path to a giben excel sheet. If left empty the
 #'   function defaults to the data provided by the pachage.
 #' @param sheetnr Specifies the sheet of the excel table, where the relevant data can
@@ -19,10 +19,10 @@
 #' @examples
 #' income_sti_correlation()
 #' income_sti_correlation("expl/path.xlsx", 11)
-#' 
+#'
 #' \dontrun{income_sti_correlation(sheetnr=3)}
 #' \dontrun{income_sti_correlation(path="custom/path/without/sheetnumber.xlsx")}
-#' 
+#'
 #' @export
 income_sti_correlation <- function(path, sheetnr){
 
@@ -39,35 +39,38 @@ income_sti_correlation <- function(path, sheetnr){
     return(rolling_correlation(path, sheetnr))
 }
 
-#' Korrelation zwischen Auszahlungen und STI
-#' 
-#' Diese Funktion berechnet die Korellation zwischen der STI eines Landkreises
-#' und dem durchschnittlichen Arbeiterentgeld (i.e. ausgezahlter Lohn) des Landkreises
-#' für jeden Tag aus. Anschließend wird der Korrelationskoeffizient als Zeitreihe ausgegeben.
-#' 
-#' Die Funktion basiert auf Daten des Destatis, bezogen
-#' von https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
-#' am 12.8.2021. Man kann auch eine eigene Tabelle einladen. Hierfür muss der entsprechende
-#' Pfad, als auch die Sheetnumber des relevanten Datensatz angegeben werden.
-#' 
-#' @param path Gibt an, wo sich die relevante Tabelle befindet. Wird path nicht
-#'   angegeben, so wird die im Package vorhandene Tabelle benutzt.
-#' @param sheetnr Gibt an, auf welcher Seite der Excel Tabelle die releanten
-#'   Daten zu finden sind. Der Parameter muss nur angegeben werden, falls ein
-#'   eigener Datensatz verwendet wird.
-#' @return Gibt den täglichen Korrelationskoeffizienten zwischen Lohnauszahlungen
-#'   und der STI in allen Landkreisen als Zeitreihe in der Form eines Tibbles
-#'   zurück. Die Spalte "date" beschreibt das Datum, die Spalte "cor" den Koeffizienten.
+#' Correlation between payouts and STI
+#'
+#' This function calculates the correlation between the STI of a county
+#' and the average worker compensation (i.e., wages paid out) of the county
+#' for each day. It then outputs the correlation coefficient as a time series.
+#'
+#' The function is based on data from Destatis, sourced
+#' from https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
+#' on 12.8.2021. You can also load your own table. For this the corresponding
+#' path, as well as the sheetnumber of the relevant dataset.
+#'
+#' @param path Specifies where the relevant table is located. If path is not
+#' specified, the table available in the package will be used.
+#' @param sheetnr Specifies on which page of the Excel table the relevant
+#' data can be found. The parameter must only be specified if an
+#' own dataset is used.
+#' @return Gives the daily correlation coefficient between wage
+#' payments and the
+#' and the STI in all counties as a time series in the form of a tibble
+#' The "date" column describes the date, and the "cor" column describes the coefficient.
 #'
 #' @examples
 #' auszahlungen_sti_korrelation()
 #' auszahlungen_sti_korrelation("expl/path.xlsx", 11)
-#' 
+#'
 #' \dontrun{auszahlungen_sti_korrelation(sheetnr=3)}
 #' \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
 #'
-#' @family Wohlstand und Corona
-# export
+#' @family wealth and corona
+#' @export
+
+Translated with www.DeepL.com/Translator (free version)
 auszahlungen_sti_korrelation <- function(path, sheetnr){
 
     if(missing(path)){
@@ -139,14 +142,14 @@ rolling_correlation <- function(tablepath, sheet){
 # Building correlation tibble
 
     correlation <- tibble::tibble(sti_id(1001)$date, cts)
-    
+
     correlation %>%
         dplyr::rename( cor = cts) %>%
         dplyr::rename( date = "sti_id(1001)$date") %>%
         return()
 }
 
-#' East Germany 
+#' East Germany
 #'
 #' Generates an STI time series for the new federal states.
 #'
@@ -159,14 +162,14 @@ east_germany <- function(){
     for(id in ids){
         temp[as.character(id)] <- sti_id(id)$sti
     }
-    
+
     temp %>%
         dplyr::transmute(mean_sti = rowMeans(dplyr::select(., !"sti_id(1001)$date"))) %>%
         dplyr::mutate(date = sti_id(1001)$date, .before = 1) %>%
         return()
 }
 
-#' West Germany 
+#' West Germany
 #'
 #' Generates an STI time series for the old federal states.
 #'
@@ -179,7 +182,7 @@ west_germany <- function(){
     for(id in ids){
         temp[as.character(id)] <- sti_id(id)$sti
     }
-    
+
     temp %>%
         dplyr::transmute(mean_sti = rowMeans(dplyr::select(., !"sti_id(1001)$date"))) %>%
         dplyr::mutate(date = sti_id(1001)$date, .before = 1) %>%

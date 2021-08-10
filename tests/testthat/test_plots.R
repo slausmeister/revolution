@@ -59,11 +59,19 @@
 #   expect_s3_class(plot_accidents_with_sti(), c("ggplot"))
 #   expect_s3_class(plot_public_transportation_with_sti(), c("ggplot"))
 # })
+# 
+# test_that("vaccination plots are ggplot", {
+#   expect_s3_class(plot_vaccination_data(), c("ggplot"))
+#   expect_s3_class(plot_vaccination_data(regions=c(8221, 1001, "Bremen")), c("ggplot"))
+#   expect_s3_class(plot_vaccination_data(ages="12-17", regions=c(8221, 1001, "Bremen"), smoothing=49, cumulate=T), c("ggplot"))
+#   expect_s3_class(plot_vaccination_data(ages="18-59", regions=c("Bayern"), vac_num=1), c("ggplot"))
+#   expect_s3_class(plot_vaccination_data(ages="60+", regions=c("Bayern"), from="2020-09-09", to="2021-04-05", vac_num=2), c("ggplot"))
+# })
 
-test_that("vaccination plots are ggplot", {
-  expect_s3_class(plot_vaccination_data(), c("ggplot"))
-  expect_s3_class(plot_vaccination_data(regions=c(8221, 1001, "Bremen")), c("ggplot"))
-  expect_s3_class(plot_vaccination_data(ages="12-17", regions=c(8221, 1001, "Bremen"), smoothing=49, cumulate=T), c("ggplot"))
-  expect_s3_class(plot_vaccination_data(ages="18-59", regions=c("Bayern"), vac_num=1), c("ggplot"))
-  expect_s3_class(plot_vaccination_data(ages="60+", regions=c("Bayern"), from="2020-09-09", to="2021-04-05", vac_num=2), c("ggplot"))
+test_that("variant plots are ggplot", {
+  expect_s3_class(plot_variants(type="r"), c("ggplot"))
+  expect_s3_class(plot_variants(), c("ggplot"))
+  expect_s3_class(plot_variants(type="share"), c("ggplot"))
+  expect_s3_class(plot_variants(type="percentage"), c("ggplot"))
+  expect_s3_class(plot_variants(type="sti"), c("ggplot"))
 })
