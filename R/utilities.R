@@ -81,7 +81,7 @@ get_age_label_from_number <- function(age_number){
 filter_data_by <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   data <- rki_data
 
-  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(age_number)))))
+  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(ages)))))
   stopifnot("from must be before to"=as.Date(from)<as.Date(to))
 
   # filter the age groups

@@ -84,7 +84,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
   # therefore, it is recommended to specify only one or the other
   ids <- is.numeric(regions)
 
-  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(age_number)))))
+  stopifnot("invalid age"=(ages=="all" || suppressWarnings(!is.na(as.numeric(ages)))))
   stopifnot("from must be before to"=as.Date(from)<as.Date(to))
 
   # calculate the population of the specified group
@@ -96,7 +96,7 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
     for(i in 1:length(ages)){
       age_labels[i] <- get_age_label_from_number(ages[i])
     }
-    population_age_data %>%
+    rev.env$population_age_data %>%
       dplyr::filter(Altersgruppe %in% age_labels) %>% `[[`("Bevölkerung") %>% sum() -> spec_pop
     spec_pop_percentage <- spec_pop / total_pop
   }
@@ -111,8 +111,10 @@ get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01",
 
   if(all(tolower(regions)=="germany")) final_pop <- spec_pop_percentage * total_pop
   else if(all(tolower(regions) %in% bundesländer)){
-    rev.env$population_age_data %>% dplyr::filter(tolower(Bundesland) %in% tolower(regions)) %>%
-      `[[`("Bevölkerung") %>% sum() -> region_pop
+    rev.env$population_lk_data %>%
+      dplyr::filter(tolower(Bundesland) %in% tolower(regions)) %>%
+      `[[`("Bevölkerung") %>% sum() ->
+      region_pop
     final_pop <- region_pop * spec_pop_percentage
   }
   else{
