@@ -319,13 +319,13 @@ plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(),
 #'and incidence age groups. When comparing the cases or deaths, it returns a plot
 #'which shows the share of cases/deaths for each age group. When plotting cases or deaths,
 #' the plot will get smoothened automatically by the ggstream library
-#' @param type A string which can be "cases", "deats" or "sti".
-#'@examples plot_for_agegroups(type="sti")
+#' @param type A string which can be "cases" or "deaths".
+#'@examples plot_for_agegroups(type="deaths")
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
 
-  stopifnot(type %in% c("cases", "deaths", "sti"))
+  stopifnot(type %in% c("cases", "deaths"))
 
   days_since_2020 <- rev.env$days_since_2020
   rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe

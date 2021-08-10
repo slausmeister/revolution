@@ -7,7 +7,7 @@
 plot_for_agegroups(type = "cases")
 }
 \arguments{
-\item{type}{A string which can be "cases", "deats" or "sti".}
+\item{type}{A string which can be "cases" or "deaths".}
 }
 \description{
 \code{plot_for_agegroups} is used to generate a plot that can compare the case/death numbers
@@ -16,5 +16,5 @@ which shows the share of cases/deaths for each age group. When plotting cases or
 the plot will get smoothened automatically by the ggstream library
 }
 \examples{
-plot_for_agegroups(type="sti")
+plot_for_agegroups(type="deaths")
 }

@@ -2,12 +2,12 @@
 #'
 #' This function takes the weekly variant of concern data provided by the RKI and
 #' approximates the case time series of the different variants.
-#' 
+#'
 #' It assumes, that the proportions of the variants in the actual cases is the same
 #' as the proportion in the sampled viral matter. Since the RKI only provides the
 #' variant shares on a weekly bases, the function can interpolate the data, using a linear
 #' spline interpolation.
-#' 
+#'
 #' @param interpolation Specifies whether the voc data should be interpolated. Options
 #'   include "linear" and "none". The default in "none", i.e. no interpolation.
 #' @param format_long, boolean Specifies whether a long format should be used.
@@ -23,7 +23,7 @@
 #' \dontrun{variant_case_time_series(interpolation=T)}
 #' @family Variants
 #' @export
-variant_case_time_series <- function(interpolation="none", format_long=F){
+variant_case_time_series <- function(interpolation="linear", format_long=F){
 
     temp_data <- building_variant_data(interpolation)
     get_time_series_for() %>%
@@ -51,16 +51,16 @@ variant_case_time_series <- function(interpolation="none", format_long=F){
 }
 
 #'Variant R value
-#'  
-#'\code{variant_case_R_value()} is used to calculate the R value of different variants of COVID-19 (e.g. alpha, beta, gamma, delta). 
+#'
+#'\code{variant_case_R_value()} is used to calculate the R value of different variants of COVID-19 (e.g. alpha, beta, gamma, delta).
 #'The reproduction number (R value) describes how many people an infected person infects on average.
-#'  
+#'
 #'@return A tibble that contains the share of cases with alpha, beta, gamma, delta variant and the according reproduction number (variant specific).
 #'
 #'@examples variant_case_R_value()
 #'
 #'@export
-variant_case_R_value <- function(){
+variant_case_r_value <- function(){
   cases <- c("alpha", "beta", "gamma", "delta")
   data <- variant_case_time_series()
 
@@ -75,20 +75,25 @@ variant_case_R_value <- function(){
     data[i + 5] <- R_value
     names(data)[i + 5] <- column_title
   }
-  data %>% print(n = 100)
+
+  data %>%
+    dplyr::select(date, tidyselect::starts_with("R_val")) %>%
+    tidyr::pivot_longer(!date, names_to="variant", values_to="r", names_prefix="R_value_") %>%
+    dplyr::mutate(r=tidyr::replace_na(r, 0)) ->
+    data
   return(data)
 }
 
 #' Variant STI time series
-#' 
+#'
 #' This function takes the weekly variant of concern data provided by the RKI and
 #' approximates the STI time series of the different variants.
-#' 
+#'
 #' It assumes, that the proportions of the variants in the actual cases is the same
 #' as the proportion in the sampled viral matter. Since the RKI only provides the
 #' variant shares on a weekly bases, the function can interpolate the data, using a linear
 #' spline interpolation.
-#' 
+#'
 #' @param interpolation Specifies whether the voc data should be interpolated. Options
 #'   include "linear" and "none". The default in "none", i.e. no interpolation.
 #' @param format_long, boolean Specifies whether a long format should be used.
@@ -104,7 +109,7 @@ variant_case_R_value <- function(){
 #' \dontrun{variant_sti_time_series(interpolation=T)}
 #' @family Variants
 #' @export
-variant_sti_time_series <- function(interpolation="none", format_long=F){
+variant_sti_time_series <- function(interpolation="linear", format_long=F){
 
     temp_data <- building_variant_data(interpolation)
     get_sti_series_for() %>%
@@ -131,7 +136,7 @@ variant_sti_time_series <- function(interpolation="none", format_long=F){
 }
 
 # Building ts of voc prop
-building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
+building_variant_data <- function(interpolation="linear", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
 
   tablepath %>% readxl::read_excel(sheet=1) %>% # reading data
     head(-1) %>% # Dropping last row, as it is a summary row
@@ -176,34 +181,70 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
 #'
 #' The function can ether plot the case time series of different vocs, or the
 #' sti time series of different vocs.
-#' 
+#'
 #' @param interpolation Specifies whether the voc data should be interpolated.
 #'   Possible options include "linear" or "none". Linear does a linear spline
 #'   interpolation. None is the default.
 #'
-#' @param sti Boolean, specifies whether the STI should be plotted. The default
-#'   is F.
+#' @param type String, specifies which value for the variants should be plotted
+#'   and how it should be displayed
 #' @return Returns a ggplot2 plot.
-#' 
+#'
 #' @examples
-#' plot_variant_share()
-#' plot_variant_share(interpolation="linear", sti=T)
-#' \dontrun{plot_variant_share(interpolation=T)
+#' plot_variants()
+#' plot_variants(interpolation="linear", type="sti")
+#' \dontrun{plot_variants(interpolation=T)}
 #'
 #' @family Variants
 #' @import ggplot2 ggstream
 #' @export
-plot_variant_share <- function(interpolation="none", sti=F){
-  if(sti){
-    variant_sti_time_series(interpolation, format_long=T) %>%
-      ggplot(aes(x=date)) %>%
-      `+`(geom_stream(aes(y=sti, fill=variant), type="ridge")) %>%
-      return()
+plot_variants <- function(interpolation="linear", type="cases"){
+  stopifnot(type %in% c("cases", "percentage", "sti", "share", "r"))
+  if(type=="sti"){
+    variant_sti_time_series(interpolation=interpolation, format_long=T) %>%
+      ggplot2::ggplot(ggplot2::aes(x=date)) %>%
+      `+`(ggplot2::geom_line(ggplot2::aes(y=sti, color=variant))) ->
+      plt
+    return(plt)
   }
-  else{
-    variant_case_time_series(update_data, interpolation, format_long=T) %>%
-      ggplot(aes(x=date)) %>%
-      `+`(geom_stream(aes(y=cases, fill=variant), type="ridge")) %>%
-      return()
+  if(type=="cases"){
+    variant_case_time_series(interpolation=interpolation, format_long=T) %>%
+      ggplot2::ggplot(ggplot2::aes(x=date)) %>%
+      `+`(ggstream::geom_stream(ggplot2::aes(y=cases, fill=variant), type="ridge")) ->
+      plt
+    return(plt)
+  }
+  if(type=="share"){
+    variant_case_time_series(interpolation=interpolation, format_long=T) %>%
+      dplyr::group_by(date) %>%
+      dplyr::summarise(total=sum(cases)) ->
+      data1
+    variant_case_time_series(interpolation=interpolation, format_long=T) %>%
+      dplyr::left_join(data1, by="date")%>%
+      dplyr::mutate(share=cases/total) %>%
+      ggplot2::ggplot(ggplot2::aes(x=date)) %>%
+      `+`(ggplot2::geom_area(ggplot2::aes(y=share, fill=variant))) ->
+      plt
+    return(plt)
+  }
+  if(type=="percentage"){
+    variant_case_time_series(interpolation=interpolation, format_long=T) %>%
+      dplyr::group_by(date) %>%
+      dplyr::summarise(total=sum(cases)) ->
+      data1
+    variant_case_time_series(interpolation=interpolation, format_long=T) %>%
+      dplyr::left_join(data1, by="date")%>%
+      dplyr::mutate(share=cases/total) %>%
+      ggplot2::ggplot(ggplot2::aes(x=date)) %>%
+      `+`(ggplot2::geom_line(ggplot2::aes(y=share, color=variant, group=variant))) ->
+      plt
+    return(plt)
+  }
+  if(type=="r"){
+    variant_case_r_value() %>%
+      ggplot2::ggplot(ggplot2::aes(x=date)) %>%
+      `+`(ggplot2::geom_line(ggplot2::aes(y=r, color=variant))) ->
+      plt
+    return(plt)
   }
 }

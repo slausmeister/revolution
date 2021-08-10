@@ -7,13 +7,13 @@
 update_vac_data(method)
 }
 \arguments{
-\item{method}{Spezifiziert über welche Methode der Download
-passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
-"wget" und "curl". Wird dieser Parameter nicht spezifiziert, so
-wird "auto" gewält.}
+\item{method}{Specifies via which method the download should happen.
+Possible options include "auto", "internal", "libcurl", "wget" and "curl".
+If none is chosen, the function defaults to "auto".}
 }
 \description{
-Läd die aktuellen RKI VOC Daten über die API in das Package.
+Loads the newest Vaccination Data via the RKI API and loads it into
+the package.
 }
 \examples{
 update_vac_data()

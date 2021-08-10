@@ -38,8 +38,4 @@ auszahlungen_sti_korrelation("expl/path.xlsx", 11)
 \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
 
 }
-\seealso{
-Other Wohlstand und Corona: 
-\code{\link{einkommen_sti_korrelation}()}
-}
 \concept{Wohlstand und Corona}
