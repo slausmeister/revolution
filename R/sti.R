@@ -1,5 +1,3 @@
-# calc sti for a certain time series with a given population
-# calc sti for a certain time series with a given population
 sti <- function(cases, pop){
   # cases is a vector of daily cases, pop the population of the group
   sti <- stats::filter(cases, rep(1, 7), method="convolution", sides=1)

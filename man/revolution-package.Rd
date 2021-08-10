@@ -4,19 +4,41 @@
 \name{revolution-package}
 \alias{revolution}
 \alias{revolution-package}
-\title{revolution: What the Package Does (One Line, Title Case)}
+\title{revolution: Analysis of COVID-19 Data in Germany}
 \description{
-What the package does (one paragraph).
+The package "revolution" provides various tools of data analysis to inspect
+    the course and impact of the COVID-19 pandemic in Germany over the span of more
+    than a year. The package offers the possibility to retrieve the newest data directly
+    from the German federal agency for disease control (RKI). It can be used to look at
+    the trend of infections and deaths throughout
+    the crisis, as well as analyze the circulation of the virus in certain demographic
+    groups and compare the vulnerability to the virus of those groups. Furthermore,
+    it can display the spread of the different virus mutations and the progress of the
+    vaccination campaigns, starting at the end of 2020.
 }
 \details{
-Frag mich nicht nach Details
+The core functions of the package include \code{get_data_for()},
+\code{get_sti_series_for()}, \code{get_vaccination_data()}, \code{variant_sti_time_series()}
+and \code{plot_excess_mortality()} with their respective plot functions for
+presentiveness.
 }
 \section{Hallelujah}{
-NA
+
+Hoffentlich kriegen wir eine <3.0!
 }
 
+\references{
+RKI Data: \url{https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/about}
+
+Vaccination Data: \url{https://impfdashboard.de/daten}
+
+Variants Data: \url{https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/VOC_VOI_Tabelle.xlsx?__blob=publicationFile}
+
+Every other dataset in this package is not up to date and comes from the
+"Statistisches Bundesamt".
+}
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Nico Bruder
 
 }
-\keyword{RONA}
+\keyword{internal}
