@@ -1,9 +1,22 @@
+#' Update RKI data
+#' 
+#' Läd die aktuellen RKI Daten über die RKI API in das Package
+#' 
+#' @param method Spezifiziert über welche Methode der Download
+#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
+#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
+#'   wird "auto" gewält. Erfahrungsweise funktioniert dies auf Windows/
+#'   OSX recht gut, auf Linux wird "wget" empfohlen, da die Datei für "curl"
+#'   zu groß ist.
+#' 
+#' @examples
+#' update_rki_data()
+#' update_rki_data(method="wget")
+#' \dontrun{update_rki_data(method=wget)}
+#' 
+#' @family update
 #' @export
 update_rki_data <- function(method){
-# the end user needs to specify a download method, because it depends on the system
-# on Manjaro Linux, "wget" seems to work
-# see ?download.file for all possible methods
-
 # checks if we have a backup RKI file
 if (""!=system.file("extdata", "RKI_COVID19_old.csv", package = "revolution")) {
 # delete file if it exists
@@ -80,11 +93,26 @@ rki_data %>% dplyr::select(-FID) -> rki_data1
 assign("rki_data", rki_data1, envir=as.environment("package:revolution"))
 
 }
+
+#' Update Variants of Concern data
+#' 
+#' Läd die aktuellen RKI VOC Daten über die API in das Package. Da das
+#' RKI die zugehörige API öfters verändert, kann es sein, dass diese
+#' Funktion irgentwann nicht mehr funktioniert.
+#' 
+#' @param method Spezifiziert über welche Methode der Download
+#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
+#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
+#'   wird "auto" gewält. 
+#' 
+#' @examples
+#' update_voc_data()
+#' update_voc_data(method="wget")
+#' \dontrun{update_voc_data(method=wget)}
+#' 
+#' @family update
 #' @export
 update_voc_data <- function(method){
-# the end user needs to specify a download method, because it depends on the system
-# on Manjaro Linux, "wget" seems to work
-# see ?download.file for all possible methods
 
 # checks if we have a backup VOC file
 if (""!=system.file("extdata", "VOC_VOI_Tabelle_old.xlsx", package = "revolution")) {
@@ -133,11 +161,23 @@ file.rename(
 
 }
 
+#' Update Vaccination data
+#' 
+#' Läd die aktuellen RKI VOC Daten über die API in das Package.
+#' 
+#' @param method Spezifiziert über welche Methode der Download
+#'   passieren soll. Zur Auswahl stehen "auto", "internal", "libcurl",
+#'   "wget" und "curl". Wird dieser Parameter nicht spezifiziert, so 
+#'   wird "auto" gewält.
+#' 
+#' @examples
+#' update_vac_data()
+#' update_vac_data(method="wget")
+#' \dontrun{update_vac_data(method=wget)}
+#' 
+#' @family update
 #' @export
 update_vac_data <- function(method){
-# the end user needs to specify a download method, because it depends on the system
-# on Manjaro Linux, "wget" seems to work
-# see ?download.file for all possible methods
 
 # checks if we have a backup file
 if (""!=system.file("extdata", "vac_COVID19_old.csv", package = "revolution")) {
