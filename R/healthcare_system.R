@@ -1,5 +1,26 @@
-# returnt einen tibble in dem die fälle an jedem tag stehen und bei wie vielen davon
-# das erkrankungsdatum bekannt ist (absolut und prozentual)
+#' Time Series of Traced Cases over Pandemic
+#'
+#' \code{calc_traced_cases()} is used to create a time series for the pandemic
+#' which shows the total and relative amount of cases traced by the German healthcare system.
+#' Traced cases here means that the infection date of an infection is known,
+#' as opposed to cases which had a positive test, but could not be traced back to the infection.
+#' The parameters work exactly like the ones in \code{get_sti_series_for}
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the data of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the data will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A tibble that contains total and relative amount of traced cases for each day since 2020
+#'
 #' @export
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -22,8 +43,26 @@ calc_traced_cases <- function(ages="all", regions="Germany",
       return()
   }
 
-# plottet die sti über die plandemie und darunter zu welchem zeitpunkt wie viele
-# dieser fälle ein bekanntes erkrankungsdatum haben (prozentual)
+
+#' Plot Time Series of Relative Traced Cases over Pandemic
+#'
+#'Plots the data created by \code{calc_traced_cases}, next to the STI of the regions for comparison.
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the data of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the data will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A plot that displays the desired data next to the STI for comparison
+#'
 #' @export
 plot_traced_cases_percentage <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -32,15 +71,33 @@ plot_traced_cases_percentage <- function(ages="all", regions="Germany",
     plt <- ggplot2::ggplot(data, ggplot2::aes(x=date, y=traced_percentage)) +
       ggplot2::geom_path()
 
-    ggplot2::ggplot(data=get_sti_series_for(), ggplot2::aes(x=date, y=sti)) +
+    ggplot2::ggplot(data=get_sti_series_for(ages, regions, from, to), ggplot2::aes(x=date, y=sti)) +
       ggplot2::geom_path() -> plt_germany
 
     cowplot::plot_grid(plotlist = list(plt_germany, plt), nrow=2) %>%
       return()
 }
 
-# plots the proportion of traced/untraced cases in total over the pandemic
-# next to the sti
+#' Plot Time Series of Total Traced Cases over Pandemic
+#'
+#'Plots the data created by \code{calc_traced_cases}, next to the STI of the regions for comparison.
+#'The plot is a stream plot so that the proportions are still visible.
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the data of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the data will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A plot that displays the desired data next to the STI for comparison
+#'
 #' @export
 plot_traced_cases_total <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -60,7 +117,31 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
       return()
   }
 
-# berechnet die verteilung zwischen meldedatum und erkrankungsdatum (falls bekannt)
+
+#' Time Difference Between Infection and Report of Cases
+#'
+#' This function returns a tibble, which summarises the distribution of the
+#' difference between a case being reported and a person being infected over the
+#' whole pandemic. It only uses the cases for which the actual time of infection is know.
+#'
+#'
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param regions A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
+#'If this vector has more than one entry, the tibble contains the data of these regions together.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'@param cut A integer that determines at which number the distribution is cut
+#' off, because some of the results are nonsensical
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the data will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A plot that displays the distribution of differences between infection and report date
+#'
 #' @export
 calc_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=Inf){
@@ -77,7 +158,9 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
       return()
   }
 
-# plottet die obige verteilung
+#' Plot Time Difference Between Infection and Report of Cases
+#'
+#' Plots the data of \code{calc_distribution_report_diff}. See \code{\link{calc_distribution_report_diff}} for an explanation of the data
 #' @export
 plot_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=30){

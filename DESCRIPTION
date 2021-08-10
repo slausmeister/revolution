@@ -1,13 +1,28 @@
 Package: revolution
-Title: What the Package Does (One Line, Title Case)
+Title: Analysis of COVID-19 Data in Germany
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R:
+    c(person(given = "Nico",
+        family = "Bruder",
+        role = c("aut", "cre")),
+      person(given = "Lucienne-Sophie",
+          family = "Marmé",
+          role = c("aut", "cre")),
+      person(given = "Viktor",
+          family = "Stein von Kamienski",
+          role = c("aut", "cre")),
+      person(given = "Philipp Hilmar",
+          family = "Tepel",
+          role = c("aut", "cre")))
+Description: The package "revolution" provides various tools of data analysis to inspect
+    the course and impact of the COVID-19 pandemic in Germany over the span of more
+    than a year. The package offers the possibility to retrieve the newest data directly
+    from the German federal agency for disease control (RKI). It can be used to look at
+    the trend of infections and deaths throughout
+    the crisis, as well as analyze the circulation of the virus in certain demographic
+    groups and compare the vulnerability to the virus of those groups. Furthermore,
+    it can display the spread of the different virus mutations and the progress of the
+    vaccination campaigns, starting at the end of 2020.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8

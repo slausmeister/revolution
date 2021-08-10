@@ -1,7 +1,17 @@
-# returnt ein tibble mit der bevdichte eines landkreises und dessen durschnitttliche
-# sti über die pandemie
+#' Correlation Between Population Density and STI
+#'
+#' This function can be used to analyze the relation between the population density
+#' and average incidence over the pandemic. The user can specify, which districts
+#' to analyze.
+#' @param regions A vector of district IDs or district names, which will be analyzed.
+#' @examples get_pop_density_with_sti(regions=c(8221, "Mannheim"))
+#' @return A tibble which contains the average STI over the pandemic with the population density of the district
+#' @section Warning:
+#' When calling this function with the paramater "all" (the default paramater),
+#' the results may take a while, because this is a very expensive computation.
 #' @export
 get_pop_density_with_sti <- function(regions="all"){
+  # TODO: Fehlermeldungen
   mean_stis <- c()
 
   if(all(regions=="all")){
@@ -21,14 +31,22 @@ get_pop_density_with_sti <- function(regions="all"){
     mean_stis <- c(mean_stis, mean(get_sti_series_simple(lk_id)))
   }
 
-  rev.env$population_lk_data %>%
-    dplyr::filter(IdLandkreis %in% lk_ids) %>%
+  tibble::tibble(IdLandkreis=lk_ids, mean_sti=mean_stis) %>%
+    dplyr::left_join(rev.env$population_lk_data, by="IdLandkreis") %>%
     dplyr::transmute(Landkreis=Landkreis, mean_sti=mean_stis, pop_density=BevDichte) %>%
     return()
 }
 
-# plottet das obige tibble (ein scatter plot mit x Achse bevdichte und y Achse durchschntl sti)
-# und fittet noch ein lineares durch, um einen zusammenhang festzustellen
+#' Plot Correlation Between Population Density and STI
+#'
+#' Utilizes a scatter plot to display the data provided by \code{\link{get_pop_density_with_sti}}.
+#' The plot has the population density on the x axis and the average STI on the y axis.
+#' Additionally, a linear model is fit to the data, to visualize a possible correlation.
+#' @examples get_pop_density_with_sti(regions=c(8221, "Mannheim"))
+#' @return A plot which contains the average STI over the pandemic with the population density of the district
+#' @section Warning:
+#' When calling this function with the paramater "all" (the default paramater),
+#' the results may take a while, because this is a very expensive computation.
 #' @export
 plot_pop_density_with_linear_model <- function(regions="all"){
   sti_density <- get_pop_density_with_sti(regions)

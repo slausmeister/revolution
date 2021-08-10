@@ -31,6 +31,29 @@ variant_case_time_series <- function(update_data=F, interpolation="none", format
     return(temp_data)
 }
 
+#' @export
+variant_case_R_value <- function(){
+  cases <- c("alpha", "beta", "gamma", "delta")
+  data <- variant_case_time_series()
+  
+  for (i in 1:length(cases)){
+    R_value <- rep(NA, nrow(data))
+    case <- paste(cases[i], "cases", sep="_")
+    print(case)
+    for (t in 8:nrow(data)) {
+      R_value[t] <- sum(data[t-0:3, case]) / sum(data[t-4:7, case]) 
+    }
+    column_title <- gsub(" ", "", paste("R_value_", cases[i]))
+    print(column_title)
+    R_value <- unlist(R_value)
+    print(R_value)
+    data[i + 5] <- R_value
+    names(data)[i + 5] <- column_title
+  } 
+  data %>% print(n = 100)
+  return(data)
+}
+
 
 variant_sti_time_series <- function(update_data=F, interpolation="none", format_long=F){
 
@@ -62,40 +85,51 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
     return(temp_data)
 }
 
+#' @import ggplot2, ggstream
+#' @export
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
-    stopifnot("invalid interpolation method"=interpolation %in% c("none", "linear"))
+  
+  tablepath %>% readxl::read_excel(sheet=1) %>% # reading data
+    head(-1) %>% # Dropping last row, as it is a summary row
+    dplyr::select(matches(
+      c("B\\.1\\.1\\.7.*Anteil","B\\.1\\.351.*Anteil", "P\\.1.*Anteil", "B\\.1\\.617.*Anteil")
+    )) %>%
+    dplyr::rename(c("alpha"=1,"beta"=2,"gamma"=3,"delta"=4)) %>%
+    '/'(.,100) %>% # Dividing by 100 for accurate %
+    dplyr::slice(rep(1:n(), each = 7)) -> # Replicating the data values
+    anteil
+  
+  # Adding a date column
+  anteil %>%
+    dplyr::mutate(Datum = seq(as.Date("2021/01/04"),by = "days",
+                              length.out = dim(anteil)[1]), .before = "alpha") ->
+    anteil
+  anteil
+  
+  if(interpolation=="linear"){
     
-    tablepath %>% readxl::read_excel(sheet=1) %>% # reading data
-        head(-1) %>% # Dropping last row, as it is a summary row
-        dplyr::select(matches(
-            c("B\\.1\\.1\\.7.*Anteil","B\\.1\\.351.*Anteil", "P\\.1.*Anteil", "B\\.1\\.617.*Anteil")
-            )) %>%
-        dplyr::rename(c("alpha"=1,"beta"=2,"gamma"=3,"delta"=4)) %>%
-        '/'(.,100) %>% # Dividing by 100 for acurate %
-        dplyr::slice(rep(1:n(), each = 7)) -> # Replicating the data values
-        anteil
-
-    # Adding a date column
-    anteil %>%
-        dplyr::mutate(Datum = seq(as.Date("2021/01/04"),by = "days",
-            length.out = dim(anteil)[1]), .before = "alpha") ->
-        anteil
-    # Mayor issues right here...
-    if(interpolation=="linear"){
-
-        for(i in seq(8, dim(anteil)[1], by=7) ){
-            a <- anteil[i-7,2:5]
-            b <- anteil[i,2:5]
-            m <- (b-a)/7
-            for(j in 0:6){
-                anteil[i+j-7,2:5] <- a + j*m
-            }
+    variants_vector <- c("alpha", "beta", "gamma", "delta")
+    for(k in 1:length(variants_vector)){
+      x_out <- rep(NA, nrow(anteil))
+      for(i in seq(8, dim(anteil)[1], by=7) ){
+        a <- anteil[i-7,k + 1]
+        b <- anteil[i,k + 1]
+        m <- (b-a)/7
+        for(j in 0:6){
+          x_out[i - 7 + j] <- a + j*m
         }
-
+      }
+      column_title <- gsub(" ", "", paste("x_out_", variants_vector[k]))
+      anteil[k + 5] <- x_out
+      names(anteil)[k + 5] <- column_title
     }
-
-    return(anteil)
+  }
+  
+  ## plot still needs some work ##
+  ggplot()+
+    geom_line(data=anteil, aes(x = Datum, y = alpha), color="red")
+  return(anteil)
 }
 
 #' @import ggplot2 ggstream
