@@ -25,7 +25,7 @@ office_case_distribution <- function(bundesland_1 = "Baden-Württemberg", bundes
   weekday_distribution %>%
     dplyr::mutate(dplyr::across(count_weekday, ~ ./total_rows)) -> mean_distribution
 
-  mean_distribution$weekday <- factor(mean_distribution$weekday, levels= c("Sunday", "Monday",
+  mean_distribution$weekday <- tidyr::factor(mean_distribution$weekday, levels= c("Sunday", "Monday",
                                                                                "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
 
   mean_distribution <- mean_distribution[order(mean_distribution$weekday), ]
