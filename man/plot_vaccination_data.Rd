@@ -20,18 +20,18 @@ The default value is "all", so that the plot is not specified for a special age 
 
 \item{regions}{A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
 Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))}
-is not allowed.}
+is not allowed. The default region is the whole country "Germany".}
 
 \item{from}{A date that specifies the beginning of the time series.}
 
-\item{to}{A date that specifies the end of the time series.}
+\item{to}{A date that specifies the end of the time series. The default value is today.}
 
-\item{vac_num}{Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.}
+\item{vac_num}{Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered. The default is "all".}
 
 \item{cumulate}{A boolean that indicates whether the time series values should be absolute or cumulative.}
 
 \item{smoothing}{A positive integer that defines the window size of the moving average. Thus, the plot will be smoother
-the higher 'smoothing' is chosen.}
+the higher 'smoothing' is chosen. The default setting is 'no smoothing'.}
 }
 \value{
 A plot of public vaccine data prepared in a user-specified way.
@@ -47,8 +47,10 @@ plot_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen")
 
 \dontrun{plot_vaccination_data(regions=c("Germany","Heidelberg"))}
 #don't mix districts, states or "Germany"
+
 \dontrun{plot_vaccination_data(ages=12-17)}
 #age group must always be a string
+
 \dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'from' needs to be earlier than 'to'
 }

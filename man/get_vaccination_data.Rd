@@ -19,11 +19,11 @@ The default value is "all", so that the data is not specified for a special age 
 
 \item{regions}{A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
 Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))}
-is not allowed.}
+is not allowed. The default region is the whole country "Germany".}
 
-\item{from}{A date that specifies the beginning of the time series}
+\item{from}{A date that specifies the beginning of the time series.}
 
-\item{to}{A date that specifies the end of the time series}
+\item{to}{A date that specifies the end of the time series. The default value is today.}
 
 \item{vac_num}{Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.}
 
@@ -42,9 +42,11 @@ get_vaccination_data(ages="60+",regions=c("Heidelberg","Sachsen"),from="2021-06-
 get_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen"),to="2021-07-08")
 
 \dontrun{get_vaccination_data(regions=c("Germany","Heidelberg"))}
-#don't mix districts, states or "Germany"
+#don't mix districts, states or "Germany
+
 \dontrun{get_vaccination_data(ages=12-17)}
 #age group must always be a string
+
 \dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'from' needs to be earlier than 'to'
 }
