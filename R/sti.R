@@ -319,7 +319,8 @@ plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(),
 #'
 #'\code{plot_for_agegroups} is used to generate a plot that can compare the case/death numbers
 #'and incidence age groups. When comparing the cases or deaths, it returns a plot
-#'which shows the share of cases/deaths for each age group.
+#'which shows the share of cases/deaths for each age group. When plotting cases or deaths,
+#' the plot will get smoothened automatically by the ggstream library
 #' @param type A string which can be "cases", "deats" or "sti".
 #'@examples plot_for_agegroups(type="sti")
 #' @export

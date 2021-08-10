@@ -1,6 +1,3 @@
-# returnt einen tibble in dem die fälle an jedem tag stehen und bei wie vielen davon
-# das erkrankungsdatum bekannt ist (absolut und prozentual)
-
 #' Time Series of Traced Cases over Pandemic
 #'
 #' \code{calc_traced_cases()} is used to create a time series for the pandemic
@@ -143,7 +140,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
 #'by the age distribution of Germany.
 #'Therefore, it is recommended to specify only one or the other
 #'
-#'@return A plot that displays the distribution of differences
+#'@return A plot that displays the distribution of differences between infection and report date
 #'
 #' @export
 calc_distribution_report_diff <- function(ages="all", regions="Germany",
@@ -161,7 +158,9 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
       return()
   }
 
-#' Time Difference Between Infection and Report of Cases
+#' Plot Time Difference Between Infection and Report of Cases
+#'
+#' Plots the data of \code{calc_distribution_report_diff}. See \code{\link{calc_distribution_report_diff}} for an explanation of the data
 #' @export
 plot_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=30){

@@ -15,5 +15,5 @@ and incidence age groups. When comparing the cases or deaths, it returns a plot
 which shows the share of cases/deaths for each age group.
 }
 \examples{
-plot_for_agegroups(type="sti") 
+plot_for_agegroups(type="sti")
 }

@@ -1,7 +1,7 @@
 .onLoad <- function(libname, pkgname){
   # TODO: checken, ob die rki datei schon ex, wenn nicht, runterladen!!!!!!
   # TODO: package dependencies
-  print(topenv())
+
   assign("rev.env", new.env(parent = emptyenv()), envir=topenv())
   # rev.env <<- new.env(parent = emptyenv())
 

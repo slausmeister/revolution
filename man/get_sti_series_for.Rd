@@ -16,7 +16,7 @@ get_sti_series_for(
 \item{ages}{A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
 The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.}
 
-\item{regions}{A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+\item{regions}{A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
 If this vector has more than one entry, the tibble contains the 7-day-incidence of these regions together.}
 
 \item{from}{A date that specifies the beginning of the time series}
