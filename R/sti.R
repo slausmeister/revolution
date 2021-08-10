@@ -54,7 +54,7 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
 #'
 #'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
 #'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
-#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
+#'@param regions A vector that either consists of strings (either the names of German districts or the names of German states) or district ID's.
 #'If this vector has more than one entry, the tibble contains the 7-day-incidence of these regions together.
 #'@param from A date that specifies the beginning of the time series
 #'@param to A date that specifies the end of the time series
@@ -321,7 +321,7 @@ plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(),
 #'and incidence age groups. When comparing the cases or deaths, it returns a plot
 #'which shows the share of cases/deaths for each age group.
 #' @param type A string which can be "cases", "deats" or "sti".
-#'@examples plot_for_agegroups(type="sti") 
+#'@examples plot_for_agegroups(type="sti")
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths
