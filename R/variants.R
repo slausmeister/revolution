@@ -85,7 +85,7 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
     return(temp_data)
 }
 
-#' @import ggplot2, ggstream
+#' @import ggplot2 ggstream
 #' @export
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
