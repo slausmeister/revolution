@@ -50,8 +50,16 @@ variant_case_time_series <- function(interpolation="none", format_long=F){
     return(temp_data)
 }
 
-#' Variant R value
-#' @export
+#'Variant R value
+#'  
+#'\code{variant_case_R_value()} is used to calculate the R value of different variants of COVID-19 (e.g. alpha, beta, gamma, delta). 
+#'The reproduction number (R value) describes how many people an infected person infects on average.
+#'  
+#'@return A tibble that contains the share of cases with alpha, beta, gamma, delta variant and the according reproduction number (variant specific).
+#'
+#'@examples variant_case_R_value()
+#'
+#'@export
 variant_case_R_value <- function(){
   cases <- c("alpha", "beta", "gamma", "delta")
   data <- variant_case_time_series()
@@ -59,14 +67,11 @@ variant_case_R_value <- function(){
   for (i in 1:length(cases)){
     R_value <- rep(NA, nrow(data))
     case <- paste(cases[i], "cases", sep="_")
-    print(case)
     for (t in 8:nrow(data)) {
       R_value[t] <- sum(data[t-0:3, case]) / sum(data[t-4:7, case])
     }
     column_title <- gsub(" ", "", paste("R_value_", cases[i]))
-    print(column_title)
     R_value <- unlist(R_value)
-    print(R_value)
     data[i + 5] <- R_value
     names(data)[i + 5] <- column_title
   }
@@ -143,7 +148,6 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
     dplyr::mutate(Datum = seq(as.Date("2021/01/04"),by = "days",
                               length.out = dim(anteil)[1]), .before = "alpha") ->
     anteil
-  anteil
 
   if(interpolation=="linear"){
 
