@@ -12,7 +12,8 @@ plot_for_agegroups(type = "cases")
 \description{
 \code{plot_for_agegroups} is used to generate a plot that can compare the case/death numbers
 and incidence age groups. When comparing the cases or deaths, it returns a plot
-which shows the share of cases/deaths for each age group.
+which shows the share of cases/deaths for each age group. When plotting cases or deaths,
+the plot will get smoothened automatically by the ggstream library
 }
 \examples{
 plot_for_agegroups(type="sti")
