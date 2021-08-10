@@ -7,10 +7,9 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
                    "Saarland","Baden-Württemberg","Bayern","Brandenburg")
 
 
-   filter_data_by(ages, regions, from, to)
+   #filter_data_by(regions, from, to)
    stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
-
-
+   
    rev.env$vax_data -> vaccines
 
    vaccines %>%
@@ -80,7 +79,7 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
    }
    if(cumulate==F){
      return(vaccine_prepared)
-   }else{
+   }else {
      if(k==1){
        vaccine_prepared %>%
          dplyr::mutate(Anzahl=cumsum(Anzahl)) -> t1
@@ -103,23 +102,28 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01
 
 #' @export
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-01",
-  to=Sys.Date(), vac_num="all", cumulate=F){
+  to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
-
+  
     if(ncol(data)==2){
       data %>%
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
     }
     else if(ncol(data)==3){
       data %>%
+        dplyr::group_by(Bundesland) %>% 
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl, color=Bundesland)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
     }
     else{
       data %>%
+        dplyr::group_by(Landkreis) %>% 
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl, color=Landkreis)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
