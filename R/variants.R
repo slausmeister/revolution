@@ -1,10 +1,29 @@
-
+#' Variant case time series
+#'
+#' This function takes the weekly variant of concern data provided by the RKI and
+#' approximates the case time series of the different variants.
+#' 
+#' It assumes, that the proportions of the variants in the actual cases is the same
+#' as the proportion in the sampled viral matter. Since the RKI only provides the
+#' variant shares on a weekly bases, the function can interpolate the data, using a linear
+#' spline interpolation.
+#' 
+#' @param interpolation Specifies whether the voc data should be interpolated. Options
+#'   include "linear" and "none". The default in "none", i.e. no interpolation.
+#' @param format_long, boolean Specifies whether a long format should be used.
+#'   A long format pivots the data. The default is F
+#'
+#' @return A tibble carrying a "date" column, and a column for each variant case number for
+#'   that day.
+#'
+#' @examples
+#' variant_case_time_series()
+#' variant_case_time_series(interpolation="linear")
+#'
+#' \dontrun{variant_case_time_series(interpolation=T)}
+#' @family Variants
 #' @export
-variant_case_time_series <- function(update_data=F, interpolation="none", format_long=F){
-
-    if(update_data){
-        get_latest_voc_data()
-    }
+variant_case_time_series <- function(interpolation="none", format_long=F){
 
     temp_data <- building_variant_data(interpolation)
     get_time_series_for() %>%
@@ -31,6 +50,7 @@ variant_case_time_series <- function(update_data=F, interpolation="none", format
     return(temp_data)
 }
 
+#' Variant R value
 #' @export
 variant_case_R_value <- function(){
   cases <- c("alpha", "beta", "gamma", "delta")
@@ -54,12 +74,32 @@ variant_case_R_value <- function(){
   return(data)
 }
 
-
-variant_sti_time_series <- function(update_data=F, interpolation="none", format_long=F){
-
-    if(update_data){
-        get_latest_voc_data()
-    }
+#' Variant STI time series
+#' 
+#' This function takes the weekly variant of concern data provided by the RKI and
+#' approximates the STI time series of the different variants.
+#' 
+#' It assumes, that the proportions of the variants in the actual cases is the same
+#' as the proportion in the sampled viral matter. Since the RKI only provides the
+#' variant shares on a weekly bases, the function can interpolate the data, using a linear
+#' spline interpolation.
+#' 
+#' @param interpolation Specifies whether the voc data should be interpolated. Options
+#'   include "linear" and "none". The default in "none", i.e. no interpolation.
+#' @param format_long, boolean Specifies whether a long format should be used.
+#'   A long format pivots the data. The default is F
+#'
+#' @return A tibble carrying a "date" column, and a column for each variant STI for
+#'   that day.
+#'
+#' @examples
+#' variant_sti_time_series()
+#' variant_sti_time_series(interpolation="linear")
+#'
+#' \dontrun{variant_sti_time_series(interpolation=T)}
+#' @family Variants
+#' @export
+variant_sti_time_series <- function(interpolation="none", format_long=F){
 
     temp_data <- building_variant_data(interpolation)
     get_sti_series_for() %>%
@@ -85,8 +125,6 @@ variant_sti_time_series <- function(update_data=F, interpolation="none", format_
     return(temp_data)
 }
 
-#' @import ggplot2 ggstream
-#' @export
 # Building ts of voc prop
 building_variant_data <- function(interpolation="none", tablepath = system.file("extdata", "VOC_VOI_Tabelle.xlsx",package= "revolution")){
 
@@ -125,18 +163,35 @@ building_variant_data <- function(interpolation="none", tablepath = system.file(
       names(anteil)[k + 5] <- column_title
     }
   }
-
-  ## plot still needs some work ##
-  ggplot()+
-    geom_line(data=anteil, aes(x = Datum, y = alpha), color="red")
   return(anteil)
 }
 
+#' Plot variant share
+#'
+#' A function that plots variant data over time.
+#'
+#' The function can ether plot the case time series of different vocs, or the
+#' sti time series of different vocs.
+#' 
+#' @param interpolation Specifies whether the voc data should be interpolated.
+#'   Possible options include "linear" or "none". Linear does a linear spline
+#'   interpolation. None is the default.
+#'
+#' @param sti Boolean, specifies whether the STI should be plotted. The default
+#'   is F.
+#' @return Returns a ggplot2 plot.
+#' 
+#' @examples
+#' plot_variant_share()
+#' plot_variant_share(interpolation="linear", sti=T)
+#' \dontrun{plot_variant_share(interpolation=T)
+#'
+#' @family Variants
 #' @import ggplot2 ggstream
 #' @export
-plot_variant_share <- function(update_data=F, interpolation="none", sti=F){
+plot_variant_share <- function(interpolation="none", sti=F){
   if(sti){
-    variant_sti_time_series(update_data, interpolation, format_long=T) %>%
+    variant_sti_time_series(interpolation, format_long=T) %>%
       ggplot(aes(x=date)) %>%
       `+`(geom_stream(aes(y=sti, fill=variant), type="ridge")) %>%
       return()
