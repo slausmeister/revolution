@@ -2,7 +2,7 @@
 % Please edit documentation in R/deaths.R
 \name{plot_excess_mortality}
 \alias{plot_excess_mortality}
-\title{Plotting of excess mortality}
+\title{Plot of excess mortality}
 \usage{
 plot_excess_mortality(
   excess_year = 2020,
@@ -27,12 +27,13 @@ average values of other years. Data is available for the years 2000-2020.
 }
 \section{Warning}{
 
-Due to missing data for February 29th in non-leap years, the smoothing function increases the gap in the plot the higher
+Due to missing data for February 29th in non-leap years, the smoothing function increases the gap in the plot the higher the
 smoothing factor is chosen.
 }
 
 \examples{
 plot_excess_mortality(2020,c(2015,2016,2017,2018,2019),smoothing=1)
+
 \dontrun{plot_excess_mortality(excess_year="2020",average_years=c(1999,2017),smoothing=100)}
 #"excess_year" and "average_years" should be an integer. Only the years 2000-2020 can be considered. 
 #Furthermore, it's not recommended to choose a smoothing factor > 5 due to the gap in the plot described in section "Warning".
