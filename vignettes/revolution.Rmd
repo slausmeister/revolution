@@ -18,3 +18,37 @@ knitr::opts_chunk$set(
 library(revolution)
 ```
 
+## Loading and updating the underlying data
+
+The "revolution" package offers the possibility to manually update the underlying data, so that the plots of time series like the 7-day-incidence or the vaccination data are always up to date. To update the official data from the German federal agency for disease control (RKI), the function `update_rki_data()` should be called.
+
+Basically, all the functions except the ones that plot data of vaccines and "variants of concerns" use this data set, so recommended to call `update_rki_data()` regularly.
+
+To update the data for vaccine-related tibbles or plots, the function `update_vac_data()` should be called.
+
+Furthermore, the RKI offers data for "variants of concerns", so e.g. the delta-variant. To update this data set, call `update_voc_data()`.
+
+## COVID-19 associated deaths and cases
+
+The RKI data is huge (more than 2 000 000 rows and more than 300 MB that are only made up of letters, digits and commas). Thus, it offers countless possibilities of statistical analysis, some of the most famous or useful are included in this package. These function often come in pairs: one delivers the time series (so it returns a tibble), the other returns the belonging plot to visualize the time series.
+
+One of the most important functions in this context seems to be `get_data_for()`. This function allows various extractions of the RKI data, the user can define the desired age group, region and the beginning and the end of the time series that `get_data_for()` returns:
+
+```{r}
+get_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-02",to="2021-08-05",type="cases")
+```
+The belonging plot function is `plot_data_for()`, so the plot for the upper example looks like this:
+
+```{r}
+plot_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-02",to="2021-08-05",type="cases")
+```
+In this example, the data contains the absolute number of cases, but `get_data_for()` and `plot_data_for()` also offer the possibility to get the 7-day-incidence or the number of COVID-19 associated deaths.
+
+Similar functions are `get_sti_series_for()` and `get_time_series_for()`. 
+`get_sti_series_for()` returns a time series of the 7-day-incidence and it is possible to get a "7-day-death-incidence". `get_time_series_for()` returns a time series for the absolute number of cases and COVID-19 associated deaths. In contrast to `get_data_for()`, it delivers a single tibble. 
+
+The package also offers a nice visualization of the age distribution during the pandemic: `plot_for_agegroups()` can be called with `type="cases"` or with `type="sti"`.
+```{r}
+plot_for_agegroups(type="cases")
+```
+
