@@ -7,9 +7,9 @@
 #'The default value is "all", so that the data is not specified for a special age group.
 #'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
 #'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
-#'is not allowed.
-#'@param from A date that specifies the beginning of the time series
-#'@param to A date that specifies the end of the time series
+#'is not allowed. The default region is the whole country "Germany".
+#'@param from A date that specifies the beginning of the time series.
+#'@param to A date that specifies the end of the time series. The default value is today.
 #'@param vac_num Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.
 #'@param cumulate A boolean that indicates whether the time series values should be absolute or cumulative.
 #'
@@ -38,6 +38,8 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
    
    stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
    stopifnot("'from' must be earlier than 'to'"= as.Date(from)<as.Date(to))
+   stopifnot("invalid age, ages must be a string and either '12-17','18-59','60+'"=(ages=="all"||ages=="12-17"||ages=="18-59"||ages=="60+"))
+   stopifnot("cumulate must be boolean"=(!is.na(as.logical(cumulate))))
    rev.env$vax_data -> vaccines
 
    vaccines %>%
@@ -136,13 +138,13 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
 #'The default value is "all", so that the plot is not specified for a special age group.
 #'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
 #'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
-#'is not allowed.
+#'is not allowed. The default region is the whole country "Germany".
 #'@param from A date that specifies the beginning of the time series.
-#'@param to A date that specifies the end of the time series.
-#'@param vac_num Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered.
+#'@param to A date that specifies the end of the time series. The default value is today.
+#'@param vac_num Either 1 or 2 or "all". Indicates whether the first or second vaccine should be considered. The default is "all".
 #'@param cumulate A boolean that indicates whether the time series values should be absolute or cumulative.
 #'@param smoothing A positive integer that defines the window size of the moving average. Thus, the plot will be smoother
-#'the higher 'smoothing' is chosen. 
+#'the higher 'smoothing' is chosen. The default setting is 'no smoothing'.
 #'
 #'@return A plot of public vaccine data prepared in a user-specified way.
 #'
@@ -158,12 +160,11 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
 #'
 #'\dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'#'from' needs to be earlier than 'to'
-
-
 #' @export
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
+    stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>0)
   
     if(ncol(data)==2){
       data %>%

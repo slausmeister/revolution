@@ -1,5 +1,9 @@
-# gibt einen tibble mit unfällen pro monat in 2019 und 2020 aus
-#' @export
+#'Traffic accidents of 2019 and 2020
+#'
+#'\code{get_accidents_data()} is used to create a tibble of the monthly number of traffic accidents during 2019-2020.
+#'
+#'@examples get_accidents_data()
+#'@export
 get_accidents_data <- function(){
   readr::read_csv(system.file("extdata", "unfaelle_jahre.csv", package="revolution"),
     show_col_types = FALSE) %>%
@@ -7,8 +11,13 @@ get_accidents_data <- function(){
       return()
 }
 
-# plottet die sti und darunter den vergleich der unfälle in 2019 und 2020
-#' @export
+#'Comparison between traffic accidents and 7-day-incidence
+#'
+#'\code{plot_accidents_with_sti()} is used to create a plot of the monthly number of traffic accidents in comparison with
+#'the 7-day-incidence in Germany. Obviously, the number of accidents drastically sank when COVID-19 reached Germany.
+#'
+#'@examples plot_accidents_with_sti()
+#'@export
 plot_accidents_with_sti <- function(){
   unfaelle_data <- get_accidents_data()
 
@@ -26,14 +35,23 @@ plot_accidents_with_sti <- function(){
     return()
 }
 
-# returnt die Personenkilometer des öpvs über 2019 und 2020 nach Quartal und Bundesland
+#'Kilometers per person in traffic
+#'
+#'\code{get_public_transportation_data} is used to create a tibble that contains quarterly data of kilometers per person of the years 2019 and 2020.
+#'
+#'@examples get_public_transportation_data
 #' @export
 get_public_transportation_data <- function(){
   readr::read_csv(system.file("extdata", "oepnv_jahre.csv", package="revolution"),
     show_col_types = FALSE) %>% return()
 }
 
-# plottet die obigen Daten im Vergleich 2019 2020 und als referenz noch mit sti
+#'Comparison between traffic kilometers per person and 7-day-incidence
+#'
+#'\code{plot_public_transportation_with_sti} is used to create a plot of the person-kilometers in comparison with
+#'the 7-day-incidence in Germany. Obviously, the number of kilometers drastically sank when COVID-19 reached Germany.
+#'
+#'@examples plot_public_transportation_with_sti
 #' @export
 plot_public_transportation_with_sti <- function(){
   oepnv_data <- get_public_transportation_data()
