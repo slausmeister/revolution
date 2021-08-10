@@ -69,8 +69,6 @@ income_sti_correlation <- function(path, sheetnr){
 #'
 #' @family wealth and corona
 #' @export
-
-Translated with www.DeepL.com/Translator (free version)
 auszahlungen_sti_korrelation <- function(path, sheetnr){
 
     if(missing(path)){

@@ -2,33 +2,34 @@
 % Please edit documentation in R/income_sti_correlation.R
 \name{auszahlungen_sti_korrelation}
 \alias{auszahlungen_sti_korrelation}
-\title{Korrelation zwischen Auszahlungen und STI}
+\title{Correlation between payouts and STI}
 \usage{
 auszahlungen_sti_korrelation(path, sheetnr)
 }
 \arguments{
-\item{path}{Gibt an, wo sich die relevante Tabelle befindet. Wird path nicht
-angegeben, so wird die im Package vorhandene Tabelle benutzt.}
+\item{path}{Specifies where the relevant table is located. If path is not
+specified, the table available in the package will be used.}
 
-\item{sheetnr}{Gibt an, auf welcher Seite der Excel Tabelle die releanten
-Daten zu finden sind. Der Parameter muss nur angegeben werden, falls ein
-eigener Datensatz verwendet wird.}
+\item{sheetnr}{Specifies on which page of the Excel table the relevant
+data can be found. The parameter must only be specified if an
+own dataset is used.}
 }
 \value{
-Gibt den täglichen Korrelationskoeffizienten zwischen Lohnauszahlungen
-und der STI in allen Landkreisen als Zeitreihe in der Form eines Tibbles
-zurück. Die Spalte "date" beschreibt das Datum, die Spalte "cor" den Koeffizienten.
+Gives the daily correlation coefficient between wage
+payments and the
+and the STI in all counties as a time series in the form of a tibble
+The "date" column describes the date, and the "cor" column describes the coefficient.
 }
 \description{
-Diese Funktion berechnet die Korellation zwischen der STI eines Landkreises
-und dem durchschnittlichen Arbeiterentgeld (i.e. ausgezahlter Lohn) des Landkreises
-für jeden Tag aus. Anschließend wird der Korrelationskoeffizient als Zeitreihe ausgegeben.
+This function calculates the correlation between the STI of a county
+and the average worker compensation (i.e., wages paid out) of the county
+for each day. It then outputs the correlation coefficient as a time series.
 }
 \details{
-Die Funktion basiert auf Daten des Destatis, bezogen
-von https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
-am 12.8.2021. Man kann auch eine eigene Tabelle einladen. Hierfür muss der entsprechende
-Pfad, als auch die Sheetnumber des relevanten Datensatz angegeben werden.
+The function is based on data from Destatis, sourced
+from https://www.statistikportal.de/de/vgrdl/ergebnisse-kreisebene/einkommen-kreise
+on 12.8.2021. You can also load your own table. For this the corresponding
+path, as well as the sheetnumber of the relevant dataset.
 }
 \examples{
 auszahlungen_sti_korrelation()
@@ -38,4 +39,4 @@ auszahlungen_sti_korrelation("expl/path.xlsx", 11)
 \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
 
 }
-\concept{Wohlstand und Corona}
+\concept{wealth and corona}
