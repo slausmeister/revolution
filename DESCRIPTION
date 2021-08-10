@@ -34,6 +34,9 @@ Imports:
     readxl,
     ggplot2,
     ggstream
-Suggests: 
-    testthat (>= 3.0.0)
+Suggests:
+    testthat (>= 3.0.0),
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
 Config/testthat/edition: 3
