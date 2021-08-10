@@ -49,6 +49,36 @@ file.rename(
             )
 }
 
+### rki covid data:
+# import raw rki data
+rki_data <- readr::read_csv(system.file("extdata", "RKI_COVID19.csv", package="revolution"),show_col_types = FALSE)
+
+# the 'Neuer' and 'Datenstand' columns compare this dataset to the one from yesterday,
+# which makes it useless for our research
+rki_data %>% dplyr::select(-NeuerFall, -NeuerTodesfall, -NeuGenesen, -Datenstand) ->
+  rki_data
+
+# change the column type of 'Meldedatum' and 'Refdatum' to date
+rki_data %>% dplyr::mutate(Meldedatum=as.Date(Meldedatum), Refdatum=as.Date(Refdatum)) -> rki_data
+
+# in most cases, 'Altersgruppe2' is not available
+rki_data %>% dplyr::select(-Altersgruppe2) -> rki_data
+
+# transform the 'IdLandkreis' column to a numeric
+rki_data %>% dplyr::mutate(IdLandkreis=as.numeric(IdLandkreis)) -> rki_data
+
+# we will use the 'Landkreis' column from the other csv, because of normalization
+rki_data %>% dplyr::select(-Landkreis) %>%
+  dplyr::left_join(dplyr::select(readr::read_csv(system.file("extdata","population_lk.csv", package="revolution"),show_col_types = FALSE), IdLandkreis, Landkreis), by="IdLandkreis") ->
+  rki_data
+
+# 'IdBundesland' is a part of 'IdLandkreis' and we have the 'Bundesland' column
+rki_data %>% dplyr::select(-IdBundesland) -> rki_data
+
+# 'FID' is the case id, which is useless for our research
+rki_data %>% dplyr::select(-FID) -> rki_data1
+assign("rki_data", rki_data1, envir=as.environment("package:revolution"))
+
 }
 #' @export
 update_voc_data <- function(method){
@@ -153,5 +183,9 @@ file.rename(
             file.path(system.file(package= "revolution"),"extdata", "vac_COVID19.csv")
             )
 }
+
+# import the data for vaccination
+rev.env$vax_data <- readr::read_csv(system.file("extdata", "vac_COVID19.csv", package="revolution"),
+  show_col_types = FALSE)
 
 }

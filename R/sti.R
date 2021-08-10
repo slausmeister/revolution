@@ -179,20 +179,19 @@ get_sti_series_simple <- function(lk_id){
   sti(cases_ts, population) %>% return()
 }
 
-#'Plotting time series for districts
+#'Creating Time Series of Cases, Deaths or Incidence
 #'
-#'\code{plot_for_lks} is used to create a plot of the absolute number of cases, of deaths or of
+#'\code{get_data_for} is used to create a table of the absolute number of cases, of deaths or of
 #'the 7-day-incidence of a region and a certain
 #'age group. The time period can be defined by the user.
 #'
-#'@param lks A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's, or just "Germany" as a whole
+#'If this vector has more than one entry, the tibble contains the values of these regions separately.
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
 #'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
-#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
-#'If this vector has more than one entry, the tibble contains the 7-day-incidence of these regions together.
 #'@param from A date that specifies the beginning of the time series
 #'@param to A date that specifies the end of the time series
-#'@param return_deaths A boolean. If one sets \code{return_deaths=T}, another column is added to the tibble that contains the 7-day-death-average weighted by
-#'the population. (Basically, this is the something like a 7-day-death-incidence.)
+#'@param type A string specifying which time series is returned. Can be "sti" for the incidence or just "cases" / "deaths"
 #'
 #'@section Warning:
 #'When specifying region \strong{and} agegroup, the incidence will not be accurate because
@@ -200,15 +199,14 @@ get_sti_series_simple <- function(lk_id){
 #'by the age distribution of Germany.
 #'Therefore, it is recommended to specify only one or the other
 #'
-#'@return A tibble that contains the 7-day-incidence (or additionally, the 7-day-death-average) for the desired regions during the defined period of time.
-#'The default version without any arguments returns a tibble that contains the 7-day-incidence of Germany between 2020-01-01 and today.
-#'@examples get_sti_series_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
+#'@return A tibble that contains the wanted value for the desired regions during the defined period of time.
+#'@examples get_data_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
 #'
-#'get_sti_series_for(ages=32,regions=c(8221,8222))
+#'get_data_for(ages=32,regions=c(8221, "Hessen", "Germany"), type="sti")
 #'
 #'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'#"from" must always be an earlier date than "to"
-
+#' @export
 get_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases"){
   # type can be "cases", "sti", "deaths"
   stopifnot("invalid type!"=type %in% c("cases", "sti", "deaths"))
@@ -271,34 +269,39 @@ get_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), 
     return()
 }
 
+#'Plotting a Time Series of Cases, Deaths or Incidence
+#'
+#'\code{plot_data_for} is used to plot the absolute number of cases, of deaths or of
+#'the 7-day-incidence of a region and a certain
+#'age group. The time period can be defined by the user.
+#'The function will plot the returns of \code{get_data_for}
+#'
+#'@param smoothing A positive integer that defines the window size of the moving average. Thus, the plot will be smoother
+#'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's, or just "Germany" as a whole
+#'If this vector has more than one entry, the tibble contains the values of these regions separately.
+#'@param ages A vector of numbers specifying the desired age groups. The available age groups are "A00-A04","A05-A14","A15-A34","A35-A59","A60-A79" and "A80+".
+#'The numbers in \code{ages} are automatically assigned to the belonging age group and afterwards, the cases and deaths of of these age groups are added up.
+#'@param from A date that specifies the beginning of the time series
+#'@param to A date that specifies the end of the time series
+#'@param type A string specifying which time series is returned. Can be "sti" for the incidence or just "cases" / "deaths"
+#'
+#'@section Warning:
+#'When specifying region \strong{and} agegroup, the incidence will not be accurate because
+#'there is no population data for the age groups in each district and it will be estimated
+#'by the age distribution of Germany.
+#'Therefore, it is recommended to specify only one or the other
+#'
+#'@return A plot that displays the wanted value for the desired regions during the defined period of time.
+#'@examples plot_data_for(ages=c(3,55),regions="Sachsen",from="2021-01-05",to="2021-02-06")
+#'
+#'plot_data_for(ages=32,regions=c(8221, "Hessen", "Germany"), type="sti")
+#'
+#'\dontrun{plot_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
+#'#"from" must always be an earlier date than "to"
 #' @export
 plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases", smoothing=0){
+  smoothing <- as.integer(smoothing)
   stopifnot("invalid smoothing"=smoothing>=0)
-  # data <- tibble::tibble(date=character(), value=numeric(), region=character())
-  #
-  # if(type=="sti"){
-  #   for(i in 1:length(lks)){
-  #     get_sti_series_for(regions=lk_ids[i]) -> temp
-  #     temp %>% dplyr::mutate(date=as.character(date), value=sti, lk=as.character(lks[i])) %>%
-  #       dplyr::select(-sti) %>% tibble::add_row(data, .) -> data
-  #   }
-  # }
-  #
-  # if(type=="cases"){
-  #   for(i in 1:length(lks)){
-  #     get_time_series_for(regions=lk_ids[i]) -> temp
-  #     temp %>% dplyr::mutate(date=as.character(date), value=cases, lk=as.character(lks[i])) %>%
-  #       dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
-  #   }
-  # }
-  #
-  # if(type=="deaths"){
-  #   for(i in 1:length(lks)){
-  #     get_time_series_for(regions=lk_ids[i]) -> temp
-  #     temp %>% dplyr::mutate(date=as.character(date), value=deaths, lk=as.character(lks[i])) %>%
-  #       dplyr::select(-cases, -deaths) %>% tibble::add_row(data, .) -> data
-  #   }
-  # }
   data <- get_data_for(regions, ages, from, to, type)
 
   data %>%
@@ -311,8 +314,14 @@ plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(),
     `+`(ggplot2::geom_line()) %>% return()
 }
 
-# TODO: documentation
-# schöner stream plot zur aufteilung der Altersgruppen
+
+#' Plotting a Comparison of Age Groups over the Pandemic
+#'
+#'\code{plot_for_agegroups} is used to generate a plot that can compare the case/death numbers
+#'and incidence age groups. When comparing the cases or deaths, it returns a plot
+#'which shows the share of cases/deaths for each age group.
+#' @param type A string which can be "cases", "deats" or "sti".
+#'@examples plot_for_agegroups(type="sti") 
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths

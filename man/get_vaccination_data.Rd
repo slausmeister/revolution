@@ -42,9 +42,11 @@ get_vaccination_data(ages="60+",regions=c("Heidelberg","Sachsen"),from="2021-06-
 get_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen"),to="2021-07-08")
 
 \dontrun{get_vaccination_data(regions=c("Germany","Heidelberg"))}
-#don't mix districts, states or "Germany"
+#don't mix districts, states or "Germany
+
 \dontrun{get_vaccination_data(ages=12-17)}
 #age group must always be a string
+
 \dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'from' needs to be earlier than 'to'
 }

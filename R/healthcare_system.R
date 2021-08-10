@@ -1,5 +1,13 @@
 # returnt einen tibble in dem die fälle an jedem tag stehen und bei wie vielen davon
 # das erkrankungsdatum bekannt ist (absolut und prozentual)
+
+#' Time Series of Traced Cases over Pandemic
+#'
+#' \code{calc_traced_cases()} is used to create a time series for the pandemic
+#' which shows the total and relative amount of cases traced by the German healthcare system.
+#' Traced cases here means that the infection date of an infection is known,
+#' as opposed to cases which had a positive test, but could not be traced back to the infection.
+#' 
 #' @export
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){

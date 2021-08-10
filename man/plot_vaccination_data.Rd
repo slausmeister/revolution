@@ -47,8 +47,10 @@ plot_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen")
 
 \dontrun{plot_vaccination_data(regions=c("Germany","Heidelberg"))}
 #don't mix districts, states or "Germany"
+
 \dontrun{plot_vaccination_data(ages=12-17)}
 #age group must always be a string
+
 \dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'from' needs to be earlier than 'to'
 }
