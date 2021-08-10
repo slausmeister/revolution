@@ -38,3 +38,7 @@ Imports:
     readxl,
     ggplot2,
     ggstream
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

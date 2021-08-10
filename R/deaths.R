@@ -226,7 +226,7 @@ plot_total_mortality <- function(age="A80+"){
   ggplot2::geom_line()->plt
   plt
 }
-#'Plotting of excess mortality
+#'Plot of excess mortality
 #'
 #'\code{plot_excess_mortality} creates a plot of the total number of daily deaths of one year in contrast to the
 #'average values of other years. Data is available for the years 2000-2020.
@@ -237,12 +237,13 @@ plot_total_mortality <- function(age="A80+"){
 #'the higher 'smoothing' is chosen. The default setting is 'no smoothing'.
 #'
 #'@section Warning:
-#'Due to missing data for February 29th in non-leap years, the smoothing function increases the gap in the plot the higher 
+#'Due to missing data for February 29th in non-leap years, the smoothing function increases the gap in the plot the higher the
 #'smoothing factor is chosen.
 #'
 #'@return A plot that shows the total number of deaths in comparison to a user-defined average.
 #'
 #'@examples plot_excess_mortality(2020,c(2015,2016,2017,2018,2019),smoothing=1)
+#'
 #'\dontrun{plot_excess_mortality(excess_year="2020",average_years=c(1999,2017),smoothing=100)}
 #'#"excess_year" and "average_years" should be an integer. Only the years 2000-2020 can be considered. 
 #'#Furthermore, it's not recommended to choose a smoothing factor > 5 due to the gap in the plot described in section "Warning".
@@ -250,7 +251,7 @@ plot_total_mortality <- function(age="A80+"){
 plot_excess_mortality <- function(excess_year=2020,average_years=c(2016,2017,2018,2019),smoothing=0){
   stopifnot("excess_year needs to be an integer >=2000 and <= 2020"= (is.integer(as.integer(excess_year))&& excess_year>=2000 && excess_year<=2020))
   stopifnot("average_years needs to be an integer vector >=2000 <= 2020"= (is.integer(as.integer(average_years))&& max(average_years)<=2020 && min(average_years)>=2000))
-  stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>0)
+  stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>=0)
   daily_death <- readxl::read_excel(system.file("extdata", "daily_deaths.xlsx", package="revolution"))
   daily_death %>% 
     dplyr::filter(days<=365)->daily_deaths

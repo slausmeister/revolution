@@ -164,7 +164,7 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
-    stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>0)
+    stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>=0)
   
     if(ncol(data)==2){
       data %>%
