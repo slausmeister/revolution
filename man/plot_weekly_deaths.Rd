@@ -30,7 +30,7 @@ overestimated during the first weeks of the year.
 }
 
 \examples{
-plot_weekly_deaths(c(2001,2003,2006,2016), age="A35-A59",rate=T)
+plot_weekly_deaths(c(2014,2016,2016), age="A35-A59",rate=T)
 
 \dontrun{plot_weekly_deaths("1999")}
 #Data is only available for 2014-2020 and \code{years} must be an integer vector

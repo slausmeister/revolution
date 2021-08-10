@@ -32,6 +32,7 @@ plot_accidents_with_sti <- function(){
     plt_germany
 
   cowplot::plot_grid(plotlist = list(plt_germany, unfaelle_plt), nrow=2) %>%
+    suppressMessages() %>%
     return()
 }
 
@@ -66,5 +67,6 @@ plot_public_transportation_with_sti <- function(){
     plt_germany
 
   cowplot::plot_grid(plotlist = list(plt_germany, oepnv_plt), nrow=2) %>%
+    suppressMessages() %>%
     return()
 }

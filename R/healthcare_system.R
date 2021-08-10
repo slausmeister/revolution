@@ -75,6 +75,7 @@ plot_traced_cases_percentage <- function(ages="all", regions="Germany",
       ggplot2::geom_path() -> plt_germany
 
     cowplot::plot_grid(plotlist = list(plt_germany, plt), nrow=2) %>%
+      suppressMessages() %>%
       return()
 }
 
@@ -114,6 +115,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
       ggplot2::geom_line() -> plt_germany
 
     cowplot::plot_grid(plotlist = list(plt_germany, plt), nrow=2) %>%
+      suppressMessages() %>%
       return()
   }
 
