@@ -26,9 +26,9 @@
 #' @export
 income_sti_correlation <- function(path, sheetnr){
 
-    if(missing(path)){
+    if(!hasArg(path)){
         path <- system.file("extdata", "einkommen.xlsx", package="revolution")
-        if (!missing(sheetnr)){
+        if (hasArg(sheetnr)){
         print("please provide a table")
         }
         else{
@@ -69,11 +69,11 @@ income_sti_correlation <- function(path, sheetnr){
 #'
 #' @family wealth and corona
 #' @export
-auszahlungen_sti_korrelation <- function(path, sheetnr){
+payments_sti_korrelation <- function(path, sheetnr){
 
-    if(missing(path)){
+    if(!hasArg(path)){
         path <- system.file("extdata", "auszahlungen.xlsx", package="revolution")
-        if (!missing(sheetnr)){
+        if (hasArg(sheetnr)){
         print("please provide a table")
         }
         else{
