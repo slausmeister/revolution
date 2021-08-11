@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library("revolution")
+update_rki_data(method="wget")
 ```
 
 ## Loading and updating the underlying data
