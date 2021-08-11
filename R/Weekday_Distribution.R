@@ -14,7 +14,7 @@ ggplot2::ggplot#'Comparison of offices from different federal states regarding t
 #'
 #'@examples office_case_distribution("Hamburg","Niedersachsen")
 
-#'@import ggplot2, ggstream
+#'@import ggplot2 ggstream
 #'@export
 office_case_distribution <- function(bundesland_1 = "Baden-Württemberg", bundesland_2 = "Schleswig-Holstein"){
   rki_data$weekday <- weekdays(as.Date(rki_data$Meldedatum))
