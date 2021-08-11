@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library("revolution")
-update_rki_data(method="wget")
+method <- readline(prompt = "If you use Windows or MacOS, please type 'auto'. For linux users: type 'wget'")
+update_rki_data(method=method)
 ```
 
 ## Loading and updating the underlying data
