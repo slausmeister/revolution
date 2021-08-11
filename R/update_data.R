@@ -90,7 +90,6 @@ rki_data %>% dplyr::select(-IdBundesland) -> rki_data
 # 'FID' is the case id, which is useless for our research
 rki_data %>% dplyr::select(-FID) ->> rki_data
 # assign("rki_data", rki_data1, envir=as.environment("package:revolution"))
-
 }
 
 #' Update Variants of Concern data
