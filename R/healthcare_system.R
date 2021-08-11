@@ -153,7 +153,7 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
       dplyr::filter(IstErkrankungsbeginn==1) %>%
       dplyr::mutate(diff=as.numeric(Meldedatum - Refdatum)) %>%
       dplyr::group_by(diff) %>%
-      dplyr::count() %>%
+      dplyr::summarise(n=sum(AnzahlFall)) %>%
       # we cut every data which has a diff greater than cut because that is nonsensical and
       # distorts the distribution
       dplyr::filter(abs(diff)<cut) %>%
