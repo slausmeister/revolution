@@ -21,7 +21,7 @@ update_rki_data(method="auto")
 
 ## Loading and updating the underlying data
 
-The "revolution" package offers the possibility to manually update the underlying data, so that the plots of time series like the 7-day-incidence or the vaccination data are always up to date. To update official data provided by the Robert Koch Institut, the function `update_rki_data()` can be called.
+The "revolution" package offers the possibility to manualy update the underlying data, so that the plots of time series like the 7-day-incidence or the vaccination data are always up to date. To update official data provided by the Robert Koch Institut, the function `update_rki_data()` can be called.
 
 As pretty much all functions are based on that data set, it is recommended to keep ontop of recent changes. However, the data provided by the RKI is sometimes broken. Thus, if the package starts to behave strange, try to update the data the next day.
 
