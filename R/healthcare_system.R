@@ -112,7 +112,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
     ggplot2::ggplot(data, ggplot2::aes(x=date)) +
       ggstream::geom_stream(ggplot2::aes(y=count, fill=traced), type="ridge") -> plt
 
-    ggplot2::ggplot(data=get_sti_series_for(), ggplot2::aes(x=date, y=sti)) +
+    ggplot2::ggplot(data=get_sti_series_for(ages, regions, from, to), ggplot2::aes(x=date, y=sti)) +
       ggplot2::geom_line() -> plt_germany
 
     cowplot::plot_grid(plotlist = list(plt_germany, plt), nrow=2) %>%
