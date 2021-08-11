@@ -8,7 +8,8 @@ plot_traced_cases_percentage(
   ages = "all",
   regions = "Germany",
   from = "2020-01-01",
-  to = Sys.Date()
+  to = Sys.Date(),
+  smoothing = 0
 )
 }
 \arguments{
