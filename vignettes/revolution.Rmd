@@ -37,10 +37,23 @@ The RKI data set provides the date the case was reported by the health office fo
 The function `calc_traced_cases()` returns a time series that contains the total and relative amount of traced cases for each day since 2020. The specification of age groups and regions (districts and states) is possible.
 
 ```{r}
-calc_traced_cases(ages="all",region="Baden-Württemberg",from="2020-03-01")
+calc_traced_cases(ages="all",region="Baden-Württemberg",from="2020-03-19")
 ```
 
-Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage` and `plot_traced_cases_total` visualize the upper tibble.
+Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage()` and `plot_traced_cases_total()` visualize the upper tibble.
+
+```{r}
+plot_traced_cases_percentage(ages="all",region="Baden-Württemberg",from="2020-03-19")
+```
+
+The function `calc_distribution_report_diff()` calculates the temporal difference between infection and reporting date for each traced case. This is nicely visualized by `plot_distribution_report_diff()`:
+
+```{r}
+plot_distribution_report_diff()
+```
+As it can be seen, most of the cases were reported just a few days after the assumed infection date, but a not neglectable share of cases shows a big temporal difference between infection and reporting. In approximately more than 30 000 cases, the reporting date is even before the assumed infection date. That doesn't make sense at all. 
+
+As a conclusion, one can say that the data needs to be interpreted and analyized carefully.
 
 ## COVID-19 associated deaths and cases
 
