@@ -42,15 +42,16 @@ calc_traced_cases(ages="all",region="Baden-Württemberg",from="2020-03-19")
 
 Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage()` and `plot_traced_cases_total()` visualize the upper tibble.
 
-```{r}
+```{r, fig.width=7}
 plot_traced_cases_percentage(ages="all",region="Baden-Württemberg",from="2020-03-19")
 ```
 
 The function `calc_distribution_report_diff()` calculates the temporal difference between infection and reporting date for each traced case. This is nicely visualized by `plot_distribution_report_diff()`:
 
-```{r}
+```{r, fig.width=7}
 plot_distribution_report_diff()
 ```
+
 As it can be seen, most of the cases were reported just a few days after the assumed infection date, but a not neglectable share of cases shows a big temporal difference between infection and reporting. In approximately more than 30 000 cases, the reporting date is even before the assumed infection date. That doesn't make sense at all. 
 
 As a conclusion, one can say that the data needs to be interpreted and analyized carefully.
@@ -66,7 +67,7 @@ get_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-0
 ```
 The belonging plot function is `plot_data_for()`, so the plot for the upper example looks like this:
 
-```{r show_figure fig.width=8}
+```{r, fig.width=7}
 plot_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-02",to="2021-08-05",type="cases")
 ```
 
@@ -76,7 +77,7 @@ Similar functions are `get_sti_series_for()` and `get_time_series_for()`.
 `get_sti_series_for()` returns a time series of the 7-day-incidence and it is possible to get a "7-day-death-incidence". `get_time_series_for()` returns a time series for the absolute number of cases and COVID-19 associated deaths. In contrast to `get_data_for()`, it delivers a single tibble. 
 
 The package also offers a nice visualization of the age distribution during the pandemic: `plot_for_agegroups()` can be called with `type="cases"` or with `type="sti"`.
-```{r}
+```{r, fig.width=7}
 plot_for_agegroups(type="cases")
 ```
 
@@ -84,7 +85,7 @@ During the pandemic, several virus variants showed up. They all differ in charac
 
 Unfortunately, the official RKI table only contains weekly data. Hence, `plot_variants()` tries to interpolate the weekly data points to estimate the daily share of the different variants. `plot_variants()`is able to plot either the absolute number, the r-value, the 7-day-incidence or the share of each single variant.
 
-```{r}
+```{r, fig.width=7}
 plot_variants(interpolation="linear",type="share")
 ```
 ## Factors influencing the spread
@@ -103,9 +104,10 @@ All in all, all of the districts show a rather high correlation because the geog
 
 The third important function in this context is `get_pop_density_with_sti()` (and for plotting with a linear model: `plot_pop_density_with_linear_model()`). The former just returns a tibble of the 7-days-incidence and the population density of a tibble, the latter delivers a linear model in order to identify a possible correlation between population density and the 7-days-incidence.
 
-```{r}
+```{r, fig.width=7}
 plot_pop_density_with_linear_model(c("Heidelberg","Mannheim","Nordfriesland","Schleswig-Flensburg","Hamburg","München"))
 ```
+
 This data evaluation delivers similar results as the other analsyis functions: a clear correlation cannot be identified. Of course, one can find highly populated districts that also show high COVID-19 rates and a general trend is recognizable. But on the other hand, there are many districts that draw a contrary picture: high population density and low COVID-19 incidence or low density and high incidence. 
 All in all, there are simply too many influence factors that are not covered by these three functions, so "revolution" alone is not sufficient for a deep study of influential factors. 
 
@@ -119,12 +121,12 @@ Therefore, "revolution" has the function `get_vaccination_data()` (and for plott
 get_vaccination_data(ages="18-59",regions=c("Niedersachsen","Sachsen"),from="2020-12-26",to="2021-08-07",vac_num=1,cumulate=F)
 ```
 The belonging plot looks like this:
-```{r}
+```{r, fig.width=7}
 plot_vaccination_data(ages="18-59",regions=c("Niedersachsen","Sachsen"),from="2020-12-26",to="2021-08-07",vac_num=1,cumulate=F)
 ```
 Some of the plotting functions have the possibility to smooth the time series. Always check the documentation to see whether smoothing is possible or not.
 
-```{r}
+```{r, fig.width=7}
 plot_vaccination_data(ages="18-59",regions=c("Niedersachsen","Sachsen"),from="2020-12-26",to="2021-08-07",vac_num=1,cumulate=F,smoothing=3)
 ```
 
@@ -138,9 +140,10 @@ Firstly, the function `calc_covid_mortality()` is useful in order to clearly ide
 calc_covid_mortality(ages=80, regions="Baden-Württemberg",from="2020-03-15")
 ```
 The belonging plot looks like this:
-```{r}
+```{r, fig.width=7}
 plot_covid_mortality(ages=80, regions="Baden-Württemberg",from="2020-03-15",smoothing=2)
 ```
+
 The plot shows that in the beginning of the COVID-19 pandemic the mortality was quite high. This aspect can be explained by the fact that the reporting system was too slow at first, what lead to a high dark figure. 
 The effects of the vaccination are also visible, obviously, the mortality has been sinking since the second quarter of 2021.
 
@@ -150,31 +153,35 @@ get_abs_deaths(years=c(2000,2019,2020))
 ```
 
 As always, "revolution" provides the belonging function to plot this tibble:
-```{r}
+```{r, fig.width=7}
 plot_abs_deaths(years=c(2003,2019,2020),smoothing=0)
 ```
+
 In contrast to previous years, an exceedingly high number of absolute deaths at the end of the year is significantly recognizable in 2020.
 
 The data set on which the upper function relies on does not contain any information about the number of deaths in different age groups, but there exists data that splits up the weekly number of deaths by ages. Unfortunately, the earliest possible year is 2014. 
 The function `get_weekly_deaths()` prepares that data set and returns a tibble filtered by the desired years and age groups. Additionally, it has the feature to divide the weekly number of deaths by the population to calculate a "weekly mortality rate".
 To plot this tibble, call `plot_weekly_deaths()`:
-```{r}
+```{r, fig.width=7}
 plot_weekly_deaths(c(2018,2019,2020),age="A60-A79")
 ```
+
 As expected, the weekly number also shows a strong rise of deaths at the end of 2020, but e.g. in the age group "A60-A79", the number of weekly deaths did not increase as much as during the flu epidemic of 2018.
 
 In order to give context to the mortality in 2020, "revolution" provides the function `get_total_mortality()`. For each year since 2014, it calculates the mortality per age group over the whole year.
-```{r}
+```{r, fig.width=7}
 plot_total_mortality(age="A80+")
 ```
+
 Obviously, the mortality in 2020 wasn't significantly high, even though the plot shows the most vulnerable age group "A80+". But it is important to consider the fact that the total mortality is calculated with accumulated deaths over the whole year. Thus, seasonal effects (COVID-19 is seasonal) can be compensated by a low number of deaths in another time of the year. In 2020 e.g., the upper plots show a quite weak flu pandemic at the beginning of the year.
 
 A pretty popular way to measure excess mortality is the comparison between one specific year (for COVID-19, one chooses 2020 of course) and the average deaths per day of the previous years (this is how the "Statistisches Bundesamt" measures excess mortality). To visualize this comparison, the function `plot_excess_mortality`can be used.
-```{r}
+```{r, fig.width=8}
 plot_excess_mortality(2020,c(2016,2017,2018,2019),smoothing=1)
 ```
+
 Looking at this plot, it becomes crystal clear that winter 2020/2021 showed a significant excess mortality. At this point it is important to note that the average must not be calculated with too early years, because otherwise demographic changes and an aging society would distort the comparison:
 
-```{r}
+```{r, fig.width=8}
 plot_excess_mortality(2020,c(2000,2001,2002,2003),smoothing=1)
 ```
