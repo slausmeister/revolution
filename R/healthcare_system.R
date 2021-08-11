@@ -32,13 +32,11 @@ calc_traced_cases <- function(ages="all", regions="Germany",
       dplyr::left_join(data, by=c("date"="Meldedatum"))  %>%
       dplyr::group_by(date) %>%
       dplyr::summarise(cases=sum(AnzahlFall),
-        traced_percentage=sum(IstErkrankungsbeginn*AnzahlFall)/sum(AnzahlFall),
         traced_total=sum(IstErkrankungsbeginn*AnzahlFall)) %>%
       # the days for which we have no infection data for are days with 0 infections
-      dplyr::mutate(cases=tidyr::replace_na(cases, 0), traced_percentage=tidyr::replace_na(traced_percentage, 1),
+      dplyr::mutate(cases=tidyr::replace_na(cases, 0),
         traced_total=tidyr::replace_na(traced_total, 0)) %>%
-      # smoothen the data a bit
-      dplyr::mutate(traced_percentage=stats::filter(traced_percentage, rep(1/10, 10), sides=1)) %>%
+      dplyr::mutate(traced_percentage=traced_total/cases) %>%
       dplyr::mutate(traced_percentage=tidyr::replace_na(traced_percentage, 1)) %>%
       return()
   }
@@ -65,9 +63,12 @@ calc_traced_cases <- function(ages="all", regions="Germany",
 #'
 #' @export
 plot_traced_cases_percentage <- function(ages="all", regions="Germany",
-  from="2020-01-01", to=Sys.Date()){
+  from="2020-01-01", to=Sys.Date(), smoothing=0){
     #TODO: remove "Don't know how to automatically pick scale for object of type ts" warning
-    data <- calc_traced_cases(ages, regions, from, to)
+    calc_traced_cases(ages, regions, from, to) %>%
+      dplyr::mutate(traced_percentage=slider::slide_dbl(traced_percentage,mean,.before=smoothing,.after=smoothing)) ->
+      data
+
     plt <- ggplot2::ggplot(data, ggplot2::aes(x=date, y=traced_percentage)) +
       ggplot2::geom_path()
 
