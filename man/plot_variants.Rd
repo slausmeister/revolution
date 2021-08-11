@@ -32,6 +32,8 @@ plot_variants(interpolation="linear", type="sti")
 }
 \seealso{
 Other Variants: 
+\code{\link{plot_variant_data}()},
+\code{\link{variant_case_r_value}()},
 \code{\link{variant_case_time_series}()},
 \code{\link{variant_sti_time_series}()}
 }

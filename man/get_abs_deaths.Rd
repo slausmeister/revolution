@@ -24,4 +24,10 @@ get_abs_deaths(c(2001,2003,2006,2016))
 
 \dontrun{get_abs_deaths(c("2006"))}
 #The years must be integer values
+
 }
+\seealso{
+Other total number of daily deaths: 
+\code{\link{plot_abs_deaths}()}
+}
+\concept{total number of daily deaths}

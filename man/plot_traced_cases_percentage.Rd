@@ -37,3 +37,9 @@ by the age distribution of Germany.
 Therefore, it is recommended to specify only one or the other
 }
 
+\seealso{
+Other traced cases: 
+\code{\link{calc_traced_cases}()},
+\code{\link{plot_traced_cases_total}()}
+}
+\concept{traced cases}

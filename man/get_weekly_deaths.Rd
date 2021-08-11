@@ -37,4 +37,10 @@ get_weekly_deaths(c(2001,2003,2006,2016), age="A35-A59",rate=T)
 
 \dontrun{get_weekly_deaths(2015,age=65)}
 #The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+
 }
+\seealso{
+Other total number of weekly deaths: 
+\code{\link{plot_weekly_deaths}()}
+}
+\concept{total number of weekly deaths}

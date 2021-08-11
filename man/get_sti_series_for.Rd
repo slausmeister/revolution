@@ -50,4 +50,6 @@ get_sti_series_for(ages=32,regions=c(8221,8222))
 
 \dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #"from" must always be an earlier date than "to"
+
 }
+\concept{7-day-incidence}

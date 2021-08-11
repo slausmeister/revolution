@@ -12,4 +12,6 @@ the 7-day-incidence in Germany. Obviously, the number of accidents drastically s
 }
 \examples{
 plot_accidents_with_sti()
+
 }
+\concept{traffic accidents}

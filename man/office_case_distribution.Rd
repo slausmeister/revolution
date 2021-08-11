@@ -26,4 +26,6 @@ All values are standardized.
 }
 \examples{
 office_case_distribution("Hamburg","Niedersachsen")
+
 }
+\concept{office case distribution}

@@ -27,4 +27,10 @@ get_abs_deaths(c(2001,2003,2006,2016),smoothing=2)
 
 \dontrun{get_abs_deaths(c("2006"),smoothing=-2.4)}
 #Years must be a vector of integer values and smoothing must be a positive integer.
+
 }
+\seealso{
+Other total number of daily deaths: 
+\code{\link{get_abs_deaths}()}
+}
+\concept{total number of daily deaths}

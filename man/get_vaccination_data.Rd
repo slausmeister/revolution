@@ -49,4 +49,10 @@ get_vaccination_data(ages="all",regions=c("Schleswig-Holstein","Niedersachsen"),
 
 \dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'from' needs to be earlier than 'to'
+
 }
+\seealso{
+Other vaccination: 
+\code{\link{plot_vaccination_data}()}
+}
+\concept{vaccination}

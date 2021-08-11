@@ -41,4 +41,10 @@ These numbers must be handled carefully because of the unknown dark figure.
 plot_covid_mortality(ages=c(10,76,42),regions=c("Bayern","Sachsen"))
 
 plot_covid_mortality(ages="all",regions=8221,from="2020-02-03",to="2021-02-03")
+
 }
+\seealso{
+Other COVID-19 associated mortality: 
+\code{\link{calc_covid_mortality}()}
+}
+\concept{COVID-19 associated mortality}

@@ -52,4 +52,10 @@ plot_data_for(ages=32,regions=c(8221, "Hessen", "Germany"), type="sti")
 
 \dontrun{plot_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #"from" must always be an earlier date than "to"
+
 }
+\seealso{
+Other time series of cases, deaths or incidence: 
+\code{\link{get_data_for}()}
+}
+\concept{time series of cases, deaths or incidence}

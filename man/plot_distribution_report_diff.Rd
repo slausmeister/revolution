@@ -15,3 +15,8 @@ plot_distribution_report_diff(
 \description{
 Plots the data of \code{calc_distribution_report_diff}. See \code{\link{calc_distribution_report_diff}} for an explanation of the data
 }
+\seealso{
+Other time difference infection vs. report: 
+\code{\link{calc_distribution_report_diff}()}
+}
+\concept{time difference infection vs. report}

@@ -21,6 +21,7 @@ Please be aware of the front-slash/back-slash conventions of your operating syst
 manual_load_rki_data("~/Downloads/RKI.csv")
 \dontrun{manual_load_rki_data()}
 \dontrun{manual_load_rki_data(~/Downloads/RKI.csv)}
+
 }
 \seealso{
 Other update: 
@@ -28,4 +29,5 @@ Other update:
 \code{\link{update_vac_data}()},
 \code{\link{update_voc_data}()}
 }
+\concept{manually load}
 \concept{update}

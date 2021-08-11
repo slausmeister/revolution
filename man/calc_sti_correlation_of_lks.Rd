@@ -28,3 +28,4 @@ the results may take a while, because this is a very expensive computation.
 calc_sti_correlation_of_lks(c("Heidelberg", 8222, "1001"))
 
 }
+\concept{district pairs}

@@ -42,3 +42,8 @@ by the age distribution of Germany.
 Therefore, it is recommended to specify only one or the other
 }
 
+\seealso{
+Other time difference infection vs. report: 
+\code{\link{plot_distribution_report_diff}()}
+}
+\concept{time difference infection vs. report}

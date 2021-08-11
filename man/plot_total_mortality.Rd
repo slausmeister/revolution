@@ -21,4 +21,10 @@ plot_total_mortality(age="A35-A59")
 
 \dontrun{plot_total_mortality(age=65)}
 #The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+
 }
+\seealso{
+Other Yearly mortality per age group: 
+\code{\link{get_total_mortality}()}
+}
+\concept{Yearly mortality per age group}

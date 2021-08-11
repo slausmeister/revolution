@@ -11,4 +11,10 @@ get_public_transportation_data()
 }
 \examples{
 get_public_transportation_data
+
 }
+\seealso{
+Other traffic kilometers: 
+\code{\link{plot_public_transportation_with_sti}()}
+}
+\concept{traffic kilometers}

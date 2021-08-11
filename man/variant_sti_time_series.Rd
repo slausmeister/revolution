@@ -35,7 +35,9 @@ variant_sti_time_series(interpolation="linear")
 }
 \seealso{
 Other Variants: 
+\code{\link{plot_variant_data}()},
 \code{\link{plot_variants}()},
+\code{\link{variant_case_r_value}()},
 \code{\link{variant_case_time_series}()}
 }
 \concept{Variants}

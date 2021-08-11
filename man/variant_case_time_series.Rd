@@ -32,10 +32,13 @@ variant_case_time_series()
 variant_case_time_series(interpolation="linear")
 
 \dontrun{variant_case_time_series(interpolation=T)}
+
 }
 \seealso{
 Other Variants: 
+\code{\link{plot_variant_data}()},
 \code{\link{plot_variants}()},
+\code{\link{variant_case_r_value}()},
 \code{\link{variant_sti_time_series}()}
 }
 \concept{Variants}

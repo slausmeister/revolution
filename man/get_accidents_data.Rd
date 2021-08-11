@@ -11,4 +11,6 @@ get_accidents_data()
 }
 \examples{
 get_accidents_data()
+
 }
+\concept{Traffic accidents}

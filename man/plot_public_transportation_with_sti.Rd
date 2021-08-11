@@ -12,4 +12,10 @@ the 7-day-incidence in Germany. Obviously, the number of kilometers drastically 
 }
 \examples{
 plot_public_transportation_with_sti
+
 }
+\seealso{
+Other traffic kilometers: 
+\code{\link{get_public_transportation_data}()}
+}
+\concept{traffic kilometers}

@@ -21,3 +21,11 @@ A function that plots share of variant data over time.
 plot_variant_data(), plot_variant_data("linear")
 
 }
+\seealso{
+Other Variants: 
+\code{\link{plot_variants}()},
+\code{\link{variant_case_r_value}()},
+\code{\link{variant_case_time_series}()},
+\code{\link{variant_sti_time_series}()}
+}
+\concept{Variants}

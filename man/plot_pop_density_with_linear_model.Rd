@@ -23,3 +23,8 @@ the results may take a while, because this is a very expensive computation.
 \examples{
 get_pop_density_with_sti(regions=c(8221, "Mannheim"))
 }
+\seealso{
+Other population density and STI: 
+\code{\link{get_pop_density_with_sti}()}
+}
+\concept{population density and STI}

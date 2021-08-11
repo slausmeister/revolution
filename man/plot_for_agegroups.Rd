@@ -17,4 +17,6 @@ the plot will get smoothened automatically by the ggstream library
 }
 \examples{
 plot_for_agegroups(type="deaths")
+
 }
+\concept{comparison age groups}
