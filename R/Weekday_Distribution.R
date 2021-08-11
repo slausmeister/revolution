@@ -43,7 +43,7 @@ office_case_distribution <- function(bundesland_1 = "Baden-Württemberg", bundes
   bundesland_2
 
   office_case_distribution_plot <- ggplot2::ggplot()+
-    geom_line(data=mean_distribution,ggplot2::aes(x = weekday, y = count_weekday, group = 1, color= "Durchschnitt"))+
+    #geom_line(data=mean_distribution, ggplot2::aes(x = weekday, y = count_weekday, group = 1, color= "Durchschnitt"))+
     geom_line(data=bundesland_1,ggplot2::aes(x = weekday, y = count_weekday, group = 1, color=Bundesland))+
     geom_line(data=bundesland_2,ggplot2::aes(x = weekday, y = count_weekday, group = 1, color=Bundesland))
 

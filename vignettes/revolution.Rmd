@@ -28,6 +28,20 @@ To update the data for vaccine-related tibbles or plots, the function `update_va
 
 Furthermore, the RKI offers data for "variants of concerns", so e.g. the delta-variant. To update this data set, call `update_voc_data()`.
 
+## The official RKI data set
+
+Most of the functions provided by "revolution" obtain their data by the official RKI csv file. Unfortunately, the data set is not without errors and it heavily relies on the reporting capabilities of the local health offices. E.g., the number of reported cases fluctuates drastically within one week due to the fact that most of the health offices and laboratories do not work full-time on Sundays. Furthermore, less people are tested during the weekend, what distorts the numbers as well.
+
+The RKI data set provides the date the case was reported by the health office for each case. For about half of them, the data set also lists the infection date. In the following, the cases for which the infection date is known will be called "traced". 
+
+The function `calc_traced_cases()` returns a time series that contains the total and relative amount of traced cases for each day since 2020. The specification of age groups and regions (districts and states) is possible.
+
+```{r}
+calc_traced_cases(ages="all",region="Baden-Württemberg",from="2020-03-01")
+```
+
+Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage` and `plot_traced_cases_total` visualize the upper tibble.
+
 ## COVID-19 associated deaths and cases
 
 The RKI data is huge (more than 2 000 000 rows and more than 300 MB that are only made up of letters, digits and commas). Thus, it offers countless possibilities of statistical analysis, some of the most famous or useful are included in this package. These function often come in pairs: one delivers the time series (so it returns a tibble), the other returns the belonging plot to visualize the time series.
@@ -39,9 +53,10 @@ get_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-0
 ```
 The belonging plot function is `plot_data_for()`, so the plot for the upper example looks like this:
 
-```{r}
+```{r show_figure fig.width=8}
 plot_data_for(regions=c("Heidelberg","Mannheim"),ages=c(15,52,84),from="2020-12-02",to="2021-08-05",type="cases")
 ```
+
 In this example, the data contains the absolute number of cases, but `get_data_for()` and `plot_data_for()` also offer the possibility to get the 7-day-incidence or the number of COVID-19 associated deaths.
 
 Similar functions are `get_sti_series_for()` and `get_time_series_for()`. 
@@ -52,6 +67,13 @@ The package also offers a nice visualization of the age distribution during the 
 plot_for_agegroups(type="cases")
 ```
 
+During the pandemic, several virus variants showed up. They all differ in characteristics like the contagiosity or the mortality. To show the influence of the so called "variants of concern", "revolution" has the functions `variant_case_time_series()`, `variant_case_r_value()` and `variant_sti_time_series()`. These functions all return tibbles that contain the data that the function names indicate for each variant of concern. The function `plot_variants()` delivers the belonging plots. 
+
+Unfortunately, the official RKI table only contains weekly data. Hence, `plot_variants()` tries to interpolate the weekly data points to estimate the daily share of the different variants. `plot_variants()`is able to plot either the absolute number, the r-value, the 7-day-incidence or the share of each single variant.
+
+```{r}
+plot_variants(interpolation="linear",type="share")
+```
 ## Factors influencing the spread
 
 The way COVID-19 spread during the last months is diffuse. One of the biggest problems with identifying influential factors is the large dark figure and the classical saying "correlation is not causality". There is a huge amount of possible factors (i.e. seasonality and weather, travel behaviour of the population, mandatory mask wearing, lockdown, etc.). "revolution" takes a closer look at three factors: the income, the geographical proximity between districts and the population density of districts.
@@ -107,7 +129,7 @@ The belonging plot looks like this:
 plot_covid_mortality(ages=80, regions="Baden-Württemberg",from="2020-03-15",smoothing=2)
 ```
 The plot shows that in the beginning of the COVID-19 pandemic the mortality was quite high. This aspect can be explained by the fact that the reporting system was too slow at first, what lead to a high dark figure. 
-The effects of the vaccination are also visible, obviously, the mortality has been sinking since the second since the second quarter of 2021.
+The effects of the vaccination are also visible, obviously, the mortality has been sinking since the second quarter of 2021.
 
 The function `get_abs_deaths()` returns the absolute number of daily deaths in Germany. The user decides, which years should be returned, the earliest data are from 2000, the latest from 2020.
 ```{r}

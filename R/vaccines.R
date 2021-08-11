@@ -97,7 +97,6 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
        dplyr::group_by(Impfdatum,Bundesland) %>%
        dplyr::summarize(Anzahl=sum(Anzahl)) %>%
        tidyr::replace_na(list(Bundesland="Berlin"))->vaccine_prepared
-     print(vaccine_prepared)
      k <- 3
    }
    else{
