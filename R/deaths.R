@@ -35,7 +35,6 @@ get_abs_deaths <- function(years=2020){
   daily_deaths %>% dplyr::filter(year %in% years) -> deaths_filtered
   deaths_filtered <- dplyr::mutate(deaths_filtered,year=as.character(year))
   return(deaths_filtered)
-
 }
 
 #'Plotting the total number of daily deaths in Germany

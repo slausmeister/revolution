@@ -1,15 +1,14 @@
 Package: revolution
 Title: Analysis of COVID-19 Data in Germany
 Version: 0.0.0.9000
-Authors@R:
-    c(person(given = "Nico",
-        family = "Bruder"),
-      person(given = "Lucienne-Sophie",
-          family = "Marmé",),
-      person(given = "Viktor",
-          family = "Stein von Kamienski"),
-      person(given = "Philipp Hilmar",
-          family = "Tepel"))
+Authors@R:c(person("Nico", "Bruder", role = c("aut", "trl"),
+                     email = "Nico.Schwester@some.domain.net"),
+            person("Lucienne-Sophie", "Marmé", role = c("aut", "cph"),
+                      email = "Lucy.Marmelade@some.domain.net"),
+            person("Viktor", "Stein von Kamienski", role = c("aut", "cre"),
+                      email = "Stani.Stani@some.domain.net"),
+            person("Philipp Hilmar", "Tepel", role = c("aut", "ths"),
+                      email = "Hilmar@some.domain.net"))
 Description: The package "revolution" provides various tools of data analysis to inspect
     the course and impact of the COVID-19 pandemic in Germany over the span of more
     than a year. The package offers the possibility to retrieve the newest data directly
@@ -19,8 +18,8 @@ Description: The package "revolution" provides various tools of data analysis to
     groups and compare the vulnerability to the virus of those groups. Furthermore,
     it can display the spread of the different virus mutations and the progress of the
     vaccination campaigns, starting at the end of 2020.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: use_mit_license()
+Maintainer: Stanislaus Stein <stanislaussteinvk@gmail.com>
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

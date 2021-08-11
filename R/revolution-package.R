@@ -30,7 +30,8 @@
 #' Variants Data: \url{https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/VOC_VOI_Tabelle.xlsx?__blob=publicationFile}
 #'
 #' Every other dataset in this package is not up to date and comes from the
-#' "Statistisches Bundesamt": \url{https://www.destatis.de/DE/Home/_inhalt.html}.
+#' "Statistisches Bundesamt" (\url{https://www.destatis.de/DE/Home/_inhalt.html}),
+#' but was modified to fit our purposes.
 #'
 #'
 #'
