@@ -88,6 +88,7 @@ Unfortunately, the official RKI table only contains weekly data. Hence, `plot_va
 ```{r, fig.width=7}
 plot_variants(interpolation="linear",type="share")
 ```
+
 ## Factors influencing the spread
 
 The way COVID-19 spread during the last months is diffuse. One of the biggest problems with identifying influential factors is the large dark figure and the classical saying "correlation is not causality". There is a huge amount of possible factors (i.e. seasonality and weather, travel behaviour of the population, mandatory mask wearing, lockdown, etc.). "revolution" takes a closer look at three factors: the income, the geographical proximity between districts and the population density of districts.
