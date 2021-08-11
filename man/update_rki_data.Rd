@@ -24,6 +24,7 @@ update_rki_data(method="wget")
 }
 \seealso{
 Other update: 
+\code{\link{manual_load_rki_data}()},
 \code{\link{update_vac_data}()},
 \code{\link{update_voc_data}()}
 }

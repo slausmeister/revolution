@@ -1,6 +1,20 @@
+#' Manually load RKI data
+#' 
+#' This function manually laods an RKI file into the package. The user has to provide a valid 
+#' path to a valid RKI file. If a wrong file is loaded, the package cannot build its internal 
+#' data. Thus we recommend using the automatic \code{update_rki_data()} function. 
+#'
+#' Please be aware of the front-slash/back-slash conventions of your operating system.
+#' 
+#' @param path A path to a file which is to be loaded in. The bath has to be in parentheses.
+#' @family update 
+#' @examples
+#' manual_load_rki_data("~/Downloads/RKI.csv")
+#' \dontrun{manual_load_rki_data()}
+#' \dontrun{manual_load_rki_data(~/Downloads/RKI.csv)}
 #' @export
-manual_load_rki_data <- function(method){
-if(missing(path)){
+manual_load_rki_data <- function(path){
+if(!hasArg(path)){
     print("please provide a path to an rki file as a function arguement")
     return()
 }
@@ -13,14 +27,15 @@ file.rename(system.file("extdata", "RKI_COVID19.csv", package = "revolution"), f
 
 
 # check if the download was successful, if so remove the backup file and rename the new file
-if(""!=system.file(path)){
+if(hasArg(path)){
 file.copy(
            from = path,
            to = file.path(system.file(package = "revolution"), "extdata", "RKI_COVID19.csv")
             )
+if(""!=system.file("extdata", "RKI_COVID19_old.csv", package = "revolution")){
 file.remove(
             system.file("extdata", "RKI_COVID19_old.csv", package = "revolution")
-            )
+            )}
 print("Load successful")
 } else{
 # if the download failed, restore the old file
