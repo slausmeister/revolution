@@ -332,7 +332,9 @@ plot_for_agegroups <- function(type="cases"){
   tidyr::crossing(Altersgruppe, days_since_2020) -> series1
   print(series1)
   options(dplyr.summarise.inform = FALSE)
-  series1 %>% dplyr::rename("date"="days_since_2020") %>%
+  series1 %>%
+    dplyr::mutate(date=days_since_2020) %>%
+    dplyr::select(-days_since_2020) %>%
     dplyr::left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
     dplyr::group_by(date, Altersgruppe) %>%
     dplyr::summarise(cases=sum(AnzahlFall), deaths=sum(AnzahlTodesfall)) %>%

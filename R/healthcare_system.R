@@ -26,9 +26,9 @@ calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
 
     data <- filter_data_by(ages, regions, from, to)
-
+    days_series <- seq(as.Date(from), as.Date(to), by="days")
     # infections time series
-    tibble::tibble(date=rev.env$days_since_2020) %>%
+    tibble::tibble(date=days_series) %>%
       dplyr::left_join(data, by=c("date"="Meldedatum"))  %>%
       dplyr::group_by(date) %>%
       dplyr::summarise(cases=sum(AnzahlFall),
