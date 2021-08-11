@@ -52,7 +52,7 @@ test_that("sti plots are ggplot", {
 
   expect_s3_class(plot_for_agegroups(), c("ggplot"))
   expect_s3_class(plot_for_agegroups(type="deaths"), c("ggplot"))
-  expect_s3_class(plot_for_agegroups(type="sti"), c("ggplot"))
+  expect_s3_class(plot_for_agegroups(type="cases"), c("ggplot"))
 })
 
 test_that("traffic plots are ggplot", {

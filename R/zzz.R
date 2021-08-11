@@ -25,6 +25,8 @@
     dplyr::group_by(Altersgruppe, Jahr) %>% dplyr::summarise(Bevölkerung=sum(Bevölkerung)) ->
     rev.env$population_age_data
 
+  rev.env$days_since_2020 <- seq(as.Date("2020-01-01"), as.Date(Sys.Date()), by="days")
+  
   ### rki covid data:
   # import raw rki data
   if(system.file("extdata", "RKI_COVID19.csv", package = "revolution")==""){
@@ -60,8 +62,6 @@
     rki_data %>% dplyr::select(-FID) ->> rki_data
 
     #     assign("rki_data", rki_data, envir=topenv())
-
-    rev.env$days_since_2020 <- seq(as.Date("2020-01-01"), as.Date(Sys.Date()), by="days")
   }
 
 }

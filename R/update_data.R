@@ -48,9 +48,11 @@ file.rename(
             system.file("extdata", "RKI_COVID19_new.csv", package = "revolution"),
             file.path(system.file(package = "revolution"), "extdata", "RKI_COVID19.csv")
             )
+if(""!=system.file("extdata", "RKI_COVID19_old.csv", package = "revolution")){
 file.remove(
             system.file("extdata", "RKI_COVID19_old.csv", package = "revolution")
             )
+}
 print("Download successful")
 } else{
 # if the download failed, restore the old file
