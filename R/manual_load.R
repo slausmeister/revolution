@@ -1,5 +1,5 @@
 #' @export
-update_rki_data <- function(method){
+manual_load_rki_data <- function(method){
 if(missing(path)){
     print("please provide a path to an rki file as a function arguement")
     return()
