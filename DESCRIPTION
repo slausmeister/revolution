@@ -33,7 +33,8 @@ Imports:
     readxl,
     ggplot2,
     ggstream,
-    slider
+    slider,
+    cowplot
 Suggests:
     testthat (>= 3.0.0),
     rmarkdown,
