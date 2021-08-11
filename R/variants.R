@@ -175,6 +175,35 @@ building_variant_data <- function(interpolation="linear", tablepath = system.fil
   return(anteil)
 }
 
+#' Plot variant data
+#'
+#' A function that plots share of variant data over time.
+#'
+#' @param interpolation Specifies whether the voc data should be interpolated.
+#'   Possible options include "linear" or "none". Linear does a linear spline
+#'   interpolation. None is the default.
+#' @return Returns a ggplot2 plot.
+#' @examples plot_variant_data(), plot_variant_data("linear")
+#'   
+#' @import ggplot2, ggstream
+#' @export
+plot_variant_data <- function(interpolation="none"){
+  
+  anteil <- building_variant_data("linear")
+  anteil %>%
+    rename(alpha_share = x_out_alpha) %>%
+    rename(beta_share = x_out_beta) %>%
+    rename(gamma_share = x_out_gamma) %>%
+    rename(delta_share = x_out_delta) %>%
+    pivot_longer(c("alpha_share", "beta_share", "gamma_share", "delta_share"),"variant") %>%
+    rename(date = Datum) -> anteil_plot
+  
+  office_case_distribution_plot <- ggplot()+
+    geom_line(data=anteil_plot, aes(x = date, y = value, color = variant))
+  return(office_case_distribution_plot)
+  
+}
+
 #' Plot variant share
 #'
 #' A function that plots variant data over time.
