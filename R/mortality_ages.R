@@ -22,6 +22,7 @@
 #'
 #'calc_covid_mortality(ages="all",regions=8221,from="2020-02-03",to="2021-02-03")
 #'
+#' @family COVID-19 associated mortality
 #' @export
 calc_covid_mortality <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
@@ -70,6 +71,8 @@ calc_covid_mortality <- function(ages="all", regions="Germany", from="2020-01-01
 #'@examples plot_covid_mortality(ages=c(10,76,42),regions=c("Bayern","Sachsen"))
 #'
 #'plot_covid_mortality(ages="all",regions=8221,from="2020-02-03",to="2021-02-03")
+#'
+#' @family COVID-19 associated mortality
 #' @export
 plot_covid_mortality <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),smoothing=0){
   calc_covid_mortality(ages, regions, from, to) %>%

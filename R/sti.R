@@ -26,6 +26,8 @@ sti <- function(cases, pop){
 #'
 #'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'##"from" must always be an earlier date than "to"
+#'
+#'@family COVID-19 cases and deaths
 #'@export
 get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date()){
   # regions can be either Landkreise, Bundesländer or just Germany
@@ -73,6 +75,8 @@ get_time_series_for <- function(ages="all", regions="Germany", from="2020-01-01"
 #'
 #'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'#"from" must always be an earlier date than "to"
+#'
+#' @family 7-day-incidence
 #' @export
 get_sti_series_for <- function(ages="all", regions="Germany", from="2020-01-01", to=Sys.Date(),
   return_deaths=F){
@@ -204,6 +208,8 @@ get_sti_series_simple <- function(lk_id){
 #'
 #'\dontrun{get_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'#"from" must always be an earlier date than "to"
+#'
+#' @family time series of cases, deaths or incidence
 #' @export
 get_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases"){
   # type can be "cases", "sti", "deaths"
@@ -296,6 +302,8 @@ get_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), 
 #'
 #'\dontrun{plot_time_series_for(ages=c(12,42),from="2020-05-02",to="2020-05-01"}
 #'#"from" must always be an earlier date than "to"
+#'
+#' @family time series of cases, deaths or incidence
 #' @export
 plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(), type="cases", smoothing=0){
   smoothing <- as.integer(smoothing)
@@ -321,6 +329,8 @@ plot_data_for <- function(regions, ages="all", from="2020-01-01", to=Sys.Date(),
 #' the plot will get smoothened automatically by the ggstream library
 #' @param type A string which can be "cases" or "deaths".
 #'@examples plot_for_agegroups(type="deaths")
+#'
+#' @family comparison age groups 
 #' @export
 plot_for_agegroups <- function(type="cases"){
   # type can be cases or deaths

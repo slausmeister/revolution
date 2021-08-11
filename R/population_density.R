@@ -9,6 +9,8 @@
 #' @section Warning:
 #' When calling this function with the paramater "all" (the default paramater),
 #' the results may take a while, because this is a very expensive computation.
+#' 
+#' @family population density and STI
 #' @export
 get_pop_density_with_sti <- function(regions="all"){
   # TODO: Fehlermeldungen
@@ -47,6 +49,8 @@ get_pop_density_with_sti <- function(regions="all"){
 #' @section Warning:
 #' When calling this function with the paramater "all" (the default paramater),
 #' the results may take a while, because this is a very expensive computation.
+#' 
+#' @family population density and STI
 #' @export
 plot_pop_density_with_linear_model <- function(regions="all"){
   sti_density <- get_pop_density_with_sti(regions)

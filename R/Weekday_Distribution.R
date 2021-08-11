@@ -1,4 +1,4 @@
-ggplot2::ggplot#'Comparison of offices from different federal states regarding the number of reported cases on the different weekdays.
+#'Comparison of offices from different federal states regarding the number of reported cases on the different weekdays.
 #'
 #'\code{office_case_distribution()} is used to create a plot showing the mean number of reported cases in Germany regarding the specific weekdays
 #'as well as the number of reported cases regarding the specific weekdays of the two given federal states. To see how fast or slow offices of different
@@ -13,7 +13,8 @@ ggplot2::ggplot#'Comparison of offices from different federal states regarding t
 #'and the standardized amount of all reported cases per day.
 #'
 #'@examples office_case_distribution("Hamburg","Niedersachsen")
-
+#' 
+#'@family office case distribution 
 #'@import ggplot2 ggstream
 #'@export
 office_case_distribution <- function(bundesland_1 = "Baden-Württemberg", bundesland_2 = "Schleswig-Holstein"){

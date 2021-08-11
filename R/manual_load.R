@@ -12,6 +12,8 @@
 #' manual_load_rki_data("~/Downloads/RKI.csv")
 #' \dontrun{manual_load_rki_data()}
 #' \dontrun{manual_load_rki_data(~/Downloads/RKI.csv)}
+#' 
+#' @family manually load
 #' @export
 manual_load_rki_data <- function(path){
 if(!hasArg(path)){

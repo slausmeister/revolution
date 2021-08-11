@@ -21,6 +21,7 @@
 #'
 #'@return A tibble that contains total and relative amount of traced cases for each day since 2020
 #'
+#' @family traced cases
 #' @export
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -61,6 +62,7 @@ calc_traced_cases <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the desired data next to the STI for comparison
 #'
+#' @family traced cases
 #' @export
 plot_traced_cases_percentage <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), smoothing=0){
@@ -100,6 +102,7 @@ plot_traced_cases_percentage <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the desired data next to the STI for comparison
 #'
+#' @family traced cases
 #' @export
 plot_traced_cases_total <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -145,6 +148,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the distribution of differences between infection and report date
 #'
+#' @family time difference infection vs. report
 #' @export
 calc_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=Inf){
@@ -164,6 +168,8 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
 #' Plot Time Difference Between Infection and Report of Cases
 #'
 #' Plots the data of \code{calc_distribution_report_diff}. See \code{\link{calc_distribution_report_diff}} for an explanation of the data
+#' 
+#' @family time difference infection vs. report
 #' @export
 plot_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=30){

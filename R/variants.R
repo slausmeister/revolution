@@ -21,6 +21,7 @@
 #' variant_case_time_series(interpolation="linear")
 #'
 #' \dontrun{variant_case_time_series(interpolation=T)}
+#' 
 #' @family Variants
 #' @export
 variant_case_time_series <- function(interpolation="linear", format_long=F){
@@ -59,6 +60,7 @@ variant_case_time_series <- function(interpolation="linear", format_long=F){
 #'
 #'@examples variant_case_R_value()
 #'
+#'@family Variants
 #'@export
 variant_case_r_value <- function(){
   cases <- c("alpha", "beta", "gamma", "delta")
@@ -185,6 +187,7 @@ building_variant_data <- function(interpolation="linear", tablepath = system.fil
 #' @return Returns a ggplot2 plot.
 #' @examples plot_variant_data(), plot_variant_data("linear")
 #'
+#' @family Variants
 #' @export
 plot_variant_data <- function(interpolation="none"){
 

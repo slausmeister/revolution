@@ -27,6 +27,8 @@
 #'
 #'\dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'#'from' needs to be earlier than 'to'
+#'
+#'@family vaccination
 #'@export
 get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F){
@@ -164,6 +166,8 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
 #'
 #'\dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'#'from' needs to be earlier than 'to'
+#'
+#' @family vaccination
 #' @export
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
