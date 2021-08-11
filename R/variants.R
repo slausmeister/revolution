@@ -184,11 +184,10 @@ building_variant_data <- function(interpolation="linear", tablepath = system.fil
 #'   interpolation. None is the default.
 #' @return Returns a ggplot2 plot.
 #' @examples plot_variant_data(), plot_variant_data("linear")
-#'   
-#' @import ggplot2, ggstream
+#'
 #' @export
 plot_variant_data <- function(interpolation="none"){
-  
+
   anteil <- building_variant_data("linear")
   anteil %>%
     rename(alpha_share = x_out_alpha) %>%
@@ -197,11 +196,11 @@ plot_variant_data <- function(interpolation="none"){
     rename(delta_share = x_out_delta) %>%
     pivot_longer(c("alpha_share", "beta_share", "gamma_share", "delta_share"),"variant") %>%
     rename(date = Datum) -> anteil_plot
-  
+
   office_case_distribution_plot <- ggplot()+
     geom_line(data=anteil_plot, aes(x = date, y = value, color = variant))
   return(office_case_distribution_plot)
-  
+
 }
 
 #' Plot variant share
@@ -225,7 +224,6 @@ plot_variant_data <- function(interpolation="none"){
 #' \dontrun{plot_variants(interpolation=T)}
 #'
 #' @family Variants
-#' @import ggplot2 ggstream
 #' @export
 plot_variants <- function(interpolation="linear", type="cases"){
   stopifnot(type %in% c("cases", "percentage", "sti", "share", "r"))
