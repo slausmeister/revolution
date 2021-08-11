@@ -33,10 +33,11 @@ income_sti_correlation <- function(path, sheetnr){
         }
         else{
             sheetnr <- 11
+            return(rolling_correlation(path, sheetnr))
         }
     }
 
-    return(rolling_correlation(path, sheetnr))
+    
 }
 
 #' Correlation between payouts and STI
