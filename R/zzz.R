@@ -2,7 +2,7 @@
   # TODO: checken, ob die rki datei schon ex, wenn nicht, runterladen!!!!!!
   # TODO: package dependencies
 
-  unlockBindings(package::revolution)
+  unlockBinding(package::revolution)
 
   assign("rev.env", new.env(parent = emptyenv()), envir=topenv())
   # rev.env <<- new.env(parent = emptyenv())
