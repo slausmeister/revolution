@@ -34,8 +34,9 @@ get_abs_deaths <- function(years=2020){
     stopifnot("data only available for the years 2000-2020"=jahr %in% daily_deaths$year)
     stopifnot("invalid years"=suppressWarnings(!is.na(as.numeric(jahr))))
   }
-  daily_deaths %>% dplyr::filter(year %in% years) -> deaths_filtered
+  daily_deaths %>% dplyr::filter(year %in% years) %>% tidyr::drop_na(deaths)-> deaths_filtered
   deaths_filtered <- dplyr::mutate(deaths_filtered,year=as.character(year))
+  
   return(deaths_filtered)
 }
 
@@ -201,7 +202,9 @@ get_total_mortality <- function(age="A80+"){
     dplyr::group_by(Jahr) %>%
     dplyr::summarize(`A00-A34`=sum(`A00-A34`),`A35-A59`=sum(`A35-A59`),`A60-A79`=sum(`A60-A79`),`A80+`=sum(`A80+`))-> final_tibble
   deaths <- final_tibble[-nrow(final_tibble),]
-
+  
+  print(deaths)
+  print(pop)
   per_age_group <- deaths[2:5]/pop[2:5]
   per_age_group <- dplyr::mutate(per_age_group,Jahr=c(2014,2015,2016,2017,2018,2019,2020),.before=`A00-A34`)
 

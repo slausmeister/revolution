@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library("revolution")
-update_rki_data(method="wget")
+update_rki_data(method="auto")
 ```
 
 ## Loading and updating the underlying data
@@ -91,6 +91,7 @@ Unfortunately, the official RKI table only contains weekly data. Hence, `plot_va
 ```{r, fig.width=7}
 plot_variants(interpolation="linear",type="share")
 ```
+
 ## Factors influencing the spread
 
 The way COVID-19 spread during the last few months is diffuse. One of the biggest problems with identifying influential factors is the large number of unknown cases, as well as the never resting mantra of "correlation not impying causality". There is a huge amount of possible factors (seasonality and weather, travel behaviour of the population, mandatory mask wearing, lockdown, etc.), influencing the pandemic. "revolution" takes a closer look at three factors: the income, the geographical proximity between districts and the population density of districts.
