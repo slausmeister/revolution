@@ -31,17 +31,17 @@
 get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F){
     #TODO: fehlermeldungen
-    bundeslander<-c("Schleswig-Holstein","Mecklenburg-Vorpommern","Niedersachsen","Sachsen-Anhalt","Berlin",
+    bundeslander<-c("Schleswig-Holstein","Mecklenburg-Vorpommern","Niedersachsen","Sachsen-Anhalt",
                    "Hamburg","Bremen","Sachsen","Thüringen","Hessen","Nordrhein-Westfalen","Rheinland-Pfalz",
-                   "Saarland","Baden-Württemberg","Bayern","Brandenburg")
+                   "Saarland","Baden-Württemberg","Bayern","Brandenburg","Berlin")
 
-   
+   #stopifnot("No data available for Berlin in total. Only district data availabe"=(!("Berlin" %in% regions)))
    stopifnot("invalid vac_num"=(vac_num=="all" || vac_num%in%c(1,2)))
    stopifnot("'from' must be earlier than 'to'"= as.Date(from)<as.Date(to))
    stopifnot("invalid age, ages must be a string and either '12-17','18-59','60+'"=(ages=="all"||ages=="12-17"||ages=="18-59"||ages=="60+"))
    stopifnot("cumulate must be boolean"=(!is.na(as.logical(cumulate))))
    rev.env$vax_data -> vaccines
-
+ 
    vaccines %>%
      dplyr::filter(suppressWarnings(!is.na(as.numeric(LandkreisId_Impfort)))) %>%
      dplyr::mutate(LandkreisId_Impfort=as.numeric(LandkreisId_Impfort)) %>%
@@ -84,6 +84,9 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
    else if(all(regions %in% bundeslander)){
      ids <- c()
      for(region in regions){
+       if(region=="Berlin"){
+         ids <- c(ids,11000)
+       }
        rev.env$population_lk_data %>%
          dplyr::filter(Bundesland==region)->temp
        temp$IdLandkreis->current_ids
@@ -92,7 +95,9 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
      vaccine_age %>%
        dplyr::filter(LandkreisId_Impfort %in% ids) %>%
        dplyr::group_by(Impfdatum,Bundesland) %>%
-       dplyr::summarize(Anzahl=sum(Anzahl))->vaccine_prepared
+       dplyr::summarize(Anzahl=sum(Anzahl)) %>%
+       tidyr::replace_na(list(Bundesland="Berlin"))->vaccine_prepared
+     print(vaccine_prepared)
      k <- 3
    }
    else{
