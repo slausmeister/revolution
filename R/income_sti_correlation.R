@@ -71,7 +71,7 @@ income_sti_correlation <- function(path, sheetnr){
 #' @export
 payments_sti_correlation <- function(path, sheetnr){
 
-    if(!hasArg(path){
+    if(!hasArg(path)){
         path <- system.file("extdata", "auszahlungen.xlsx", package="revolution")
         if (hasArg(sheetnr)){
         print("please provide a table")
