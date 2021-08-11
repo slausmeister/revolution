@@ -61,15 +61,15 @@ income_sti_correlation <- function(path, sheetnr){
 #' The "date" column describes the date, and the "cor" column describes the coefficient.
 #'
 #' @examples
-#' auszahlungen_sti_korrelation()
-#' auszahlungen_sti_korrelation("expl/path.xlsx", 11)
+#' payouts_sti_korrelation()
+#' payouts_sti_korrelation("expl/path.xlsx", 11)
 #'
-#' \dontrun{auszahlungen_sti_korrelation(sheetnr=3)}
-#' \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
+#' \dontrun{payouts_sti_korrelation(sheetnr=3)}
+#' \dontrun{payouts_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
 #'
 #' @family wealth and corona
 #' @export
-payments_sti_korrelation <- function(path, sheetnr){
+payouts_sti_correlation <- function(path, sheetnr){
 
     if(!hasArg(path)){
         path <- system.file("extdata", "auszahlungen.xlsx", package="revolution")
