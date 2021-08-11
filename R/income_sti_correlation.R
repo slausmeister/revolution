@@ -26,16 +26,7 @@
 #' @export
 income_sti_correlation <- function(path, sheetnr){
 
-    if(!hasArg(path)){
-        path <- system.file("extdata", "einkommen.xlsx", package="revolution")
-        if (hasArg(sheetnr)){
-        print("please provide a table")
-        }
-        else{
-            sheetnr <- 11
-            return(rolling_correlation(path, sheetnr))
-        }
-    }
+    rolling_correlation(path=system.file("extdata", "einkommen.xlsx", package="revolution"), sheetnr=11)
 
     
 }
