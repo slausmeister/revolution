@@ -15,44 +15,46 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(revolution)
+library("revolution")
 ```
 
 ## Loading and updating the underlying data
 
-The "revolution" package offers the possibility to manually update the underlying data, so that the plots of time series like the 7-day-incidence or the vaccination data are always up to date. To update the official data from the German federal agency for disease control (RKI), the function `update_rki_data()` should be called.
+The "revolution" package offers the possibility to manually update the underlying data, so that the plots of time series like the 7-day-incidence or the vaccination data are always up to date. To update official data provided by the Robert Koch Institut, the function `update_rki_data()` can be called.
 
-Basically, all the functions except the ones that plot data of vaccines and "variants of concerns" use this data set, so recommended to call `update_rki_data()` regularly.
+As pretty much all functions are based on that data set, it is recommended to keep ontop of recent changes. However, the data provided by the RKI is sometimes broken. Thus, if the package starts to behave strange, try to update the data the next day.
 
-To update the data for vaccine-related tibbles or plots, the function `update_vac_data()` should be called.
+The package also includes the option to manually load an RKI data set. For this we refere to the `manual_load_rki_data()` function and its documentation.
 
-Furthermore, the RKI offers data for "variants of concerns", so e.g. the delta-variant. To update this data set, call `update_voc_data()`.
+To update the data for vaccine-related tibbles or plots, the function `update_vac_data()` can be called.
+
+Furthermore, the RKI offers data for "variants of concerns", as for example the delta-variant. To update this data set, call `update_voc_data()`. This speciic data set however has not been updated since mid July. We think it's due to delta's dominance, and the resulting redundance of the data.
 
 ## The official RKI data set
 
-Most of the functions provided by "revolution" obtain their data by the official RKI csv file. Unfortunately, the data set is not without errors and it heavily relies on the reporting capabilities of the local health offices. E.g., the number of reported cases fluctuates drastically within one week due to the fact that most of the health offices and laboratories do not work full-time on Sundays. Furthermore, less people are tested during the weekend, what distorts the numbers as well.
+Most of the functions provided by "revolution" obtain their data from the official RKI csv file. Unfortunately, the data set is not without errors and it heavily relies on the reporting capabilities of the local health offices. Thus the number of reported cases fluctuates wildly during a week, as less test are taken and reported on weekends.
 
-The RKI data set provides the date the case was reported by the health office for each case. For about half of them, the data set also lists the infection date. In the following, the cases for which the infection date is known will be called "traced". 
+The RKI data set lists each known case as a unique row. For about half of them, the data set also lists the infection date. These are assum to be traced cases. 
 
-The function `calc_traced_cases()` returns a time series that contains the total and relative amount of traced cases for each day since 2020. The specification of age groups and regions (districts and states) is possible.
+The function `calc_traced_cases()` returns a time series that contains the total and relative amount of traced cases for each day since 2020. Specific regions and age groups may be specified.
 
 ```{r}
 calc_traced_cases(ages="all",region="Baden-Württemberg",from="2020-03-19")
 ```
 
-Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage()` and `plot_traced_cases_total()` visualize the upper tibble.
+Based on `calc_traced_cases()`, the two plot functions `plot_traced_cases_percentage()` and `plot_traced_cases_total()` visualise the upper tibble.
 
 ```{r, fig.width=7}
 plot_traced_cases_percentage(ages="all",region="Baden-Württemberg",from="2020-03-19")
 ```
 
-The function `calc_distribution_report_diff()` calculates the temporal difference between infection and reporting date for each traced case. This is nicely visualized by `plot_distribution_report_diff()`:
+The function `calc_distribution_report_diff()` calculates the lag between infection and reporting for each traced case. This is visualised by `plot_distribution_report_diff()`:
 
 ```{r, fig.width=7}
 plot_distribution_report_diff()
 ```
 
-As it can be seen, most of the cases were reported just a few days after the assumed infection date, but a not neglectable share of cases shows a big temporal difference between infection and reporting. In approximately more than 30 000 cases, the reporting date is even before the assumed infection date. That doesn't make sense at all. 
+As seen above, most cases were reported just a few days after the assumed infection date, but a significant share of cases fall outside of that window. In approximately more than 30 000 cases, the reporting date is even before the assumed infection date. We assume that this is due to human error, not planning. 
 
 As a conclusion, one can say that the data needs to be interpreted and analyized carefully.
 
