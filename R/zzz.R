@@ -2,8 +2,9 @@
   # TODO: checken, ob die rki datei schon ex, wenn nicht, runterladen!!!!!!
   # TODO: package dependencies
 
-  assign("rev.env", new.env(parent = emptyenv()), envir=topenv())
-  # rev.env <<- new.env(parent = emptyenv())
+
+    #   assign("rev.env", new.env(parent = emptyenv()), envir=topenv())
+    rev.env <<- new.env(parent = emptyenv())
 
   # import the population of 'Landkreis' with the given csv
   rev.env$population_lk_data <- readr::read_csv(system.file("extdata", "population_lk.csv", package="revolution"),show_col_types = FALSE)
@@ -56,9 +57,9 @@
     rki_data %>% dplyr::select(-IdBundesland) -> rki_data
 
     # 'FID' is the case id, which is useless for our research
-    rki_data %>% dplyr::select(-FID) -> rki_data
+    rki_data %>% dplyr::select(-FID) ->> rki_data
 
-    assign("rki_data", rki_data, envir=topenv())
+    #     assign("rki_data", rki_data, envir=topenv())
 
     rev.env$days_since_2020 <- seq(as.Date("2020-01-01"), as.Date(Sys.Date()), by="days")
   }
