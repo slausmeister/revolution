@@ -35,17 +35,17 @@ Vaccination Data: \url{https://impfdashboard.de/daten}
 Variants Data: \url{https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/VOC_VOI_Tabelle.xlsx?__blob=publicationFile}
 
 Every other dataset in this package is not up to date and comes from the
-"Statistisches Bundesamt": \url{https://www.destatis.de/DE/Home/_inhalt.html}.
+"Statistisches Bundesamt" (\url{https://www.destatis.de/DE/Home/_inhalt.html}),
+but was modified to fit our purposes.
 }
 \author{
-\strong{Maintainer}: 
+\strong{Maintainer}: Viktor Stein von Kamienski \email{Stani.Stani@some.domain.net}
 
-Other contributors:
+Authors:
 \itemize{
-  \item Nico Bruder
-  \item Lucienne-Sophie Marmé
-  \item Viktor Stein von Kamienski
-  \item Philipp Hilmar Tepel
+  \item Nico Bruder \email{Nico.Schwester@some.domain.net} [translator]
+  \item Lucienne-Sophie Marmé \email{Lucy.Marmelade@some.domain.net} [copyright holder]
+  \item Philipp Hilmar Tepel \email{Hilmar@some.domain.net} [thesis advisor]
 }
 
 }
