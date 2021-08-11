@@ -330,6 +330,7 @@ plot_for_agegroups <- function(type="cases"){
   days_since_2020 <- rev.env$days_since_2020
   rki_data %>% dplyr::select(Altersgruppe) %>% unique() %>% `[[`(1) -> Altersgruppe
   tidyr::crossing(Altersgruppe, days_since_2020) -> series1
+  print(series1)
   options(dplyr.summarise.inform = FALSE)
   series1 %>% dplyr::rename("date"="days_since_2020") %>%
     dplyr::left_join(filter_data_by(), by=c("date"="Meldedatum", "Altersgruppe"))  %>%
