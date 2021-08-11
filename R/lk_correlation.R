@@ -13,6 +13,7 @@
 #' @examples
 #' calc_sti_correlation_of_lks(c("Heidelberg", 8222, "1001"))
 #'
+#' @family district pairs
 #' @export
 calc_sti_correlation_of_lks <- function(regions="all"){
 

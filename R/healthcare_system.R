@@ -21,6 +21,7 @@
 #'
 #'@return A tibble that contains total and relative amount of traced cases for each day since 2020
 #'
+#' @family traced cases
 #' @export
 calc_traced_cases <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -61,6 +62,7 @@ calc_traced_cases <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the desired data next to the STI for comparison
 #'
+#' @family traced cases
 #' @export
 plot_traced_cases_percentage <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), smoothing=0){
@@ -100,6 +102,7 @@ plot_traced_cases_percentage <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the desired data next to the STI for comparison
 #'
+#' @family traced cases
 #' @export
 plot_traced_cases_total <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date()){
@@ -112,7 +115,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
     ggplot2::ggplot(data, ggplot2::aes(x=date)) +
       ggstream::geom_stream(ggplot2::aes(y=count, fill=traced), type="ridge") -> plt
 
-    ggplot2::ggplot(data=get_sti_series_for(), ggplot2::aes(x=date, y=sti)) +
+    ggplot2::ggplot(data=get_sti_series_for(ages, regions, from, to), ggplot2::aes(x=date, y=sti)) +
       ggplot2::geom_line() -> plt_germany
 
     cowplot::plot_grid(plotlist = list(plt_germany, plt), nrow=2) %>%
@@ -145,6 +148,7 @@ plot_traced_cases_total <- function(ages="all", regions="Germany",
 #'
 #'@return A plot that displays the distribution of differences between infection and report date
 #'
+#' @family time difference infection vs. report
 #' @export
 calc_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=Inf){
@@ -153,7 +157,7 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
       dplyr::filter(IstErkrankungsbeginn==1) %>%
       dplyr::mutate(diff=as.numeric(Meldedatum - Refdatum)) %>%
       dplyr::group_by(diff) %>%
-      dplyr::count() %>%
+      dplyr::summarise(n=sum(AnzahlFall)) %>%
       # we cut every data which has a diff greater than cut because that is nonsensical and
       # distorts the distribution
       dplyr::filter(abs(diff)<cut) %>%
@@ -164,6 +168,8 @@ calc_distribution_report_diff <- function(ages="all", regions="Germany",
 #' Plot Time Difference Between Infection and Report of Cases
 #'
 #' Plots the data of \code{calc_distribution_report_diff}. See \code{\link{calc_distribution_report_diff}} for an explanation of the data
+#' 
+#' @family time difference infection vs. report
 #' @export
 plot_distribution_report_diff <- function(ages="all", regions="Germany",
   from="2020-01-01", to=Sys.Date(), cut=30){

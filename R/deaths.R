@@ -24,6 +24,8 @@ pop_prep <- function(population_data){
 #'
 #'\dontrun{get_abs_deaths(c("2006"))}
 #'#The years must be integer values
+#'
+#'@family total number of daily deaths
 #'@export
 get_abs_deaths <- function(years=2020){
   daily_deaths <- readxl::read_excel(system.file("extdata", "daily_deaths.xlsx", package="revolution"))
@@ -56,6 +58,8 @@ get_abs_deaths <- function(years=2020){
 #'
 #'\dontrun{get_abs_deaths(c("2006"),smoothing=-2.4)}
 #'#Years must be a vector of integer values and smoothing must be a positive integer.
+#'
+#'@family total number of daily deaths
 #' @export
 plot_abs_deaths <- function(years=2020,smoothing=0){
   get_abs_deaths(years) %>%
@@ -89,6 +93,8 @@ plot_abs_deaths <- function(years=2020,smoothing=0){
 #'
 #'\dontrun{get_weekly_deaths(2015,age=65)}
 #'#The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+#'
+#'@family total number of weekly deaths
 #' @export
 get_weekly_deaths <- function(years=2020,age="A80+",rate=F){
   deaths_per_age <- readxl::read_excel(system.file("extdata", "deaths_per_age.xlsx", package="revolution"))
@@ -145,6 +151,8 @@ get_weekly_deaths <- function(years=2020,age="A80+",rate=F){
 #'
 #'\dontrun{plot_weekly_deaths(2015,age=65)}
 #'#The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+#'
+#'@family total number of weekly deaths
 #' @export
 plot_weekly_deaths <- function(years=2020,age="A80+",rate=F){
   data <- get_weekly_deaths(years, age,rate=rate)
@@ -172,6 +180,8 @@ plot_weekly_deaths <- function(years=2020,age="A80+",rate=F){
 #'
 #'\dontrun{get_total_mortality(age=65)}
 #'#The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+#'
+#'@family Yearly mortality per age group
 #' @export
 get_total_mortality <- function(age="A80+"){
   age_pop <- pop_prep(rev.env$population_age_data)
@@ -217,6 +227,8 @@ get_total_mortality <- function(age="A80+"){
 #'
 #'\dontrun{plot_total_mortality(age=65)}
 #'#The age group must be a string. Allowed strings are "A00-A34","A35-A59","A60-79" and "A80+".
+#'
+#'@family Yearly mortality per age group
 #' @export
 plot_total_mortality <- function(age="A80+"){
   get_total_mortality(age) %>% ggplot2::ggplot(aes(x=Jahr,y=rate,color=ages))+
@@ -244,6 +256,8 @@ plot_total_mortality <- function(age="A80+"){
 #'\dontrun{plot_excess_mortality(excess_year="2020",average_years=c(1999,2017),smoothing=100)}
 #'#"excess_year" and "average_years" should be an integer. Only the years 2000-2020 can be considered.
 #'#Furthermore, it's not recommended to choose a smoothing factor > 5 due to the gap in the plot described in section "Warning".
+#' 
+#' @family excess mortality
 #' @export
 plot_excess_mortality <- function(excess_year=2020,average_years=c(2016,2017,2018,2019),smoothing=0){
   stopifnot("excess_year needs to be an integer >=2000 and <= 2020"= (is.integer(as.integer(excess_year))&& excess_year>=2000 && excess_year<=2020))

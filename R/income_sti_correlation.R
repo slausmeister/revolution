@@ -26,16 +26,16 @@
 #' @export
 income_sti_correlation <- function(path, sheetnr){
 
-    if(missing(path)){
+    if(!hasArg(path)){
         path <- system.file("extdata", "einkommen.xlsx", package="revolution")
-        if (!missing(sheetnr)){
+        if (hasArg(sheetnr)){
         print("please provide a table")
         }
         else{
             sheetnr <- 11
+            return(rolling_correlation(path, sheetnr))
         }
     }
-
     return(rolling_correlation(path, sheetnr))
 }
 
@@ -61,19 +61,19 @@ income_sti_correlation <- function(path, sheetnr){
 #' The "date" column describes the date, and the "cor" column describes the coefficient.
 #'
 #' @examples
-#' auszahlungen_sti_korrelation()
-#' auszahlungen_sti_korrelation("expl/path.xlsx", 11)
+#' payments_sti_correlation()
+#' payments_sti_correlation("expl/path.xlsx", 11)
 #'
-#' \dontrun{auszahlungen_sti_korrelation(sheetnr=3)}
-#' \dontrun{auszahlungen_sti_korrelation(path="custom/path/without/sheetnumber.xlsx")}
+#' \dontrun{payments_sti_correlation(sheetnr=3)}
+#' \dontrun{payments_sti_correlation(path="custom/path/without/sheetnumber.xlsx")}
 #'
 #' @family wealth and corona
 #' @export
-auszahlungen_sti_korrelation <- function(path, sheetnr){
+payments_sti_correlation <- function(path, sheetnr){
 
-    if(missing(path)){
+    if(!hasArg(path)){
         path <- system.file("extdata", "auszahlungen.xlsx", package="revolution")
-        if (!missing(sheetnr)){
+        if (hasArg(sheetnr)){
         print("please provide a table")
         }
         else{
@@ -88,8 +88,6 @@ auszahlungen_sti_korrelation <- function(path, sheetnr){
 rolling_correlation <- function(tablepath, sheet){
 # reading data
 
-    tablepath <- "inst/extdata/einkommen.xlsx"
-    sheet <- 11
 
     LKBudget <- readxl::read_excel(tablepath ,sheet=sheet)
     LKBudget <- LKBudget[c("...3","...27" )]

@@ -3,6 +3,8 @@
 #'\code{get_accidents_data()} is used to create a tibble of the monthly number of traffic accidents during 2019-2020.
 #'
 #'@examples get_accidents_data()
+#'
+#'@family Traffic accidents
 #'@export
 get_accidents_data <- function(){
   readr::read_csv(system.file("extdata", "unfaelle_jahre.csv", package="revolution"),
@@ -17,6 +19,8 @@ get_accidents_data <- function(){
 #'the 7-day-incidence in Germany. Obviously, the number of accidents drastically sank when COVID-19 reached Germany.
 #'
 #'@examples plot_accidents_with_sti()
+#'
+#'@family traffic accidents
 #'@export
 plot_accidents_with_sti <- function(){
   unfaelle_data <- get_accidents_data()
@@ -41,6 +45,8 @@ plot_accidents_with_sti <- function(){
 #'\code{get_public_transportation_data} is used to create a tibble that contains quarterly data of kilometers per person of the years 2019 and 2020.
 #'
 #'@examples get_public_transportation_data
+#'
+#' @family traffic kilometers
 #' @export
 get_public_transportation_data <- function(){
   readr::read_csv(system.file("extdata", "oepnv_jahre.csv", package="revolution"),
@@ -53,6 +59,8 @@ get_public_transportation_data <- function(){
 #'the 7-day-incidence in Germany. Obviously, the number of kilometers drastically sank when COVID-19 reached Germany.
 #'
 #'@examples plot_public_transportation_with_sti
+#'
+#' @family traffic kilometers
 #' @export
 plot_public_transportation_with_sti <- function(){
   oepnv_data <- get_public_transportation_data()

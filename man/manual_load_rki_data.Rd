@@ -7,7 +7,7 @@
 manual_load_rki_data(path)
 }
 \arguments{
-\item{path}{A path to a file which is to be loaded in. The bath has to be in parentheses.}
+\item{path}{A path to a file which is to be loaded in. The path has to be in parentheses.}
 }
 \description{
 This function manually laods an RKI file into the package. The user has to provide a valid

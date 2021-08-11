@@ -6,12 +6,14 @@
 #'
 #' Please be aware of the front-slash/back-slash conventions of your operating system.
 #' 
-#' @param path A path to a file which is to be loaded in. The bath has to be in parentheses.
+#' @param path A path to a file which is to be loaded in. The path has to be in parentheses.
 #' @family update 
 #' @examples
 #' manual_load_rki_data("~/Downloads/RKI.csv")
 #' \dontrun{manual_load_rki_data()}
 #' \dontrun{manual_load_rki_data(~/Downloads/RKI.csv)}
+#' 
+#' @family manually load
 #' @export
 manual_load_rki_data <- function(path){
 if(!hasArg(path)){

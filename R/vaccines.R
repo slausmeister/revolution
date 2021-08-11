@@ -1,12 +1,12 @@
 #'Time series of German COVID-19 vaccination data
-#' 
+#'
 #'\code{get_vaccination_data()} is used to create a tibble of vaccination data for regions and a certain
 #'age group. The time period can be defined by the user.
-#'  
+#'
 #'@param ages A string of the desired age group. Data is available for the groups "12-17","18-59" and "60+".
 #'The default value is "all", so that the data is not specified for a special age group.
 #'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
-#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
+#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))}
 #'is not allowed. The default region is the whole country "Germany".
 #'@param from A date that specifies the beginning of the time series.
 #'@param to A date that specifies the end of the time series. The default value is today.
@@ -27,6 +27,8 @@
 #'
 #'\dontrun{get_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'#'from' needs to be earlier than 'to'
+#'
+#'@family vaccination
 #'@export
 get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F){
@@ -41,7 +43,7 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
    stopifnot("invalid age, ages must be a string and either '12-17','18-59','60+'"=(ages=="all"||ages=="12-17"||ages=="18-59"||ages=="60+"))
    stopifnot("cumulate must be boolean"=(!is.na(as.logical(cumulate))))
    rev.env$vax_data -> vaccines
- 
+
    vaccines %>%
      dplyr::filter(suppressWarnings(!is.na(as.numeric(LandkreisId_Impfort)))) %>%
      dplyr::mutate(LandkreisId_Impfort=as.numeric(LandkreisId_Impfort)) %>%
@@ -134,14 +136,14 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
    }
 }
 #'Plotting the time series of German COVID-19 vaccination data
-#' 
+#'
 #'\code{plot_vaccination_data()} is used to create a plot of vaccination data for regions and a certain
 #'age group. The time period can be defined by the user.
-#'  
+#'
 #'@param ages A string of the desired age group. Data is available for the groups "12-17","18-59" and "60+".
 #'The default value is "all", so that the plot is not specified for a special age group.
 #'@param regions A vector that either consists of strings (the names of German districts or the names of German states) or district ID's.
-#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))} 
+#'Warning: states and districts must not be mixed, so e.g. \code{get_vaccination_data(regions=c("Sachsen","Heidelberg"))}
 #'is not allowed. The default region is the whole country "Germany".
 #'@param from A date that specifies the beginning of the time series.
 #'@param to A date that specifies the end of the time series. The default value is today.
@@ -164,31 +166,33 @@ get_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26
 #'
 #'\dontrun{plot_vaccination_data(from="2021-06-07",to="2021-05-06")}
 #'#'from' needs to be earlier than 'to'
+#'
+#' @family vaccination
 #' @export
 plot_vaccination_data <- function(ages="all", regions="Germany", from="2020-12-26",
   to=Sys.Date(), vac_num="all", cumulate=F,smoothing=0){
     data <- get_vaccination_data(ages, regions, from, to, vac_num, cumulate)
     stopifnot("smoothing must be a positive integer"=(is.integer(as.integer(smoothing)))&&smoothing>=0)
-  
+
     if(ncol(data)==2){
       data %>%
-        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>%
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
     }
     else if(ncol(data)==3){
       data %>%
-        dplyr::group_by(Bundesland) %>% 
-        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
+        dplyr::group_by(Bundesland) %>%
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>%
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl, color=Bundesland)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
     }
     else{
       data %>%
-        dplyr::group_by(Landkreis) %>% 
-        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>% 
+        dplyr::group_by(Landkreis) %>%
+        dplyr::mutate(Anzahl=slider::slide_dbl(Anzahl,mean,.before=smoothing,.after=smoothing)) %>%
         ggplot2::ggplot(ggplot2::aes(x=Impfdatum, y=Anzahl, color=Landkreis)) %>%
         `+`(ggplot2::geom_line()) %>%
         return()
